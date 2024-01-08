@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.475">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>HEMP Using R - 4&nbsp; 측정에서 요인분석적 접근</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./chap05.html" rel="next">
+<link href="./chap03.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">측정에서 요인분석적 접근</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">HEMP Using R</a> 
+        <div class="sidebar-tools-main">
+    <a href="./HEMP-Using-R.pdf" title="Download PDF" class="sidebar-tool px-1"><i class="bi bi-file-pdf"></i></a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">머리말</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap01.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">R 소개</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap02.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">고전검사이론</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap03.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">일반화가능도 이론</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap04.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">측정에서 요인분석적 접근</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap05.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">이분 문항반응이론</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap06.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">다분 문항반응이론</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap07.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">다차원 문항반응이론</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap08.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">설명적 문항반응이론</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap09.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">데이터 시각화 및 측정 모델</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap10.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">동등화</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">측정 불변성과 차별기능문항</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap12.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">측정의 고급 주제</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#개요" id="toc-개요" class="nav-link active" data-scroll-target="#개요"><span class="toc-section-number">4.1</span>  개요</a></li>
+  <li><a href="#소개" id="toc-소개" class="nav-link" data-scroll-target="#소개"><span class="toc-section-number">4.2</span>  소개</a></li>
+  <li><a href="#탐색적-요인분석efa" id="toc-탐색적-요인분석efa" class="nav-link" data-scroll-target="#탐색적-요인분석efa"><span class="toc-section-number">4.3</span>  탐색적 요인분석(EFA)</a>
+  <ul class="collapse">
+  <li><a href="#인지검사의-fea" id="toc-인지검사의-fea" class="nav-link" data-scroll-target="#인지검사의-fea"><span class="toc-section-number">4.3.1</span>  인지검사의 FEA</a></li>
+  <li><a href="#psych-패키지를-사용한-efa" id="toc-psych-패키지를-사용한-efa" class="nav-link" data-scroll-target="#psych-패키지를-사용한-efa"><span class="toc-section-number">4.3.2</span>  psych 패키지를 사용한 EFA</a></li>
+  <li><a href="#범주형-데이터를-사용한-efa" id="toc-범주형-데이터를-사용한-efa" class="nav-link" data-scroll-target="#범주형-데이터를-사용한-efa"><span class="toc-section-number">4.3.3</span>  범주형 데이터를 사용한 EFA</a></li>
+  </ul></li>
+  <li><a href="#확인적-요인분석cfa" id="toc-확인적-요인분석cfa" class="nav-link" data-scroll-target="#확인적-요인분석cfa"><span class="toc-section-number">4.4</span>  확인적 요인분석(CFA)</a>
+  <ul class="collapse">
+  <li><a href="#wisc-r-데이터의-cfa" id="toc-wisc-r-데이터의-cfa" class="nav-link" data-scroll-target="#wisc-r-데이터의-cfa"><span class="toc-section-number">4.4.1</span>  WISC-R 데이터의 CFA</a></li>
+  <li><a href="#범주형-데이터가-포함된-cfa" id="toc-범주형-데이터가-포함된-cfa" class="nav-link" data-scroll-target="#범주형-데이터가-포함된-cfa"><span class="toc-section-number">4.4.2</span>  범주형 데이터가 포함된 CFA</a></li>
+  </ul></li>
+  <li><a href="#요약" id="toc-요약" class="nav-link" data-scroll-target="#요약"><span class="toc-section-number">4.5</span>  요약</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">측정에서 요인분석적 접근</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="개요" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="개요"><span class="header-section-number">4.1</span> 개요</h2>
+<p>제4장에서는 측정에서 요인분석적 접근법을 소개합니다. 요인분석은 제3장에서 제시된 고전검사이론과 제5장부터 제8장까지 제시된 문항반응이론 사이의 연결고리입니다. 이 장에서는 공통요이모델에 대한 간략한 검토로 시작합니다. 그런 다음 탐색적 요인분석은 psych 패키지의 factanal 함수와 fa 함수를 사용해 예제와 함께 제시됩니다. 탐색적 요인분석에서는 회전, 차원성 및 요인점수 추출에 대해 설명합니다. 그런 다음 확인적 요인분석과 lavaan 패키지를 사용한 예제로 마무리합니다. 탐색적 요인분석과 확인적 요인분석 모두에 대해 비율, 등간 척도 변수와 서열 척도를 사용하는 예제가 제시됩니다.</p>
+</section>
+<section id="소개" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="소개"><span class="header-section-number">4.2</span> 소개</h2>
+<p>요인분석은 요인 또는 차원으로 알려진 축소된 변수 집합을 사용하여 명시변수 또는 측정변수 집합 간의 공통 변산성을 설명하는 것을 목표로 하는 통계 모델링 기법입니다. <em>p</em>를 측정변수의 수, <em>q</em>를 요인의 수라고 하면 공통요인모델은 다음과 같이 표현할 수 있습니다.</p>
+<p><span class="math display">\[
+x=\mu+\Lambda f+\epsilon
+\]</span></p>
+<p>여기서 <span class="math inline">\(x는\)</span> 연속 관찰 변수의 <span class="math inline">\(p\)</span> 차원의 벡터이고, <span class="math inline">\(\mu\)</span>는 스칼라(즉, 절편)의 <span class="math inline">\(p\)</span> 차원의 벡터, <span class="math inline">\(\Lambda\)</span>는 요인적재치의 <span class="math inline">\(pXq\)</span> 행렬, <span class="math inline">\(f\)</span>는 잠재변수/요인의 <span class="math inline">\(q\)</span> 차원의 벡터로 <span class="math inline">\(E(f)=0\)</span>, <span class="math inline">\(Var(f)=\phi\)</span>, <span class="math inline">\(\epsilon\)</span>은 <span class="math inline">\(p\)</span>차원의 무선 오차, 즉 고유 또는 특정 요인이며, 여기서 <span class="math inline">\(Var(\epsilon)=\psi\)</span> 라고 가정합니다. 만일 모집단에서 <span class="math inline">\(x\)</span>의 실제 공분산 행렬을 <span class="math inline">\(\Sigma\)</span>라고 가정하면, 요인 분석의 목표는 <span class="math inline">\(\Sigma\)</span>를 가능한 가장 가깝게 설명하는 모수 모델인 <span class="math inline">\(\Sigma(\theta)\)</span>를 찾는 것입니다.</p>
+<p><span class="math display">\[
+Var(x)=\Lambda\phi\Lambda^T +\psi=\Sigma(\theta)
+\]</span></p>
+<p>여기서 <span class="math inline">\(\theta=(\Lambda, \phi, \psi)\)</span> 입니다. <span class="math inline">\(\Sigma(\theta)\)</span>를 관찰할 수 없기 때문에 <span class="math inline">\(\Sigma(\hat{\theta})\)</span> 으로 <span class="math inline">\(\Sigma(\theta)\)</span>를 추정해야 하며 <span class="math inline">\(\Sigma(\hat{\theta})\)</span>은 표본 공분산 행렬에 최대한 가까워야 한다는 제약 조건이 적용됩니다. 제약 조건의 유형에 따라 방정식 4.2의 모델에서 모든 요인에 측정변수가 적재되고 측정변수 잔차가 상관 관계가 없는 탐색적 요인분석(EFA)을 수행할지, 아니면 가설화된 요인에만 측정변수가 적재되고 측정변수의 잔차가 상관 관계가 있을 가능성이 있는 확인적 요인분석(CFA)을 수행할지 결정합니다. EFA 프레임워크 내에서 직각(<span class="math inline">\(\phi\)</span>는 대각행렬, 요인은 상관 관계가 없음) 또는 사각 회전(<span class="math inline">\(\phi\)</span> 는 대각행렬이 아님, 요인은 상관 관계가 있음)을 사용할지 여부도 지정해야 합니다.</p>
+<p>요인분석의 핵심은 데이터의 차원을 <span class="math inline">\(p\)</span> 개의 측정변수에서 <span class="math inline">\(q\)</span> 개의 요인으로, 즉 <span class="math inline">\(q&lt;p\)</span> 로 줄이려는 것입니다.이러한 의미에서 요인분석은 주성분 분석(PCA)과 유사하지만, 요인분석은 통게적 모델인 반면 PCA는 엄밀히 말해 차원 축소 기법이라는 점에서 차이가 있습니다. 요인분석은 잠재변수(즉, 요인) 간의 이론적 관계의 타당성을 평가하는 데 관심이 있는 경우에도 일반적으로 사용됩니다. 공통 요인 모형의 기초가 되는 이론적, 통계적 프레임워크에 대한 보다 심층적인 이해에 관심이 있는 독자는 Gorsuch(1983), Bollen(1989), Mulaik(2009), Kline(2015)을 강력히 추천합니다.</p>
+</section>
+<section id="탐색적-요인분석efa" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="탐색적-요인분석efa"><span class="header-section-number">4.3</span> 탐색적 요인분석(EFA)</h2>
+<p>측정도구를 개발하는 동안 또는 기존 측정 도구의 차원이나 구조에 대한 사전 지식이 없는 경우, 측정도구의 요인 구조를 조사하기 위해 EFA를 고려해야 합니다. EFA를 수행할 때 방정식 4.1과 4.2에 제시된 공통 요인 모델에는 아무런 제한이 없습니다. EFA에서 주요 고려 사항은 추출한 요인의 수, 둘 이상의 요인을 추출해야 하는지 여부, 직각 또는 사각회전을 수행할지 여부, 데이터의 특성(예를 들어, 범주형 변수 vs 연속형 변수, 정규 데이터 vs 비정규 데이터)에 따라 어떤 유형의 통계적 추정 기법을 사용해야 하는지 여부입니다.</p>
+<p>stats 패키지(R Core Team, 2017)는 빈약하긴 하지만 수용가능한 요인분석 함수인 factanal을 제공합니다. factanal 함수는 최대우도로 요인분석을 수행할 수 있다는 점에서 한계가 있습니다. 많은 경우에, 최대우도 기반 요인분석으로도 충분합니다. 그러나 최대우도는 측정변수가 다변량 정규분포 가정을 전제로 합니다. 다변량 정규성 검정은 R에 있는 MVN 패키지(Korkmaz, Goksuluk, &amp; Zararsiz, 2014)로 검정이 가능합니다. 그러나 요인분석을 수행하기 전에 데이터를 시각적으로 검사하는 것이 좋습니다. 요인 분석에서 다변량 정규성을 조사하는 일반적인 방법은 측정변수의 주변 정규성을 평가하고 필요에 따라 변수를 변환하는 것입니다. 그러나 이 방법은 단변량 정규성이 다변량 정규성을 의미하지 않고 그 반대의 경우도 마찬가지이므로 다변량 정규성을 보장하지는 않습니다.</p>
+<p>최대우도에 기반한 EFA를 제시한 후 psych 패키지를 사용하여 최소 잔차해를 구하기 위해 최소자능(OLS) 추정을 사용하는 대안적 통계불일치 함수를 제시합니다. 최소 잔차해는 최대우도가 수렴하지 않는 상황(예, 특이행렬)에서 선호됩니다. 그러나 이 방법도 고유한 단점이 있습니다(예, 가끔 공통성(commonalities)이 1보다 큰 경우가 있음).</p>
+<section id="인지검사의-fea" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="인지검사의-fea"><span class="header-section-number">4.3.1</span> 인지검사의 FEA</h3>
+<p>R에서 EFA를 수행하는 방법을 보여드리기 위해 hemp 패키지의 interest 데이터 세트를 이용하겠습니다. interest 데이터 세트는 250명의 참가자가 실시한 가상의 검사도구에대한 결과입니다. 이 검사도구의 문항은 인지, 성격, 직업흥미를 측정합니다. interest 데이터 세트에서 처음 세 변수는 성별, 교육연한, 나이에 해당합니다. 다음 6개의 변수는 인지를 측정하는 것으로 가정하며, 이후 나오는 예제에서는 이 변수에 초점을 맞출 것입니다(interest 데이터 세트에 대한 자세한 내용은 R에서 ?interest를 실행하면 볼 수 있습니다).</p>
+<p>먼저, library 명령을 사용해 hemp 패키지를 로드합니다. 다음으로 인지 문항만 포함하는 interest 데이터 세트의 하위 데이터 세트를 가져와서 이 새 데이터 세트를 cognition이라고 저장합니다. cognition 데이터 세트는 어휘(vocab), 독해력(reading), 문장 완성도(sentcomp), 수학(mathmtcs), 기하학(geometry), 분석적 추론(analyrea)의 측정값이 포함됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(hemp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: psych</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: lattice</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: lavaan</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This is lavaan 0.6-16
+lavaan is FREE software! Please report any bugs.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'lavaan'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:psych':
+
+    cor2cov</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: mirt</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: stats4</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: lme4</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: Matrix</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'lme4'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:mirt':
+
+    fixef</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: reshape2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: boot</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'boot'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:lattice':
+
+    melanoma</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:psych':
+
+    logit</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: equate</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>cognition <span class="ot">&lt;-</span> <span class="fu">subset</span>(interest, <span class="at">select=</span>vocab<span class="sc">:</span>analyrea)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>다른 통계 분석과 마찬가지로 요인분석 모델을 적합하기 전에 데이터를 탐색해야 합니다. 이러한 사전 분석을 수행하는 이유는 여러 가지가 있습니다. 데이터가 R로 올바르게 읽혀졌는지 확인하기 위해, 결측치 데이터의 범위를 파악하기 위해, 측정변수의 주변분포, 측정변수 간의 관계를 파악하기 위해, 그리고, 특정 관측치는 분석에 영향을 미칠 수 있는 이상치일 가능성이 높습니다. 이러한 사전 분석에는 일반적으로 기술통계를 검토하고 단변량 및 이변량 그래프를 만드는 작업이 포함됩니다.</p>
+<p>제1장에서 언급했듯이 summary 함수를 사용해 데이터 프레임에서 기술통계를 추출할 수 있습니다. apply 함수를 사용하여 측정변수의 분산을 계산함으로써 summary 함수에서 반환된 기술통계를 보완합니다. apply 함수에서는 사용 중인 데이터 집합(cognition), 원하는 함수를 적용하는 방법(모든 행: 1, 모든 열: 2), 적용하고자 하는 함수의 이름(분산은 var)을 지정합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(cognition)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     vocab             reading           sentcomp           mathmtcs      
+ Min.   :-2.62000   Min.   :-2.4700   Min.   :-2.47000   Min.   :-3.7100  
+ 1st Qu.:-0.60500   1st Qu.:-0.5175   1st Qu.:-0.55000   1st Qu.:-0.4925  
+ Median : 0.04000   Median : 0.1850   Median : 0.10500   Median : 0.1000  
+ Mean   : 0.09016   Mean   : 0.1350   Mean   : 0.07356   Mean   : 0.1055  
+ 3rd Qu.: 0.86000   3rd Qu.: 0.7975   3rd Qu.: 0.77500   3rd Qu.: 0.9200  
+ Max.   : 2.63000   Max.   : 2.7000   Max.   : 2.73000   Max.   : 3.0600  
+    geometry          analyrea      
+ Min.   :-3.3200   Min.   :-2.8300  
+ 1st Qu.:-0.5600   1st Qu.:-0.4825  
+ Median : 0.0900   Median : 0.2000  
+ Mean   : 0.1125   Mean   : 0.1750  
+ 3rd Qu.: 0.7675   3rd Qu.: 0.8375  
+ Max.   : 3.8600   Max.   : 3.5000  </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(cognition,<span class="dv">2</span>,var)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    vocab   reading  sentcomp  mathmtcs  geometry  analyrea 
+0.9966514 0.9811568 0.9834142 1.1117325 1.0686631 1.1170926 </code></pre>
+</div>
+</div>
+<p>기술통계를 보면 변수가 표준화되었을 수 있습니다(평균이 약 0, 분산이 약 1로 표시됨). 이 데이터 세트는 시뮬레이션 데이터 세트이기 때문에 표준정규분포에서 변수가 무선으로 생성되었을 가능성이 더 큽니다. 평균과 중앙값 모두 서로 가깝기 때문에 분포가 상당히 대칭적일 수 있음을 시사합니다. mathmtcs와 geometry 변수의 범위가 가장 크고, summary(cognition)에서 출력된 NA가 없기 때문에 결측 데이터가 없음을 알 수 있습니다. 변수를 그래프로 그러면 이러한 측정변수의 분포에 대해 훨씬 더 많은 정보를 얻을 수 있습니다.</p>
+<p>우선, lattice 패키지를 사용하여 cognition의 주변 분포의 히스토그램을 살펴봅니다(Sarkar, 2008). 먼저 lattice 패키지를 로드합니다. 그런 다음 reshape 함수를 사용하여 주변 분포를 더 쉽게 그래프로 그리기 위해 데이터를 와이드 포맷에서 롱 포맷으로 변환합니다. 와이드 포맷에서 각 행은 한 사람을 나타내고 각 열은 해당 사람과 관련된 다른 변수(예: 나이, 성별, 검사 점수)를 나타냅니다. 와이드 포맷과 달리 롱 포맷에서는 각 사람이 여러 개의 행을 가지며, 각 행은 cognition 데이터 세트의 특정 변수에 대한 점수에 해당합니다.</p>
+<p>다음 예에서, 와이드 포맷 cognition 데이터 세트를 롱 포맷 데이터 세트로 변환해 cognition_l로 저장합니다. head 함수를 사용해 참가자 식별자 “id”를 기준으로 데이터를 정렬한 후 롱 포맷 데이터 집합의 처음 여섯 행을 출력합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lattice)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>cognition_l <span class="ot">&lt;-</span> <span class="fu">reshape</span>(<span class="at">data =</span> cognition, </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">varying =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, </span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>                       <span class="at">v.names =</span> <span class="st">"score"</span>, </span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>                       <span class="at">timevar =</span> <span class="st">"indicator"</span>, </span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>                       <span class="at">times =</span> <span class="fu">names</span>(cognition), </span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>                       <span class="at">direction =</span> <span class="st">"long"</span>)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cognition_l[<span class="fu">order</span>(cognition_l<span class="sc">$</span>id),])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           indicator score id
+1.vocab        vocab  1.67  1
+1.reading    reading  1.67  1
+1.sentcomp  sentcomp  1.46  1
+1.mathmtcs  mathmtcs  0.90  1
+1.geometry  geometry  0.49  1
+1.analyrea  analyrea  1.65  1</code></pre>
+</div>
+</div>
+<p>다음으로, 각 측정변수의 점수(즉, 점수)를 포함하는 변수를 지정하는 histogram 함수를 사용합니다. histogram 함수에서 | 을 사용하여 측정변수별로 격자( 또는 국면) 그래프를 만듭니다. 이렇게 하면 각 측정변수에 대한 히스토그램이 생성되고 그리드에 정렬됩니다(이 그래프에 대한 자세한 내용은 제1, 2장 참조)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">histogram</span>(<span class="sc">~</span>score<span class="sc">|</span>indicator,<span class="at">data=</span>cognition_l)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap04_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>그림 4.1에서 변수가 단봉이고 대칭이며 대략 정규분포에 가깝다는 것을 알 수 있습니다. 이 그래프에서 (특히 수학 변수의 경우) 몇 가지 극단적인 관측치가 존재함을 알 수 있습니다. 다음으로, 산점도 행렬을 사용하여 측정변수간 이변량 관계를 살펴봅니다. 산점도 행렬에서는 일반적으로 4가지를 살펴봅니다.</p>
+<ol type="1">
+<li><p>변수 간의 관계의 크기</p></li>
+<li><p>변수 간의 관계의 방향</p></li>
+<li><p>극단적이거나 잠재적으로 영향력이 있는 지점이 있는지의 여부</p></li>
+<li><p>비선형 관계의 존재 여부</p></li>
+</ol>
+<p>cognition 데이터 세트에 대한 산점도 행렬을 만들기 위해 pairs 함수를 다음과 같이 사용합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pairs</span>(cognition)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap04_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>그림 4.2에 표시된 산점도 행렬을 보면 모든 변수가 서로 양의 상관관계가 있음을 알 수 있습니다(증가 추세, 정적 경향에 근거해). 언어 측정치(vocab, reading, sentcomp)와 수학 측정치(mathmtcs, geometry, analyrea)가 서로 더 강한 상관관계를 보이는 것으로 나타났습니다. 이는 두 가지 요인이 있을 수 있음을 시사하지만, 변수들은 모두 적어도 중간 정도의 관계가 있으므로 하나의 일반적 요인으로도 충분할 수 있음을 시사합니다. 그림 4.2의 대부분에서, 극단값 또는 이상치가 존재하지만 변수 간의 비선형 관계에 대한 증거는 보이지 않습니다.</p>
+<p>마지막으로 Bollen(1989)에서 설명한 다변량 영향력 있는 사례를 찾기 위한 그래프를 살펴봅니다. 이 그래프는 특정 관측값이 데이터의 중심으로부터 얼마나 멀리 떨어져 있는지 대략적으로 알려줍니다(데이터 시각화에 대한 자세한 내용은 제9장에서 확인할 수 있습니다). 이 그래프는 hemp 패키지의 bollen_plot 함수를 사용해서 그릴 수 있습니다. bollen_plot 함수는 데이터 프레임(필수)과 특정 임계값 이상의 값에 해당하는 행 번호에 레이블을 지정하는 선택 인자인 crit.value라는 두 개의 인수를 받습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bollen_plot</span>(cognition,<span class="at">crit.value =</span> .<span class="dv">06</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap04_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>그림 4.3에서 검은색 가로선은 예상 크기, 0.024(측정 변수의 수를 관측값의 수로 나눈 값)를 나타내는데, 예상 크기에 비해 큰 값은 영향력이 있는 것으로 간주할 수 있습니다(자세한 내용은 Bollen(1989) 참조). 다른 관측치와 상당히 거리가 먼 관측치가 몇 개 있음을 알 수 있습니다. 또한 0.06보다 큰 값(지정한 crit.value 인수를 기준으로)에는 행 번호가 지정되어 있습니다. 행 번호 202, 53, 111은 결과에 상당한 영향을 미칠 수 있는 관측치입니다. 아래에서, 이러한 관측값이 잘못 입력된 데이터 또는 과소 추출되었을 수 있는 모집단의 일부 값을 나타낼 수 있으므로 이를 살펴봅니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>cognition[<span class="fu">c</span>(<span class="dv">202</span>,<span class="dv">53</span>,<span class="dv">11</span>),]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    vocab reading sentcomp mathmtcs geometry analyrea
+202  2.63    2.23     2.55     1.38     3.86     3.50
+53  -0.38    0.99    -0.50     1.79    -0.19     2.13
+11  -0.96    0.54    -0.04    -0.25     0.97     0.30</code></pre>
+</div>
+</div>
+<p>위 코드는 cognition 데이터 세트에서 행번호(즉, 참가자) 202, 53, 111을 출력합니다. 그런 다음 아래에는 각 측정변수의 최솟값과 최댓값을 출력합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(cognition,<span class="dv">2</span>,min)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   vocab  reading sentcomp mathmtcs geometry analyrea 
+   -2.62    -2.47    -2.47    -3.71    -3.32    -2.83 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(cognition,<span class="dv">2</span>,max)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   vocab  reading sentcomp mathmtcs geometry analyrea 
+    2.63     2.70     2.73     3.06     3.86     3.50 </code></pre>
+</div>
+</div>
+<p>관측값 202는 vocab, geometry, analyrea에서 최대 관측값을 보이지만 다른 점수를 고려할 때 예상되는 것보다 mathmtcs 점수가 약간 낮다는 것을 알 수 있습니다. 마찬가지로 관측값 53은 analyrea 점수는 높지만 geometry 점수는 낮습니다. 마지막으로 111은 일반적으로 수행이 좋지 않습니다. 시뮬레이션 데이터인 것을 감안할 때, 데이터가 잘못 입력되었을 가능성은 없으며, 개인이 geometry와 analyrea에서 최대 점수를 얻을 가능성은 낮지만 불가능하지는 않습니다.</p>
+<p>이러한 통계 또는 유사한 그래프를 살펴본 후, 측정변수 간 Pearson의 상관관계를 살펴보는 것이 좋습니다. 먼저 그래프를 보면 Pearson 상관관계의 적절성을 평가할 수 있습니다. 아래에서는 cor 함수를 사용하여 Pearson의 상관관계를 계산하고, 결과를 correlations로 저장한 다음, 마지막으로 round 함수를 사용하여 소수 셋째 자리로 반올림합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>correlations <span class="ot">&lt;-</span> <span class="fu">cor</span>(cognition)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(correlations, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         vocab reading sentcomp mathmtcs geometry analyrea
+vocab    1.000   0.803    0.813    0.708    0.633    0.673
+reading  0.803   1.000    0.725    0.660    0.526    0.636
+sentcomp 0.813   0.725    1.000    0.618    0.575    0.618
+mathmtcs 0.708   0.660    0.618    1.000    0.774    0.817
+geometry 0.633   0.526    0.575    0.774    1.000    0.715
+analyrea 0.673   0.636    0.618    0.817    0.715    1.000</code></pre>
+</div>
+</div>
+<p>상관관계는 그림 4.2에서 살펴본 내용을 뒷받침합니다. cognition 데이터 세트의 변수들은 모두 서로 중간 정도에서 강한 상관관계가 있으며, 이는 1요인 또는 2요인 구조로 충분할 수 있음을 시사합니다. 측정변수의 범주(예, 언어, 수학) 내에서가 범주 간보다 서로 더 높은 상관관계를 보이는 것을 알 수 있습니다.</p>
+<p>민감도 분석으로, 모든 관측값을 사용한 상관 행렬과 관측값 202, 53, 111만 삭제한 상관 행렬의 차이를 계산하는 것도 권장합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>correlations <span class="ot">&lt;-</span> <span class="fu">cor</span>(cognition)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(correlations, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         vocab reading sentcomp mathmtcs geometry analyrea
+vocab    1.000   0.803    0.813    0.708    0.633    0.673
+reading  0.803   1.000    0.725    0.660    0.526    0.636
+sentcomp 0.813   0.725    1.000    0.618    0.575    0.618
+mathmtcs 0.708   0.660    0.618    1.000    0.774    0.817
+geometry 0.633   0.526    0.575    0.774    1.000    0.715
+analyrea 0.673   0.636    0.618    0.817    0.715    1.000</code></pre>
+</div>
+</div>
+<p>상관 행렬의 차이는 매우 작으며, geometry와 mathmtcs의 차이(-.012)가 가장 크다는 것을 알 수 있습니다. 이는 영향력 있는 관측값이 상관 관계에 미치는 영향이 미미하다는 것을 나타냅니다.</p>
+<p>이러한 모든 사전 분석이 끝나면 이제 cogntion 데이터 세트에 EFA 모델을 맞출 준비가 되었습니다. 요인분석에서 얼마나 많은 요인을 추출할지 결정할 때 고려해야 몇 가지 기준이 있습니다. 가장 간단한 접근 방식은 변수의 상관 행렬의 고유 분해에서 고유값을 조사하는 것입니다. 상관 관계에 대해 고유 분해(eigen_value)를 실행하여 eigen_decomp로 저장한 다음, 고유값을 소수 셋째짜리로 반올림하여 출력합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>eigen_decomp <span class="ot">&lt;-</span> <span class="fu">eigen</span>(correlations)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(eigen_decomp<span class="sc">$</span>values,<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4.436 0.676 0.322 0.245 0.168 0.152</code></pre>
+</div>
+</div>
+<p>결과에서 큰 고유값이 하나 있음을 알 수 있으며, 요인 수를 1보다 큰 고유값 수와 같도록 추출하는 Kaiser 규칙(Kaiser, 1960)을 사용하면 하나의 요인만 고려할 수 있습니다. 이 데이터 세트에 PCA를 적합하면 첫 번째 구성 요소만으로 관찰된 변산성의 약 74%를 설명할 수 있음을 알 수 있습니다.</p>
+<p>또 다른 일반적인 방법은 스크리 도표를 구성하고 도표에서 엘보의 위치를 찾은 다음 엘보 바로 앞에서 발생하는 고유값과 동일한 요인의 수를 추출하는 것입니다. 다음 예는 hemp 패키지의 lattice_scree 함수를 사용해 스크리 도표를 만드는 방법을 보여줍니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lattice_scree</span>(cognition)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap04_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>다시 한 번, 고유값이 두 요인 이후에 평준화되기 시작하면서 하나의 주요 요인과 잠재적으로 두 번째 요인의 증거를 볼 수 있습니다. 이 그림은 축소된 상관행렬의 고유값을 사용한 스크리 도표이며 고유값이 0보다 크면 추출을 고려할 수 있는 요인의 수를 나타냅니다. 보다 정교한 접근 방식은 병렬 분석(parallel analysis)을 사용하는 것입니다(Horn, 1965). 병렬 분석은 아래 그림과 같이 psych 패키지의 fa.parallel 함수를 사용해 수행할 수 있습니다. 관심변수(cognition)와 함께 데이터 세트의 이름과 추정 방법(최대 우도인 경우 fm=“ml”)을 지정해야 합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>correlations <span class="ot">&lt;-</span> <span class="fu">cor</span>(cognition)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(correlations, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         vocab reading sentcomp mathmtcs geometry analyrea
+vocab    1.000   0.803    0.813    0.708    0.633    0.673
+reading  0.803   1.000    0.725    0.660    0.526    0.636
+sentcomp 0.813   0.725    1.000    0.618    0.575    0.618
+mathmtcs 0.708   0.660    0.618    1.000    0.774    0.817
+geometry 0.633   0.526    0.575    0.774    1.000    0.715
+analyrea 0.673   0.636    0.618    0.817    0.715    1.000</code></pre>
+</div>
+</div>
+<p>여기서는 fa.parallel의 결과를 검토하지 않겠습니다. 그 대신, hemp 패키지의 lattice_pa라는 추가 함수를 사용하여 병렬 분석을 수행하고 그래프를 그리겠습니다. lattice_pa 함수는 fa.parallel 함수의 수정된 버전이며 불일치 함수로 최대우도와 데이터가 비율 또는 등간척도를 사용하고자 할 때 적합합니다. 변수가 비율 또는 등간척도가 아니거나 다른 불일치 함수(예: 최소잔차, 추축분석, 가중된 최소 제곱)가 필요하거나 병렬 분석에 대한 보다 세밀한 제어가 필요한 경우 fa.parallel 함수를 사용하는 것이 좋습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lattice_pa</span>(cognition)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap04_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>실선은 축소된 상관행렬의 고유값에 해당하며(즉, 상관 행렬의 대각선에 있는 것을 추정된 공통분에 대체하여), 점선은 시뮬레이션된 무선 데이터를 기반으로 축소된 상관 행렬의 고유값에 해당합니다. 병렬 분석을 사용하면, 점선 위에 있는 요인수를 추출합니다. 병렬 분석에 근거해 두 개의 요인을 추출합니다. 아래에서는 단일요인과 2요인 모두를 고려할 것입니다.</p>
+<p>먼저 cognition 데이터 세트에 단일요인 솔루션을 적합하는 것으로 시작합니다. factanal 함수를 사용하려면 데이터 세트의 이름(공분산행렬)과 추출할 요인 수(즉, factors=1)를 지정해야 합니다. 결과를 one_factor로 저장한 다음, 결과를 출력합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>one_factor <span class="ot">&lt;-</span> <span class="fu">factanal</span>(cognition, <span class="at">factors =</span> <span class="dv">1</span>)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>one_factor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+factanal(x = cognition, factors = 1)
+
+Uniquenesses:
+   vocab  reading sentcomp mathmtcs geometry analyrea 
+   0.213    0.324    0.331    0.270    0.412    0.318 
+
+Loadings:
+         Factor1
+vocab    0.887  
+reading  0.822  
+sentcomp 0.818  
+mathmtcs 0.854  
+geometry 0.767  
+analyrea 0.826  
+
+               Factor1
+SS loadings      4.132
+Proportion Var   0.689
+
+Test of the hypothesis that 1 factor is sufficient.
+The chi square statistic is 171.91 on 9 degrees of freedom.
+The p-value is 2.46e-32 </code></pre>
+</div>
+</div>
+<p>먼저, 호출(factanal이 실행되도록 지시한 내용)이 출력되고, 추출된 요인으로 설명되지 않는 변산성의 비율인 고유요인, 지표와 요인의 상관관계를 나타내는 요인부하량, 제곱하면 요인에 의해 설명되는 지표의 변산성 비율(즉, 공통분)이 표시됩니다. 요인부하량의 제곱합(SS 부하량), 요인에 의해 설명되는 변산성의 비율(SS 부하량을 지표 수로 나눈 값과 같음), 마지막으로 단일 요인 솔루션으로 충분하다는 영가설이 있는 경우 <span class="math inline">\(\chi^2\)</span> 통계치가 출력됩니다.</p>
+<p>결과에서, 모든 지표가 추출된 요인에 높은 부하가 걸렸으며 이 단일 요인이 cognition 데이터의 변산성을 약 69% 설명할 수 있음을 알 수 있습니다. <span class="math inline">\(\chi^2\)</span> 통계치는 영가설을 기각하고, 단일 요인으로는 충분하지 않다는 것을 시사합니다. factors=2로 2요인을 지정하여 코드를 업데이트합니다. 결과는 two_factor로 저장됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>two_factor <span class="ot">&lt;-</span> <span class="fu">factanal</span>(cognition, <span class="at">factors =</span> <span class="dv">2</span>)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>two_factor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+factanal(x = cognition, factors = 2)
+
+Uniquenesses:
+   vocab  reading sentcomp mathmtcs geometry analyrea 
+   0.104    0.281    0.261    0.109    0.327    0.246 
+
+Loadings:
+         Factor1 Factor2
+vocab    0.853   0.410  
+reading  0.750   0.395  
+sentcomp 0.785   0.350  
+mathmtcs 0.424   0.843  
+geometry 0.384   0.725  
+analyrea 0.437   0.751  
+
+               Factor1 Factor2
+SS loadings      2.426   2.246
+Proportion Var   0.404   0.374
+Cumulative Var   0.404   0.779
+
+Test of the hypothesis that 2 factors are sufficient.
+The chi square statistic is 11.22 on 4 degrees of freedom.
+The p-value is 0.0242 </code></pre>
+</div>
+</div>
+<p>2요인 솔루션에서는 vocab, reading, sentcomp가 첫 번째 요인에 높은 부하를, mathmtcs,geometry, analyrea가 두 번째 요인에 높은 부하를 주는 것을 알 수 있습니다. 첫 번째와 두 번째 요인의 잠재적 이름은 각각 언어적 추론과 수학적 추론이 될 수 있습니다. 2요인 구조는 cognition 데이터 세트의 변산성의 78%를 설명합니다. 2요인 구조에서도 여전히 영가설을 기각하고 카이제곱 검정에 근거해 2요인 구조가 충분하지 않다고 결론을 내립니다. 그러나 이 검정은 종종 기각되며 제안된 요인 구조의 적절성에 대한 강건한 결과는 아닙니다. 지표가 다른 요인보다 한 요인에 더 많은 부하가 걸리지만 교차 부하가 적절히 걸리므로 구조가 단순하지 않다는 것을 알 수 있습니다. factanal의 기본 회전은 varimax이며, 이는 요인들이 서로 상관관계가 없도록 하는 직교 회전입니다. 즉 각 지표가 단일 요인으로만 상관되는 단순한 구조입니다. 사각회전을 고려하는 것이 유리할 수도 있습니다.</p>
+<p>R에서 사각회전을 수행하려면 오래된 버그 때문에 기본 회전과 함께 factanal을 사용한 다음 솔루션을 회전하는 것이 좋습니다.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> 다양한 직교 및 사각 회전은 GPArotation 패키지에서 사용할 수 있습니다(Bernaards &amp; Jennrich, 2005). 회전을 수행하려면, 사용할 회전 이름을 지정하고 회전되지 않은 솔루션의 요인부하량을 전달합니다. 아래 예제에서는 GPArotation 패키지를 설치 및 로드한 다음 앞서 생성한 two_factor 객체에서 로딩을 전달하여 사각회전을 수행합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("GPArotation")</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"GPArotation"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'GPArotation'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:psych':
+
+    equamax, varimin</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oblimin</span>(<span class="fu">loadings</span>(two_factor))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Oblique rotation method Oblimin Quartimin converged.
+Loadings:
+          Factor1  Factor2
+vocab     0.94412  0.00325
+reading   0.80339  0.05482
+sentcomp  0.88899 -0.03725
+mathmtcs -0.03159  0.96884
+geometry  0.00144  0.81923
+analyrea  0.05990  0.81970
+
+               Factor1 Factor2
+SS loadings      2.359   2.313
+Proportion Var   0.393   0.386
+Cumulative Var   0.393   0.779
+
+Phi:
+        Factor1 Factor2
+Factor1   1.000   0.803
+Factor2   0.803   1.000</code></pre>
+</div>
+</div>
+<p>사각회전을 통해 간단한 구조를 얻을 수 있었고(즉, 모든 지표가 한 요인에 높게 적재되고 다른 요인에는 0에 가깝게 적재됨), 두 요인 간의 상관관계가 .803임을 알 수 있습니다(Phi는 요인 간 상관행렬). 이 경우 단순히 요인 간의 상관 관계를 허용하면 교차 부하가 제거되는 것을 알 수 있습니다.</p>
+<p>요인 점수는 scores 인수를 지정하여 추출할 수 있습니다. Thompson의 점수는 scroes=“regression”을 사용해 추출할 수 있으며 Bartlett의 가중 최소 제곱 점수는 scores=“Bartlett”을 사용하여 추출할 수 있습니다(이러한 요인 점수 추출 방법에 대한 검토는 Bartholomew, Deary, and Lawn (2009)을 참조). 요인 점수는 불확실성 때문에 항상 주의해서 사용해야 합니다(Mulaik, 2009).</p>
+</section>
+<section id="psych-패키지를-사용한-efa" class="level3" data-number="4.3.2">
+<h3 data-number="4.3.2" class="anchored" data-anchor-id="psych-패키지를-사용한-efa"><span class="header-section-number">4.3.2</span> psych 패키지를 사용한 EFA</h3>
+<p>데이터가 다변량 정규성을 위반하는 경우, EFA에 다른 통계적 불일치 함수를 사용해야 할 수도 있습니다. psych 패키지는 최소잔차해(기본 통계적 불일치 함수)를 찾기 위해 OLS를 사용하는 등 여러 가지 옵션을 제공합니다. 다음 예제에서는 psycho 패키지의 FA 함수를 사용해 동일한 cognition 데이터 세트에 EFA 모델을 적합합니다. 요인 수를 2로 지정하고(nfactors=2) 회전 방법을 사각회전으로 지정합니다(rotate=“oblimin”).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"psych"</span>)</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="fu">fa</span>(<span class="at">r =</span> cognition, <span class="at">nfactors =</span> <span class="dv">2</span>, <span class="at">rotate =</span> <span class="st">"oblimin"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Factor Analysis using method =  minres
+Call: fa(r = cognition, nfactors = 2, rotate = "oblimin")
+Standardized loadings (pattern matrix) based upon correlation matrix
+           MR1   MR2   h2   u2 com
+vocab     0.95  0.00 0.90 0.10   1
+reading   0.83  0.02 0.72 0.28   1
+sentcomp  0.87 -0.02 0.74 0.26   1
+mathmtcs -0.03  0.96 0.89 0.11   1
+geometry -0.02  0.84 0.68 0.32   1
+analyrea  0.07  0.81 0.76 0.24   1
+
+                       MR1  MR2
+SS loadings           2.36 2.31
+Proportion Var        0.39 0.38
+Cumulative Var        0.39 0.78
+Proportion Explained  0.51 0.49
+Cumulative Proportion 0.51 1.00
+
+ With factor correlations of 
+    MR1 MR2
+MR1 1.0 0.8
+MR2 0.8 1.0
+
+Mean item complexity =  1
+Test of the hypothesis that 2 factors are sufficient.
+
+df null model =  15  with the objective function =  5.11 with Chi Square =  1257.24
+df of  the model are 4  and the objective function was  0.05 
+
+The root mean square of the residuals (RMSR) is  0.01 
+The df corrected root mean square of the residuals is  0.03 
+
+The harmonic n.obs is  250 with the empirical chi square  1.42  with prob &lt;  0.84 
+The total n.obs was  250  with Likelihood Chi Square =  11.64  with prob &lt;  0.02 
+
+Tucker Lewis Index of factoring reliability =  0.977
+RMSEA index =  0.087  and the 90 % confidence intervals are  0.031 0.148
+BIC =  -10.44
+Fit based upon off diagonal values = 1
+Measures of factor score adequacy             
+                                                   MR1  MR2
+Correlation of (regression) scores with factors   0.97 0.97
+Multiple R square of scores with factors          0.94 0.94
+Minimum correlation of possible factor scores     0.88 0.87</code></pre>
+</div>
+</div>
+<p>fa 함수 결과는 적합도 지수에 대한 정보를 포함하므로 factanal 결과보다 더 깁니다. 첫 번째 표에는 요인 적재량(1, 2열), 공통분, 고유요인 및 두 열의 합계가 포함되어 있습니다. 두 번째 표에는 각 요인에 대한 SS 적재치, 각 요인에 대해 설명된 변산성의 비율, 각 요인에 대해 설명된 누적 분산, 총 설명된 변산성에서 각 요인이 차지하는 비율, 각 요인에 의해 설명된 변산성의 누적 비율(합계가 1이 되어야 함)이 출력됩니다. 그런 다음 요인 상관관계 표와 두 가지 카이제곱 검정, 즉 경험적 카이제곱 통계와 최대 확률 카이제곱 통계가 출력됩니다. 마지막으로 RMSR(평균제곱잔차제곱근), Tucker Lewis Index(TLI), RMSEA(근사 평균제곱근 오차)를 포함한 적합도 측정치를 볼 수 있습니다. 전반적으로 적합도 측정치는 2요인 모델이 cognition 데이터 세트에 잘 맞는다는 것을 시사합니다(Hu와 Bentler(1999)와 같이 일반적으로 사용되는 기준에 근거함). 이 분석을 바탕으로 cognition 데이터 세트의 지표에 대한 2요인 구조를 뒷받침하는 증거를 발견했습니다.</p>
+</section>
+<section id="범주형-데이터를-사용한-efa" class="level3" data-number="4.3.3">
+<h3 data-number="4.3.3" class="anchored" data-anchor-id="범주형-데이터를-사용한-efa"><span class="header-section-number">4.3.3</span> 범주형 데이터를 사용한 EFA</h3>
+<p>지금까지의 예제에서는 등간 또는 비율척도의 연속형 변수에 중점을 두었습니다. 이 섹션에서는 psych 패키지로 범주형 데이터를 사용하여 EFA를 수행하는 방법을 보여 드리겠습니다. 여기서는 제2장에서 설명한 SAPA 데이터 세트로부터 추출한 문항 데이터 세트를 사용합니다. 이 데이터 세트를 SAPA_subset으로 저장합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>SAPA_subset <span class="ot">&lt;-</span> <span class="fu">subset</span>(SAPA, <span class="at">select =</span> <span class="fu">c</span>(letter<span class="fl">.7</span><span class="sc">:</span>letter<span class="fl">.58</span>, rotate<span class="fl">.3</span><span class="sc">:</span>rotate<span class="fl">.8</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>SAPA_subset 데이터 세트의 변수는 이분형으로 채점되었습니다(즉, 변수 값으로 0, 1이 사용됨). 따라서 병렬 분석 또는 요인 분석을 실행할 때 이산 분석으로 인해 Pearson의 상관관계가 약화되므로 Pearson의 상관관계 대신 다항(polychoric) 상관관계(fa.parallel 및 fa 함수에 대한 기본 옵션)를 지정해야 합니다. 병렬 분석은 다음을 실행하여 수행할 수 있습니다:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fa.parallel</span>(SAPA_subset, <span class="at">cor =</span> <span class="st">"poly"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap04_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Parallel analysis suggests that the number of factors =  2  and the number of components =  2 </code></pre>
+</div>
+</div>
+<p>병렬 분석 결과는 데이터에서 2개의 요인 또는 2개의 성분을 추출할 수 있음을 제안합니다. 또한 cor=“poly” 인수를 지정하여 psych의 fa 함수를 사용해 동일한 데이터 세트에 대한 EFA를 수행합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>EFA_SAPA <span class="ot">&lt;-</span> <span class="fu">fa</span>(SAPA_subset, <span class="dv">2</span>, <span class="at">rotate =</span> <span class="st">"oblimin"</span>, <span class="at">cor =</span> <span class="st">"poly"</span>)</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>EFA_SAPA</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Factor Analysis using method =  minres
+Call: fa(r = SAPA_subset, nfactors = 2, rotate = "oblimin", cor = "poly")
+Standardized loadings (pattern matrix) based upon correlation matrix
+            MR1   MR2   h2   u2 com
+letter.7  -0.02  0.79 0.60 0.40 1.0
+letter.33  0.01  0.70 0.50 0.50 1.0
+letter.34 -0.02  0.80 0.63 0.37 1.0
+letter.58  0.21  0.54 0.46 0.54 1.3
+rotate.3   0.86 -0.02 0.72 0.28 1.0
+rotate.4   0.82  0.10 0.77 0.23 1.0
+rotate.6   0.77  0.05 0.64 0.36 1.0
+rotate.8   0.86 -0.09 0.65 0.35 1.0
+
+                       MR1  MR2
+SS loadings           2.84 2.13
+Proportion Var        0.36 0.27
+Cumulative Var        0.36 0.62
+Proportion Explained  0.57 0.43
+Cumulative Proportion 0.57 1.00
+
+ With factor correlations of 
+     MR1  MR2
+MR1 1.00 0.56
+MR2 0.56 1.00
+
+Mean item complexity =  1
+Test of the hypothesis that 2 factors are sufficient.
+
+df null model =  28  with the objective function =  4.26 with Chi Square =  6477.4
+df of  the model are 13  and the objective function was  0.06 
+
+The root mean square of the residuals (RMSR) is  0.02 
+The df corrected root mean square of the residuals is  0.02 
+
+The harmonic n.obs is  1523 with the empirical chi square  22.69  with prob &lt;  0.046 
+The total n.obs was  1525  with Likelihood Chi Square =  97.39  with prob &lt;  5.3e-15 
+
+Tucker Lewis Index of factoring reliability =  0.972
+RMSEA index =  0.065  and the 90 % confidence intervals are  0.053 0.078
+BIC =  2.1
+Fit based upon off diagonal values = 1
+Measures of factor score adequacy             
+                                                   MR1  MR2
+Correlation of (regression) scores with factors   0.95 0.92
+Multiple R square of scores with factors          0.91 0.84
+Minimum correlation of possible factor scores     0.81 0.68</code></pre>
+</div>
+</div>
+<p>fa 함수의 결과에서 일부만 인쇄했다는 점에 유의하세요. 출력 결과에서 2요인 구조의 상당히 강력한 증거와 함께 사각 회전을 사용하여 간단한 구조를 달성했음을 알 수 있습니다(두 요인이 변산성의 약 62%를 차지하며, RMSR은 .02, TLI는 .972, RMSEA는 .065임). SAPA_subset 데이터 대신 다항 상관행렬을 전달하여 factanal 함수를 직접 사용할 수도 있습니다. 이를 위해 먼저 polychoric 함수를 사용해 polychoric 상관 관계를 계산한 다음 이를 factanal 함수로 전달합니다(covmat=SAPA_cor$rho).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>SAPA_cor <span class="ot">&lt;-</span> <span class="fu">polychoric</span>(SAPA_subset)</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="fu">factanal</span>(<span class="at">covmat =</span> SAPA_cor<span class="sc">$</span>rho, <span class="at">factors =</span> <span class="dv">2</span>, <span class="at">n.obs =</span> <span class="fu">nrow</span>(SAPA))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+factanal(factors = 2, covmat = SAPA_cor$rho, n.obs = nrow(SAPA))
+
+Uniquenesses:
+ letter.7 letter.33 letter.34 letter.58  rotate.3  rotate.4  rotate.6  rotate.8 
+    0.397     0.498     0.382     0.542     0.260     0.223     0.368     0.361 
+
+Loadings:
+          Factor1 Factor2
+letter.7  0.205   0.749  
+letter.33 0.211   0.676  
+letter.34 0.212   0.757  
+letter.58 0.345   0.582  
+rotate.3  0.826   0.239  
+rotate.4  0.815   0.336  
+rotate.6  0.744   0.280  
+rotate.8  0.780   0.174  
+
+               Factor1 Factor2
+SS loadings      2.761   2.208
+Proportion Var   0.345   0.276
+Cumulative Var   0.345   0.621
+
+Test of the hypothesis that 2 factors are sufficient.
+The chi square statistic is 94.48 on 13 degrees of freedom.
+The p-value is 1.93e-14 </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="확인적-요인분석cfa" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="확인적-요인분석cfa"><span class="header-section-number">4.4</span> 확인적 요인분석(CFA)</h2>
+<p>검사도구가 개발되고 검증되면 검사도구의 차원과 어떤 지표를 어떤 요인에 적재해야 하는지 파악할 수 있습니다. 이러한 환경에서는 요인 구조를 검토할 때 EFA가 아닌 CFA를 고려하는 것이 적절합니다. EFA와 달리 CFA에서는 방정식 4.1과 4.2의 모델 예측 행렬에 특정 제한을 둡니다. CFA에서는 각 요인에 대해 단일 요인 부하를 설정하거나 요인의 분산을 1로 설정하여 척도를 고정하기 때문에 회전 및 불확실성에 대해 고려하지 않습니다.</p>
+<section id="wisc-r-데이터의-cfa" class="level3" data-number="4.4.1">
+<h3 data-number="4.4.1" class="anchored" data-anchor-id="wisc-r-데이터의-cfa"><span class="header-section-number">4.4.1</span> WISC-R 데이터의 CFA</h3>
+<p>WISC‑R은 1975년에 발표된 WISC(아동용 Weschler‑Belleview 검사의 하향 확장)의 개정판입니다. 이 데이터는 175명의 아동을 대상으로 WISC‑R을 시행한 결과입니다. 데이터에 대한 자세한 내용은 Tabachnick, Fidell 및 Osterlind(2001)에서 확인할 수 있습니다. 이 데이터 세트는 hemp 패키지에 wiscsem으로 포함되어 있습니다. wiscsem의 변수에는 클라이언트(id 변수), agemat(범주 연령 변수), 10개의 핵심 하위 검사 점수 및 하나의 선택적 하위 검사 점수가 포함됩니다.</p>
+<p>간결함을 위해 이전에 EFA를 수행하는 동안 수행한 모든 초기 탐색적 설명 및 그래픽 분석은 생략하겠습니다. 그러나 이것은 CFA뿐만 아니라 모든 유형의 심리측정 분석과 함께 수행되어야 합니다. 경로분석 및 구조방정식 모델링(SEM)과 마찬가지로 R에서 실제 CFA를 수행하기 위해 잠재변수분석(<strong>la</strong>tent <strong>va</strong>riable <strong>an</strong>alysis)을 대표하는 lavaan 패키지 Rosseel(2012)을 사용합니다. 아래에서 lavaan 패키지를 설치하고 활성화합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"lavaan"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'lavaan' is in use and will not be installed</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"lavaan"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>lavaan 패키지는 회귀분석, CFA, SEM, 성장곡선모델링, 매개, 조절효과 등을 수행할 수 있습니다. lavaan을 사용하려면 다음 세 단계를 거쳐야 합니다.</p>
+<ol type="1">
+<li><p>lavaan의 특수 구문(Mplus와 유사)을 사용하여 모델 정의</p></li>
+<li><p>모델 적합</p></li>
+<li><p>적합된 모델에서 정보 추출</p></li>
+</ol>
+<p>lavaan 패키지는 고유한 모델 구문을 사용합니다. CFA를 수행하기 위해 일반적으로 다음 구문이 사용됩니다.</p>
+<ul>
+<li><p>=~: 잠재 변수와 관련 지표를 정의하는 방법</p></li>
+<li><p>~~: 공분산 또는 분산을 정의하는 방법</p></li>
+<li><p>~: 경로 분석, 회귀분석 또는 SEM에 대한 경로를 정의하는 방법</p></li>
+<li><p>+: 변수를 함께 묶는 방법(lm으로 중다 회귀를 적합하는 방법과 동일)</p></li>
+</ul>
+<p>lavaan의 저자는 잘 문서화된 튜토리얼이 있는 훌륭한 웹사이트를 가지고 있으며 관심 있는 독자는 이 웹사이트를 참조하여 lavaan에 대한 자세한 내용을 확인하시기 바랍니다.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>어떤 하위 검사가 지능의 어떤 구성 요소(즉, 언어(verbal) 또는 수행(perf) IQ)를 측정해야 하는지 알고 있기 때문에 이 구조를 반영하도록 모델을 정의합니다. 가장 먼저 해야 할 일은 lavaan의 구문을 사용하여 모델을 정의하는 것입니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>iq_mod <span class="ot">&lt;-</span> <span class="st">'</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a><span class="st">verb =~ info + comp + arith + simil + digit + vocab</span></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a><span class="st">perf =~ pictcomp + parang + block + object + coding</span></span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a><span class="st">'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>기본적으로 lavaan은 각 잠재 변수(이 경우 info 및 pictcomp)의 첫 번째 지표를 “1”로 고정하여 요인의 척도를 설정합니다. 표준화된 해를 얻기 위해 verb 및 perf의 척도를 1로 설정할 수 있습니다. 그러나 summary 함수(아래 참조)에서 표준화된 해를 요청하는 것이 더 쉽습니다. 따라서 이 간단한 경우에는 기본 옵션을 그대로 사용하는 것이 좋습니다. 다음으로 lavaan의 cfa 함수를 사용하여 모델(iq_mod)을 맞춥니다. 모델 적합 절차를 세밀하게 제어하려면 lavaan 함수를 사용할 수 있습니다(시뮬레이션을 실행하고 더 복잡한 구조 방정식 모델을 적합하는 데 매우 유용할 수 있음). 우리는 비교적 간단한 CFA 모델을 적합하고 있기 때문에 cfa 함수를 사용하여 모델을 추정하고 iq_fit이라는 객체로 저장합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>iq_fit <span class="ot">&lt;-</span> <span class="fu">cfa</span>(iq_mod, <span class="at">data =</span> wiscsem)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>가장 먼재 해야 할 일은 모델을 검사하여 lavaan이 실제로 우리가 의도한 모델을 적합하는지 확인하는 것입니다. 이 단계에서는 inspect 함수와 함께 CFA 결과인 iq_fit을 함께 사용합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">inspect</span>(iq_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$lambda
+         verb perf
+info        0    0
+comp        1    0
+arith       2    0
+simil       3    0
+digit       4    0
+vocab       5    0
+pictcomp    0    0
+parang      0    6
+block       0    7
+object      0    8
+coding      0    9
+
+$theta
+         info comp arith simil digit vocab pctcmp parang block object coding
+info       10                                                               
+comp        0   11                                                          
+arith       0    0    12                                                    
+simil       0    0     0    13                                              
+digit       0    0     0     0    14                                        
+vocab       0    0     0     0     0    15                                  
+pictcomp    0    0     0     0     0     0     16                           
+parang      0    0     0     0     0     0      0     17                    
+block       0    0     0     0     0     0      0      0    18              
+object      0    0     0     0     0     0      0      0     0     19       
+coding      0    0     0     0     0     0      0      0     0      0     20
+
+$psi
+     verb perf
+verb   21     
+perf   23   22</code></pre>
+</div>
+</div>
+<p>$lambda 행렬은 지표에 대해 추정되는 요인 적재치입니다. 0이 아닌 값은 해당 요인에 대한 부하가 추정되고 있음을 나타냅니다. info와 pictcomp는 모두 0입니다. 이는 로딩을 1로 고정했기 때문입니다. $theta 행렬은 지표의 잔차 분산을 나타내는 지표의 공분산 행렬입니다(즉, 고유하거나 특정 분산). 모든 지표에는 추정된 잔차가 있고 어떤 지표도 상관관계가 없습니다(즉, 모든 비대각선 요소는 0임). $psi 행렬은 요인의 공분산 행렬입니다. 이 행렬의 모든 요소(즉, 분산 및 공분산)가 추정됩니다. 즉, 우리는 언어 지능과 수행 지능이 서로 연관되어 있다고 가정합니다.</p>
+<p>inspect 함수의 결과를 바탕으로 CFA 모델이 실제로 우리가 추정하고자 했던 것과 일치한다는 것을 알 수 있습니다. 이제 summary 함수를 사용하여 적합된 모델에서 정보를 추출할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(iq_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>lavaan 0.6.16 ended normally after 51 iterations
+
+  Estimator                                         ML
+  Optimization method                           NLMINB
+  Number of model parameters                        23
+
+  Number of observations                           175
+
+Model Test User Model:
+                                                      
+  Test statistic                                70.640
+  Degrees of freedom                                43
+  P-value (Chi-square)                           0.005
+
+Parameter Estimates:
+
+  Standard errors                             Standard
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+
+Latent Variables:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+  verb =~                                             
+    info              1.000                           
+    comp              0.926    0.108    8.609    0.000
+    arith             0.589    0.084    7.013    0.000
+    simil             1.012    0.115    8.764    0.000
+    digit             0.477    0.099    4.805    0.000
+    vocab             1.020    0.107    9.548    0.000
+  perf =~                                             
+    pictcomp          1.000                           
+    parang            0.719    0.156    4.614    0.000
+    block             1.060    0.187    5.675    0.000
+    object            0.921    0.177    5.215    0.000
+    coding            0.119    0.147    0.810    0.418
+
+Covariances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+  verb ~~                                             
+    perf              2.263    0.515    4.397    0.000
+
+Variances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+   .info              3.566    0.507    7.034    0.000
+   .comp              4.572    0.585    7.815    0.000
+   .arith             3.602    0.420    8.571    0.000
+   .simil             5.096    0.662    7.702    0.000
+   .digit             6.162    0.680    9.056    0.000
+   .vocab             3.487    0.506    6.886    0.000
+   .pictcomp          5.526    0.757    7.296    0.000
+   .parang            5.463    0.658    8.298    0.000
+   .block             3.894    0.640    6.083    0.000
+   .object            5.467    0.719    7.600    0.000
+   .coding            8.159    0.874    9.335    0.000
+    verb              4.867    0.883    5.514    0.000
+    perf              3.035    0.844    3.593    0.000</code></pre>
+</div>
+</div>
+<p>출력은 Mplus와 유사하도록 의도되었습니다(Muthén &amp; Muthén, 2015). 그러나 기본 결과는 좀 더 간결합니다. 최소 함수 검정 통계량은 현재 모델에 대한 카이제곱 통계량이며 모델 예측 공분산 행렬과 관찰된 공분산 행렬 사이의 편차를 측정한 것입니다. 다음은 자유도 수이며, 그 다음은 이 검정의 p값입니다. 자유도는 hemp 패키지의 unique_elements와 free_params 함수를 사용하여 공분산 행렬의 고유 요소 수에서 자유 모수 수를 뺀 값으로 계산할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique_elements</span>(iq_fit) <span class="sc">-</span> <span class="fu">free_params</span>(iq_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 43</code></pre>
+</div>
+</div>
+<p>summary(iq_fit) 인수는 세 개의 표를 반환합니다. 첫 번째 표는 표준 오차, z‑값 및 p‑값을 가진 추정된 요인적재치를 나타냅니다. 두 번째 표에는 요인의 공분산이 표시되고, 마지막 표에는 지표와 요인 모두의 분산이 포함됩니다(요인은 마지막에 나열됨). 이들 표에서 가장 주목할만한 발견은 coding이 perf IQ와 관련이 없는 것으로 보인다는 것입니다. cfa 함수는 기본적으로 지표에 대한 절편을 제공하지 않는다는 점에 유의해야 합니다(Mplus와 달리). 그러나 절편은 meanstructure = TRUE 인수를 사용하여 모델에 포함될 수 있습니다. 이러한 절편항은 지표의 원 평균에 해당합니다.</p>
+<p>summary 함수는 기본적으로 추정된 CFA 모델에 대해 표준화되지 않은 해를 반환하지만, summary 함수에 standardized = TRUE 및 fit.measures = TRUE를 포함하여 표준화된 해와 모델 적합도를 출력할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(iq_fit, <span class="at">standardized =</span> <span class="cn">TRUE</span>, <span class="at">fit.measures =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>lavaan 0.6.16 ended normally after 51 iterations
+
+  Estimator                                         ML
+  Optimization method                           NLMINB
+  Number of model parameters                        23
+
+  Number of observations                           175
+
+Model Test User Model:
+                                                      
+  Test statistic                                70.640
+  Degrees of freedom                                43
+  P-value (Chi-square)                           0.005
+
+Model Test Baseline Model:
+
+  Test statistic                               519.204
+  Degrees of freedom                                55
+  P-value                                        0.000
+
+User Model versus Baseline Model:
+
+  Comparative Fit Index (CFI)                    0.940
+  Tucker-Lewis Index (TLI)                       0.924
+
+Loglikelihood and Information Criteria:
+
+  Loglikelihood user model (H0)              -4491.822
+  Loglikelihood unrestricted model (H1)      -4456.502
+                                                      
+  Akaike (AIC)                                9029.643
+  Bayesian (BIC)                              9102.433
+  Sample-size adjusted Bayesian (SABIC)       9029.600
+
+Root Mean Square Error of Approximation:
+
+  RMSEA                                          0.061
+  90 Percent confidence interval - lower         0.033
+  90 Percent confidence interval - upper         0.085
+  P-value H_0: RMSEA &lt;= 0.050                    0.233
+  P-value H_0: RMSEA &gt;= 0.080                    0.103
+
+Standardized Root Mean Square Residual:
+
+  SRMR                                           0.059
+
+Parameter Estimates:
+
+  Standard errors                             Standard
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+
+Latent Variables:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+  verb =~                                                               
+    info              1.000                               2.206    0.760
+    comp              0.926    0.108    8.609    0.000    2.042    0.691
+    arith             0.589    0.084    7.013    0.000    1.300    0.565
+    simil             1.012    0.115    8.764    0.000    2.232    0.703
+    digit             0.477    0.099    4.805    0.000    1.053    0.390
+    vocab             1.020    0.107    9.548    0.000    2.250    0.770
+  perf =~                                                               
+    pictcomp          1.000                               1.742    0.595
+    parang            0.719    0.156    4.614    0.000    1.253    0.473
+    block             1.060    0.187    5.675    0.000    1.846    0.683
+    object            0.921    0.177    5.215    0.000    1.605    0.566
+    coding            0.119    0.147    0.810    0.418    0.207    0.072
+
+Covariances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+  verb ~~                                                               
+    perf              2.263    0.515    4.397    0.000    0.589    0.589
+
+Variances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)   Std.lv  Std.all
+   .info              3.566    0.507    7.034    0.000    3.566    0.423
+   .comp              4.572    0.585    7.815    0.000    4.572    0.523
+   .arith             3.602    0.420    8.571    0.000    3.602    0.681
+   .simil             5.096    0.662    7.702    0.000    5.096    0.506
+   .digit             6.162    0.680    9.056    0.000    6.162    0.848
+   .vocab             3.487    0.506    6.886    0.000    3.487    0.408
+   .pictcomp          5.526    0.757    7.296    0.000    5.526    0.646
+   .parang            5.463    0.658    8.298    0.000    5.463    0.777
+   .block             3.894    0.640    6.083    0.000    3.894    0.533
+   .object            5.467    0.719    7.600    0.000    5.467    0.680
+   .coding            8.159    0.874    9.335    0.000    8.159    0.995
+    verb              4.867    0.883    5.514    0.000    1.000    1.000
+    perf              3.035    0.844    3.593    0.000    1.000    1.000</code></pre>
+</div>
+</div>
+<p>standardized = TRUE 인수는 계수 표에 두 개의 열을 추가합니다. Std.lv 열은 잠재변수만을 표준화한 표준화된 값이고, Std.all 열은 잠재변수와 지표를 표준화한 표준화된 출력입니다. 전자는 지표가 이산적일 때 유용하고 후자는 지표가 연속적일 때 유용합니다.</p>
+<p>fit.measures = TRUE 인수는 다양한 적합도 지수(예: BIC(Bayesian Information Criteria), AIC(Akaike’s information criteria), 비교 적합도 지수(CFI), TLI, RMSEA, SRMR)를 출력합니다. 또한 지표의 분산만 추정하는 가장 간명하고 그럴듯한 모델의 카이제곱 검정도 추가로 제공합니다. 적합 모델에서 다양한 추가 적합도 지수를 추출할 수 있습니다. 사용 가능한 모든 지수를 출력하려면 fitMeasures 함수를 사용할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fitmeasures</span>(iq_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 npar                  fmin                 chisq 
+               23.000                 0.202                70.640 
+                   df                pvalue        baseline.chisq 
+               43.000                 0.005               519.204 
+          baseline.df       baseline.pvalue                   cfi 
+               55.000                 0.000                 0.940 
+                  tli                  nnfi                   rfi 
+                0.924                 0.924                 0.826 
+                  nfi                  pnfi                   ifi 
+                0.864                 0.675                 0.942 
+                  rni                  logl     unrestricted.logl 
+                0.940             -4491.822             -4456.502 
+                  aic                   bic                ntotal 
+             9029.643              9102.433               175.000 
+                 bic2                 rmsea        rmsea.ci.lower 
+             9029.600                 0.061                 0.033 
+       rmsea.ci.upper        rmsea.ci.level          rmsea.pvalue 
+                0.085                 0.900                 0.233 
+       rmsea.close.h0 rmsea.notclose.pvalue     rmsea.notclose.h0 
+                0.050                 0.103                 0.080 
+                  rmr            rmr_nomean                  srmr 
+                0.466                 0.466                 0.059 
+         srmr_bentler   srmr_bentler_nomean                  crmr 
+                0.059                 0.059                 0.064 
+          crmr_nomean            srmr_mplus     srmr_mplus_nomean 
+                0.064                 0.059                 0.059 
+                cn_05                 cn_01                   gfi 
+              147.916               168.121                 0.931 
+                 agfi                  pgfi                   mfi 
+                0.894                 0.606                 0.924 
+                 ecvi 
+                0.667 </code></pre>
+</div>
+</div>
+<p>inspect 함수를 사용하여 <span class="math inline">\(R^2\)</span> (잠재 변수로 설명되는 지표의 변산성 비율)를 별도의 결과로 출력할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">inspect</span>(iq_fit, <span class="st">"rsquare"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    info     comp    arith    simil    digit    vocab pictcomp   parang 
+   0.577    0.477    0.319    0.494    0.152    0.592    0.354    0.223 
+   block   object   coding 
+   0.467    0.320    0.005 </code></pre>
+</div>
+</div>
+<p>동일한 정보는 기본 요약 결과(예: 1 ‑ 고유 분산)에서도 얻을 수 있습니다. 또한 summary 함수에 추가 인수를 전달하여 <span class="math inline">\(R^2\)</span>를 요청할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(iq_fit, <span class="at">rsquare =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>lavaan 0.6.16 ended normally after 51 iterations
+
+  Estimator                                         ML
+  Optimization method                           NLMINB
+  Number of model parameters                        23
+
+  Number of observations                           175
+
+Model Test User Model:
+                                                      
+  Test statistic                                70.640
+  Degrees of freedom                                43
+  P-value (Chi-square)                           0.005
+
+Parameter Estimates:
+
+  Standard errors                             Standard
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+
+Latent Variables:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+  verb =~                                             
+    info              1.000                           
+    comp              0.926    0.108    8.609    0.000
+    arith             0.589    0.084    7.013    0.000
+    simil             1.012    0.115    8.764    0.000
+    digit             0.477    0.099    4.805    0.000
+    vocab             1.020    0.107    9.548    0.000
+  perf =~                                             
+    pictcomp          1.000                           
+    parang            0.719    0.156    4.614    0.000
+    block             1.060    0.187    5.675    0.000
+    object            0.921    0.177    5.215    0.000
+    coding            0.119    0.147    0.810    0.418
+
+Covariances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+  verb ~~                                             
+    perf              2.263    0.515    4.397    0.000
+
+Variances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+   .info              3.566    0.507    7.034    0.000
+   .comp              4.572    0.585    7.815    0.000
+   .arith             3.602    0.420    8.571    0.000
+   .simil             5.096    0.662    7.702    0.000
+   .digit             6.162    0.680    9.056    0.000
+   .vocab             3.487    0.506    6.886    0.000
+   .pictcomp          5.526    0.757    7.296    0.000
+   .parang            5.463    0.658    8.298    0.000
+   .block             3.894    0.640    6.083    0.000
+   .object            5.467    0.719    7.600    0.000
+   .coding            8.159    0.874    9.335    0.000
+    verb              4.867    0.883    5.514    0.000
+    perf              3.035    0.844    3.593    0.000
+
+R-Square:
+                   Estimate
+    info              0.577
+    comp              0.477
+    arith             0.319
+    simil             0.494
+    digit             0.152
+    vocab             0.592
+    pictcomp          0.354
+    parang            0.223
+    block             0.467
+    object            0.320
+    coding            0.005</code></pre>
+</div>
+</div>
+<p>CFA 모델로 돌아가서 모델에서 “coding” 변수를 삭제하고 모델을 다시 적합합니다. 이 새 모델의 결과를 iq_fit_nocode로 저장합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>iq_mod_nocode <span class="ot">&lt;-</span> <span class="st">'</span></span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a><span class="st">verb =~ info + comp + arith + simil + digit + vocab</span></span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a><span class="st">perf =~ pictcomp + parang + block + object</span></span>
+<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a><span class="st">'</span></span>
+<span id="cb83-5"><a href="#cb83-5" aria-hidden="true" tabindex="-1"></a>iq_fit_nocode <span class="ot">&lt;-</span> <span class="fu">cfa</span>(iq_mod_nocode, wiscsem)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>다음으로 coding(code)이 있는 모델과 없는 모델(nocode)을 비교하고 rbind 함수를 사용하여 적합도 지수를 결합할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>nocode <span class="ot">&lt;-</span> <span class="fu">fitmeasures</span>(iq_fit_nocode,</span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a><span class="at">fit.measures =</span> <span class="fu">c</span>(<span class="st">"rmsea"</span>, <span class="st">"tli"</span>, <span class="st">"cfi"</span>))</span>
+<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a>code <span class="ot">&lt;-</span> <span class="fu">fitmeasures</span>(iq_fit,</span>
+<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a><span class="at">fit.measures =</span> <span class="fu">c</span>(<span class="st">"rmsea"</span>, <span class="st">"tli"</span>, <span class="st">"cfi"</span>))</span>
+<span id="cb84-5"><a href="#cb84-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(nocode, code)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            rmsea       tli       cfi
+nocode 0.05983914 0.9384618 0.9535045
+code   0.06060555 0.9238418 0.9404581</code></pre>
+</div>
+</div>
+<p>이러한 모델은 공분산 행렬이 다르기 때문에 내재되지 않으며 이러한 모델을 카이제곱 차이 검정 또는 정보 기준으로 비교할 수 없습니다. 그러나 절대 적합도 지수를 비교할 수 있습니다. 모델은 같은 공분산 행렬을 갖고 있지만 자유 모수가 더 적은 경우에만 내재됩니다. 그런 상황에서 우리는 단순히 카이 제곱 차이 검정을 사용할 수 있습니다.</p>
+<p>이 결과를 바탕으로 coding 변수를 삭제하는 것이 정당화될 수 있지만 coding을 삭제해도 모델 적합도가 크게 개선되지는 않는 것 같습니다. 모델 적합도를 개선하려면 modindices 함수를 사용하여 계산할 수 있는 수정 지수를 검토하는 것을 고려할 수 있습니다. 현재 모델은 이러한 모든 추가 경로가 자유로운 모델 내에 내재되어 있습니다. 아래에서는 수정 지수를 계산하여 내림차순으로 정렬하고, 카이 제곱 검정을 기반으로 모델 적합도를 크게 향상시키는 것만 출력합니다(즉, <span class="math inline">\(\chi^2\)</span>의 변화가 <em>df</em>=1일 때 3.84보다 커짐)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>modind_iq <span class="ot">&lt;-</span> <span class="fu">modindices</span>(iq_fit_nocode, <span class="at">sort. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a>modind_iq[modind_iq<span class="sc">$</span>mi <span class="sc">&gt;</span> <span class="fl">3.84</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     lhs op      rhs    mi    epc sepc.lv sepc.all sepc.nox
+29  perf =~     comp 9.853  0.534   0.939    0.318    0.318
+57 arith ~~   object 6.246 -0.936  -0.936   -0.211   -0.211
+34  info ~~     comp 5.247 -0.987  -0.987   -0.245   -0.245
+47  comp ~~ pictcomp 4.629  0.961   0.961    0.192    0.192
+38  info ~~    vocab 4.429  0.915   0.915    0.259    0.259
+28  perf =~     info 4.372 -0.335  -0.589   -0.203   -0.203
+35  info ~~    arith 4.156  0.699   0.699    0.195    0.195
+70 vocab ~~   parang 4.072 -0.791  -0.791   -0.181   -0.181</code></pre>
+</div>
+</div>
+<p>결과에서, 첫 세 열은 자유모수 경로를 나타냅니다. op 열은 left-hand side(lhs) 변수와 right-hand side(rhs) 변수 사이에 lavaan 연산자에 해당합니다. 앞서 우리는 “=~”는 왼쪽 변수가 오른쪽 변수에 의해 명시된다는 것을 의미한다고 보았습니다. 첫 번째 줄은 comp가 수행 IQ 변수인 perf 의 표현식이 될 수 있도록 허용해야 함을 나타냅니다. 두 번째 줄에는 “~~” 연산자가 포함되어 있어 왼쪽의 변수와 오른쪽에 있는 변수가 공변할 수 있도록 허용해야 한다고 제안합니다. 이 경우, arith가 object와 공변하도록 허용해야 합니다.</p>
+<p>나머지 열은 카이제곱 통계량의 예상되는 변화입니다. 기대되는 모수 변화(즉, 해당 자유 경로의 추정된 모수) 그리고 다음과 같은 표준화 버전(잠재 변수만 표준화, 모든 변수 표준화, 모델의 외생 변수를 제외한 모든 변수 표준화)입니다. 수정 지수(즉, mi 열)는 comp가 perf에 적재되도록 허용함으로써 모델 적합도에서 가장 큰 변화를 찾을 수 있음을 보여줍니다. 카이제곱의 변화는 9.823입니다.</p>
+<p>수정 지수를 기반으로 한 제안을 사용하여 perf 요인 하에 comp를 추가하여 CFA 모델을 업데이트하고 새 모델을 iq_fit_mi로 저장합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a>iq_mod_mi <span class="ot">&lt;-</span> <span class="st">'</span></span>
+<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a><span class="st">verb =~ info + comp + arith + simil + digit + vocab</span></span>
+<span id="cb88-3"><a href="#cb88-3" aria-hidden="true" tabindex="-1"></a><span class="st">perf =~ pictcomp + parang + block + object + comp</span></span>
+<span id="cb88-4"><a href="#cb88-4" aria-hidden="true" tabindex="-1"></a><span class="st">'</span></span>
+<span id="cb88-5"><a href="#cb88-5" aria-hidden="true" tabindex="-1"></a>iq_fit_mi <span class="ot">&lt;-</span> <span class="fu">cfa</span>(iq_mod_mi, wiscsem)</span>
+<span id="cb88-6"><a href="#cb88-6" aria-hidden="true" tabindex="-1"></a><span class="fu">fitMeasures</span>(iq_fit_mi, <span class="fu">c</span>(<span class="st">"rmsea"</span>, <span class="st">"tli"</span>, <span class="st">"cfi"</span>, <span class="st">"srmr"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>rmsea   tli   cfi  srmr 
+0.046 0.963 0.973 0.049 </code></pre>
+</div>
+</div>
+<p>이제 업데이트된 모델(즉, iq_fit_mi)에서 적합도가 매우 양호한 것을 알 수 있으며 summary 결과를 살펴보면 카이제곱 검정에 대한 영가설을 기각하지 못하는 것을 볼 수 있습니다. 하지만 우리는 comp가 perf의 명시변수가 되도록 허용하는 이유를 정당화할 준비가 되어 있어야 합니다. 이는 타당도에 대한 질문이며 일반화가능도에도 영향을 미칩니다(즉, 모델을 과적합하고 있는 것은 아닌지?). 이제 모델이 내재되었으므로 anova 함수를 사용하여 카이제곱 차이 검정을 수행할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(iq_fit_nocode, iq_fit_mi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Chi-Squared Difference Test
+
+              Df    AIC    BIC  Chisq Chisq diff   RMSEA Df diff Pr(&gt;Chisq)   
+iq_fit_mi     33 8153.4 8223.0 45.276                                         
+iq_fit_nocode 34 8161.4 8227.9 55.305     10.029 0.22714       1   0.001541 **
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>이해력을 수행 IQ에 적재하도록 허용하면 모델 적합도가 통계적으로 유의미하게 향상되는 것을 보실 수 있습니다. 가장 적합한 모델인 iq_fit_mi에서 요인 점수를 추출하기 위해 predict 함수를 사용하고 결과를 factor_scores로 저장한 다음 head 함수를 사용하여 처음 6개 행을 출력합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a>factor_scores <span class="ot">&lt;-</span> <span class="fu">predict</span>(iq_fit_mi)</span>
+<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(factor_scores)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           verb       perf
+[1,] -0.2227813 -1.2256055
+[2,] -1.1473545 -2.0686206
+[3,]  3.8269042  2.4161738
+[4,] -0.9696807 -0.8159658
+[5,] -0.9728589 -2.5860298
+[6,]  0.8370746 -1.7503289</code></pre>
+</div>
+</div>
+<p>마지막으로, cfa 함수로 추정된 CFA 모델에서 모델 예측 공분산과 잔차 공분산 행렬을 추출하려면 fitted 함수와 residual 함수를 사용할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fitted</span>(iq_fit_mi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$cov
+           info   comp  arith  simil  digit  vocab pctcmp parang  block object
+info      8.433                                                               
+comp      4.429  8.743                                                        
+arith     2.948  2.564  5.291                                                 
+simil     4.976  4.329  2.881 10.078                                          
+digit     2.424  2.108  1.403  2.369  7.271                                   
+vocab     5.129  4.461  2.970  5.013  2.442  8.552                            
+pictcomp  2.172  3.035  1.258  2.123  1.034  2.188  8.560                     
+parang    1.426  1.993  0.826  1.394  0.679  1.437  2.144  7.033              
+block     2.177  3.042  1.260  2.128  1.036  2.193  3.272  2.148  7.301       
+object    1.961  2.741  1.136  1.917  0.934  1.976  2.949  1.936  2.955  8.042</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">residuals</span>(iq_fit_mi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$type
+[1] "raw"
+
+$cov
+           info   comp  arith  simil  digit  vocab pctcmp parang  block object
+info      0.000                                                               
+comp     -0.417  0.000                                                        
+arith     0.355  0.104  0.000                                                 
+simil    -0.246  0.460 -0.184  0.000                                          
+digit     0.281 -0.228  0.265 -0.148  0.000                                   
+vocab     0.179  0.133 -0.364 -0.020 -0.121  0.000                            
+pictcomp -0.219  0.485 -0.212  1.307 -0.440  0.254  0.000                     
+parang    0.126 -0.530  0.557  1.116  0.381 -0.412 -0.214  0.000              
+block    -0.379 -0.093  0.431  0.115 -0.506  0.158 -0.252  0.369  0.000       
+object   -0.439 -0.038 -0.856  0.502 -0.668 -0.439  0.066 -0.031  0.104  0.000</code></pre>
+</div>
+</div>
+<p>출력의 첫 번째 부분은 공분산 행렬이고 두 번째 부분은 측정 변수의 평균입니다. cfa는 기본적으로 평균을 추정하지 않기 때문에 두 함수 모두 평균이 0입니다. 적합 함수에서 반환된 평균의 경우 cfa 함수에서 평균 구조 = TRUE가 사용된 경우 0이 지표 평균으로 대체됩니다. 이 업데이트는 residual 함수에서 반환된 결과에는 영향을 주지 않습니다(즉, 평균은 여전히 0임).</p>
+</section>
+<section id="범주형-데이터가-포함된-cfa" class="level3" data-number="4.4.2">
+<h3 data-number="4.4.2" class="anchored" data-anchor-id="범주형-데이터가-포함된-cfa"><span class="header-section-number">4.4.2</span> 범주형 데이터가 포함된 CFA</h3>
+<p>마지막 섹션에서, 범주형 데이터로 CFA를 수행하는 방법을 보여줍니다. 범주형인 경우 lavaan에 대한 데이터를 설정하는 방법에는 두 가지가 있습니다.</p>
+<ol type="1">
+<li><p>지표가 명목척도이면 <em>C</em> ‑ 1개의 더미 변수를 생성해야 합니다(여기서 C는 지표의 범주 수). lm 함수와 같은 R의 많은 함수가 자동으로 더미 변수를 생성하지만 이것은 전통적인 회귀 문제에서 처리하는 방법과 유사합니다.</p></li>
+<li><p>지표가 서열척도인 경우 cfa를 실행하기 전에 ordered 함수와 함께 지표가 서열척도임을 R에게 알릴 수 있습니다. 또는 cfa 함수를 사용하여 모델을 적합할 때 ordered 인수를 전달할 수 있습니다.</p></li>
+</ol>
+<p>기본적으로 데이터가 범주형일 때 lavaan은 대각 가중 최소 제곱을 사용하는, 가중 최소 제곱 추정량으로 전환합니다. wiscsem 데이터 세트를 서열 변수로 다시 코딩하여 위에서 언급한 두 가지 접근 방식을 설명합니다. 이것은 엄밀히 말해 교육적인 목적으로 수행된 것이며, 독자들이 일반적으로 데이터에 대해 수행해야 하는 작업이 아니라는 점에 유의하시기 바랍니다.</p>
+<p>우리는 wiscsem을 wiscsem_cat으로 저장하고 지표를 사분위수로 분할하는 함수(quart_cut)를 적용하고 lapply 함수를 통해 각 관 측치를 사분위수에 할당합니다. lapply 함수를 사용하면 quart_cut 함수를 개별적으로가 아니라 동시에 모든 지표에 적용할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a>wiscsem_cat <span class="ot">&lt;-</span> wiscsem</span>
+<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a>wiscsem_cat[ ,] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(wiscsem_cat[ ,], quart_cut)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="서열-cfa-방법-1" class="level4" data-number="4.4.2.1">
+<h4 data-number="4.4.2.1" class="anchored" data-anchor-id="서열-cfa-방법-1"><span class="header-section-number">4.4.2.1</span> 서열 CFA-방법 1</h4>
+<p>방법 1은 cfa 함수를 사용하기 전에 지표가 서열척도임을 R에 알리는 것입니다. 현재 지표는 관측치가 어느 사분위수에 속하는지에 해당하는 1, 2, 3, 4의 숫자 값일 뿐입니다. lapply 명령을 사용하여 이러한 숫자 값을 서열척도로 다시 변환할 수 있습니다. 먼저 wiscsem_cat을 wiscsem_ord로 저장합니다. 그런 다음 lapply에게 ordered 함수를 사용하여 wiscsem_ord의 모든 변수를 서열 변수로 변환하고 다시 wiscsem_ord로 저장하도록 지시합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a>wiscsem_ord <span class="ot">&lt;-</span> wiscsem_cat</span>
+<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a>wiscsem_ord[,] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(wiscsem_ord[ ,], ordered)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>다음으로 wiscsem 대신 wiscsem_ord 데이터 세트를 사용하여 CFA 모델을 적합합니다. 이 모델의 결과를 iq_fit_ord1로 저장한 다음 summary 함수를 사용하여 결과를 출력합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a>iq_fit_ord1 <span class="ot">&lt;-</span> <span class="fu">cfa</span>(iq_mod, wiscsem_ord)</span>
+<span id="cb100-2"><a href="#cb100-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(iq_fit_ord1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>lavaan 0.6.16 ended normally after 21 iterations
+
+  Estimator                                       DWLS
+  Optimization method                           NLMINB
+  Number of model parameters                        41
+
+  Number of observations                           175
+
+Model Test User Model:
+                                              Standard      Scaled
+  Test Statistic                                42.611      60.299
+  Degrees of freedom                                43          43
+  P-value (Chi-square)                           0.488       0.042
+  Scaling correction factor                                  0.813
+  Shift parameter                                            7.882
+    simple second-order correction                                
+
+Parameter Estimates:
+
+  Standard errors                           Robust.sem
+  Information                                 Expected
+  Information saturated (h1) model        Unstructured
+
+Latent Variables:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+  verb =~                                             
+    info              1.000                           
+    comp              1.114    0.128    8.721    0.000
+    arith             0.732    0.129    5.667    0.000
+    simil             1.035    0.141    7.329    0.000
+    digit             0.357    0.148    2.408    0.016
+    vocab             1.185    0.135    8.787    0.000
+  perf =~                                             
+    pictcomp          1.000                           
+    parang            0.753    0.194    3.890    0.000
+    block             1.092    0.175    6.233    0.000
+    object            0.767    0.165    4.648    0.000
+    coding            0.327    0.158    2.062    0.039
+
+Covariances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+  verb ~~                                             
+    perf              0.288    0.056    5.128    0.000
+
+Intercepts:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+   .info              0.000                           
+   .comp              0.000                           
+   .arith             0.000                           
+   .simil             0.000                           
+   .digit             0.000                           
+   .vocab             0.000                           
+   .pictcomp          0.000                           
+   .parang            0.000                           
+   .block             0.000                           
+   .object            0.000                           
+   .coding            0.000                           
+    verb              0.000                           
+    perf              0.000                           
+
+Thresholds:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+    info|t1          -0.725    0.105   -6.925    0.000
+    info|t2          -0.343    0.097   -3.536    0.000
+    info|t3           0.670    0.103    6.493    0.000
+    comp|t1          -0.862    0.109   -7.908    0.000
+    comp|t2          -0.436    0.098   -4.432    0.000
+    comp|t3           0.883    0.110    8.044    0.000
+    arith|t1         -1.043    0.116   -8.958    0.000
+    arith|t2         -0.389    0.098   -3.984    0.000
+    arith|t3          0.670    0.103    6.493    0.000
+    simil|t1         -0.688    0.104   -6.638    0.000
+    simil|t2         -0.343    0.097   -3.536    0.000
+    simil|t3          0.688    0.104    6.638    0.000
+    digit|t1         -0.949    0.112   -8.446    0.000
+    digit|t2          0.905    0.111    8.180    0.000
+    vocab|t1         -0.801    0.107   -7.492    0.000
+    vocab|t2          0.688    0.104    6.638    0.000
+    pictcomp|t1      -0.725    0.105   -6.925    0.000
+    pictcomp|t2      -0.209    0.096   -2.184    0.029
+    pictcomp|t3       0.971    0.113    8.577    0.000
+    parang|t1        -0.801    0.107   -7.492    0.000
+    parang|t2         0.821    0.108    7.631    0.000
+    block|t1         -0.763    0.106   -7.210    0.000
+    block|t2          0.905    0.111    8.180    0.000
+    object|t1        -0.801    0.107   -7.492    0.000
+    object|t2        -0.436    0.098   -4.432    0.000
+    object|t3         0.949    0.112    8.446    0.000
+    coding|t1        -1.018    0.115   -8.833    0.000
+    coding|t2        -0.298    0.097   -3.086    0.002
+    coding|t3         0.883    0.110    8.044    0.000
+
+Variances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+   .info              0.555                           
+   .comp              0.447                           
+   .arith             0.761                           
+   .simil             0.523                           
+   .digit             0.943                           
+   .vocab             0.375                           
+   .pictcomp          0.580                           
+   .parang            0.762                           
+   .block             0.499                           
+   .object            0.753                           
+   .coding            0.955                           
+    verb              0.445    0.082    5.412    0.000
+    perf              0.420    0.109    3.843    0.000
+
+Scales y*:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+    info              1.000                           
+    comp              1.000                           
+    arith             1.000                           
+    simil             1.000                           
+    digit             1.000                           
+    vocab             1.000                           
+    pictcomp          1.000                           
+    parang            1.000                           
+    block             1.000                           
+    object            1.000                           
+    coding            1.000                           </code></pre>
+</div>
+</div>
+<p>이 명령을 실행하면 일부 지표에 대해 이변량 테이블의 행 또는 열에 0개의 셀이 있음을 나타내는 경고 메시지가 나타납니다. 이 경고 메시지가 표시되는 이유는 lavaan이 다변량(polychoric) 상관관계를 계산하기 때문입니다. 여기서 경고 메시지는 무시하고 summary 함수에서 반환된 결과를 검토할 수 있습니다. 결과에 모델 적합의 강력한 추정량 열이 추가되었습니다. 다른 곳에서 광범위하게 논의된 이 샌드위치 추정량(Asparouhov &amp; Muthén, 2010)을 사용하는 것이 좋습니다.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> summary 결과에는 지표 임계값 및 척도에 대한 정보도 포함됩니다(위에서 변수 “info”에 대해서만 표시됨). 그렇지 않으면, 결과는 일반적인 cfa 호출과 유사합니다.</p>
+</section>
+<section id="서열-cfa-방법-2" class="level4" data-number="4.4.2.2">
+<h4 data-number="4.4.2.2" class="anchored" data-anchor-id="서열-cfa-방법-2"><span class="header-section-number">4.4.2.2</span> 서열 CFA-방법 2</h4>
+<p>이 방법은 지표가 서수임을 cfa 함수에 알려주는 것입니다. 이 추가 조정은 다음과 같이 수행할 수 있습니다 .</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a>iq_fit_ord2 <span class="ot">&lt;-</span> <span class="fu">cfa</span>(iq_mod, wiscsem_cat, </span>
+<span id="cb102-2"><a href="#cb102-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">ordered =</span> <span class="fu">names</span>(wiscsem_cat))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>ordered=names(wiscsem_cat)를 지정하여 cfa에 wiscsem_cat의 모든 지표가 서열화 되도록 지시합니다. 이 호출의 summary 결과는 iq_fit_ord1과 동일합니다. 만일 지표 중 두 개가 서열척도인 경우, 해당 두 개의 지표만 지정합니다(예: verb와 info가 서열척도이고 다른 것은 없는 경우)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a>iq_fit_ord2 <span class="ot">&lt;-</span> <span class="fu">cfa</span>(iq_mod, wiscsem_cat, </span>
+<span id="cb103-2"><a href="#cb103-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">ordered =</span> <span class="fu">c</span>(<span class="st">"verb"</span>, <span class="st">"info"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in lavaan::lavaan(model = iq_mod, data = wiscsem_cat, ordered = c("verb", : lavaan WARNING: ordered variable(s): verb
+  could not be found in the data and will be ignored</code></pre>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="요약" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="요약"><span class="header-section-number">4.5</span> 요약</h2>
+<p>이 장에서는 탐색적 요인분석과 및 확인적 요인 분석에 대한 간략한 소개와 함께 factanal 및 psych 패키지를 사용하여 EFA를 수행하는 방법과 lavaan 패키지를 사용하여 CFA를 수행하는 방법을 보여드렸습니다. 공통 요인 모델에 대한 간략한 검토로 시작한 다음 EFA 및 CFA를 사용하는 예제로 이동했습니다. 독자들은 이러한 방법론을 더 잘 이해하기 위해 요인 분석 및 SEM에 대한 다른 리소스(예: Kline, 2015)를 검토할 것을 권장합니다. 다음으로 lavaan 외에도 요인 분석 및구조방정식 모델을 추정할 수 있는 수많은 R 패키지가 있다는 점에 주목하고 싶습니다. 예를 들어, sem(Fox, Nie, &amp; Byrnes, 2017), Fac-toMineR(Lê, Josse, &amp; Husson, 2008) 및 OpenMx(Neale et al., 2016) 등이 있습니다. 다음 장에서는 일반적으로 단일 기본 잠재 변수를 가정하는 문항반응이론 모델을 다룹니다. 요인 분석을 통해 찾은 단일차원 해는 제5, 6장에 제시된 모델의 중요한 가정입니다.</p>
+
+
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>https://bugs.r-project.org/bugzilla3/show_bug.cgi?id=15848<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a href="http://lavaan.ugent.be/">http://lava</a>{_blank=““}<a href="http://lavaan.ugent.be/" target="'_blank'">an.ugent.be</a><a href="http://lavaan.ugent.be/">/</a>{_blank=”“}<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p><a href="https://groups.google.com/forum/#!topic/lavaan/wYA9msIv5TI" target="_blank">https://groups.google.com/forum/#!topic/lavaan/wYA9msIv5TI</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./chap03.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">일반화가능도 이론</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./chap05.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">이분 문항반응이론</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

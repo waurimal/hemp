@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.475">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>HEMP Using R - 7&nbsp; 다차원 문항반응이론</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./chap08.html" rel="next">
+<link href="./chap06.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">다차원 문항반응이론</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">HEMP Using R</a> 
+        <div class="sidebar-tools-main">
+    <a href="./HEMP-Using-R.pdf" title="Download PDF" class="sidebar-tool px-1"><i class="bi bi-file-pdf"></i></a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">머리말</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap01.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">R 소개</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap02.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">고전검사이론</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap03.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">일반화가능도 이론</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap04.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">측정에서 요인분석적 접근</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap05.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">이분 문항반응이론</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap06.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">다분 문항반응이론</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap07.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">다차원 문항반응이론</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap08.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">설명적 문항반응이론</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap09.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">데이터 시각화 및 측정 모델</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap10.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">동등화</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">측정 불변성과 차별기능문항</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap12.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">측정의 고급 주제</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#개요" id="toc-개요" class="nav-link active" data-scroll-target="#개요"><span class="toc-section-number">7.1</span>  개요</a></li>
+  <li><a href="#다차원-문항반응모델링" id="toc-다차원-문항반응모델링" class="nav-link" data-scroll-target="#다차원-문항반응모델링"><span class="toc-section-number">7.2</span>  다차원 문항반응모델링</a>
+  <ul class="collapse">
+  <li><a href="#보상적-mirt와-비보상적-mirt" id="toc-보상적-mirt와-비보상적-mirt" class="nav-link" data-scroll-target="#보상적-mirt와-비보상적-mirt"><span class="toc-section-number">7.2.1</span>  보상적 MIRT와 비보상적 MIRT</a></li>
+  <li><a href="#문항-간-및-문항-내-다차원성" id="toc-문항-간-및-문항-내-다차원성" class="nav-link" data-scroll-target="#문항-간-및-문항-내-다차원성"><span class="toc-section-number">7.2.2</span>  문항 간 및 문항 내 다차원성</a></li>
+  <li><a href="#탐색적-mirt와-확인적-mirt-분석" id="toc-탐색적-mirt와-확인적-mirt-분석" class="nav-link" data-scroll-target="#탐색적-mirt와-확인적-mirt-분석"><span class="toc-section-number">7.2.3</span>  탐색적 MIRT와 확인적 MIRT 분석</a></li>
+  </ul></li>
+  <li><a href="#일반적-mirt-모델" id="toc-일반적-mirt-모델" class="nav-link" data-scroll-target="#일반적-mirt-모델"><span class="toc-section-number">7.3</span>  일반적 MIRT 모델</a>
+  <ul class="collapse">
+  <li><a href="#다차원-2모수-모델" id="toc-다차원-2모수-모델" class="nav-link" data-scroll-target="#다차원-2모수-모델"><span class="toc-section-number">7.3.1</span>  다차원 2모수 모델</a></li>
+  <li><a href="#다차원-rasch-모델" id="toc-다차원-rasch-모델" class="nav-link" data-scroll-target="#다차원-rasch-모델"><span class="toc-section-number">7.3.2</span>  다차원 Rasch 모델</a></li>
+  <li><a href="#다차원-등급-반응-모델" id="toc-다차원-등급-반응-모델" class="nav-link" data-scroll-target="#다차원-등급-반응-모델"><span class="toc-section-number">7.3.3</span>  다차원 등급 반응 모델</a></li>
+  <li><a href="#이요인-irt-모델" id="toc-이요인-irt-모델" class="nav-link" data-scroll-target="#이요인-irt-모델"><span class="toc-section-number">7.3.4</span>  이요인 IRT 모델</a></li>
+  </ul></li>
+  <li><a href="#요약" id="toc-요약" class="nav-link" data-scroll-target="#요약"><span class="toc-section-number">7.4</span>  요약</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">다차원 문항반응이론</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="개요" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="개요"><span class="header-section-number">7.1</span> 개요</h2>
+<p>제5장과 제6장에서는 이분 및 다분 문항에 대한 IRT 모델을 제시하고 R에서 이러한 모델을 추정하는 방법을 살펴봤습니다. 제5장과 제6장에 제시된 IRT 모델의 공통적인 특징은 문항의 기저에 하나의 잠재 특성이 있다는 점입니다. 즉, 검사의 구조가 단일 차원이라고 가정합니다. 그러나 대부분의 교육 및 심리검사는 두 개 이상의 잠재 특성 또는 차원을 측정하는 경향이 있습니다(Ackerman, Gierl, &amp; Walker, 2003). 문항이 2개 이상의 잠재 특성을 측정하는 경우, 이러한 검사 구조를 다차원이라고 합니다. 다차원 검사의 문항 모수와 잠재 특성 수준을 추정하려면 다차원 IRT(MIRT)를 사용해야 합니다.</p>
+<p>제7장에서는 다차원성과 R에서 MIRT 모델을 적합하는 것에 초점을 둡니다. 교육 및 심리 측정의 맥락에서 다차원성에 대한 정의로 시작한 다음, MIRT와 관련된 개념(예: 보상 모델과 비보상 모델, 문항 내 다차원성과 문항 간 다차원성, 탐색적 MIRT와 확인적 MIRT)에 대해 간략하게 논의합니다. 그리고나서, mirt 패키지를 사용하여 공통 MIRT 모델, 특히 다차원 Rasch 모델, 다차원 2모수 모델, 다차원 등급반응모델, bi-factor 모델을 적합하는 방법을 보여줍니다(Chalmers, 2012). mirt 패키지는 다양한 MIRT 모델을 추정할 수 있지만, flirt(Jeon, Rijmen, &amp; Rabe-Hesketh, 2014), TAM (Kiefer et al., 2016), eRm(Mair &amp; Hatzinger, 2007a), and sirt (Robitzsch, 2017) 등 일부 MIRT 모형을 추정할 수 있는 다른 R 패키지도 있습니다.</p>
+</section>
+<section id="다차원-문항반응모델링" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="다차원-문항반응모델링"><span class="header-section-number">7.2</span> 다차원 문항반응모델링</h2>
+<p>제5장과 제6장에서 논의한 바와 같이, 단일차원 IRT 모델은 단일 잠재 특성 또는 구인을 측정하는 문항에 대한 피험자의 응답을 분석하는 데 적합합니다. 그러나 여러 잠재 특성을 동시에 측정하는 복잡한 문항의 경우, 정답 확률이 더 이상 단일 잠재 특성의 함수가 아니므로 단일 차원 IRT 모델을 사용하여 문항 응답을 모델링해서는 안 됩니다. 여러 잠재 특성이 포함된 복잡한 문항을 분석하려면 <em>다차원</em> IRT 접근 방식(즉, MIRT 모델)을 사용해야 합니다. MIRT 모델은 주어진 문항에 정답할 확률을 단일 잠재 특성이 아닌 잠재 특성 벡터의 함수로 설명합니다. MIRT는 다양한 용도로 사용할 수 있지만, 이 모델링 프레임워크는 특히 다음과 같은 경우에 유용합니다.</p>
+<ol type="1">
+<li><p>하나 이상의 문항이 동시에 여러 잠재 특성을 측정할 때 문항 반응 데이터를 모델링하는 데 사용됩니다(Reckase, 2009).</p></li>
+<li><p>상관관계가 있는 잠재 특성을 측정하는 개별 검사 또는 하위 검사가 있을 때 측정의 정밀도를 향상시키기 위해 사용됩니다(Wang, Chen, &amp; Cheng, 2004).</p></li>
+</ol>
+<p>1980년대 초부터 연구자들은 다양한 MIRT 모델을 제안해 왔는데(예: Adams, Wilson, &amp; Wang, 1997; Reckase, 1985; Yao &amp; Schwarz, 2006), 이는 종종 단일 차원 IRT 모델을 다차원으로 확장한 것입니다. 이 장에서, 우리는 몇 가지 MIRT 모델에 초점을 맞추고 R의 mirt 패키지를 사용하여 모델을 맞추고 추정하는 방법을 보여줍니다. 다차원 문항 반응 모델링에 대한 보다 포괄적인 논의는 Reckase(2009)의 <em>다차원 문항반응이론</em>을 검토하는 것이 좋습니다.</p>
+<p>MIRT 모델은 여러 가지 방법으로 분류할 수 있습니다. 예를 들어, 하나의 차원(즉, 잠재 특성)의 약점(또는 결점)이 다른 차원의 강점으로 보완될 수 있는지 여부에 따라 MIRT 모델을 분류할 수 있습니다. 또한 각 문항이 단일 잠재 특성과 연관되어 있는지 또는 여러 잠재 특성과 연관되어 있는지에 따라 MIRT 모델을 그룹화할 수 있습니다. 다음 섹션에서는 이러한 분류에 대해 간략하게 설명합니다.</p>
+<section id="보상적-mirt와-비보상적-mirt" class="level3" data-number="7.2.1">
+<h3 data-number="7.2.1" class="anchored" data-anchor-id="보상적-mirt와-비보상적-mirt"><span class="header-section-number">7.2.1</span> 보상적 MIRT와 비보상적 MIRT</h3>
+<p>MIRT 모델은 잠재 특성 간의 보상 관계의 존재 여부에 따라 보상적 또는 비보상적으로 특징지을 수 있습니다(Sijtsma &amp; Junker, 2006). <em>보상적</em> MIRT 모델의 부가적 특성은 서로 다른 기울기(즉, 변별도) 모수로 가중치를 부여한 일련의 잠재 특성의 합을 기반으로 정의합니다. 보상적 MIRT 모델을 사용하면 한 잠재 특성의 약점을 다른 잠재 특서의 강점으로 보상할 수 있습니다(Reckase, 1997; Yao &amp; Boughton, 2007). 예를 들어, 수학 실력이 낮은 피험자가 대수 실력이 높으면 수학 문제를 정답으로 맞힐 수 있습니다.</p>
+<p>그림 7.1은 2차원 보상적 MIRT 모델의 이분 문항에 대한 그래픽 그림입니다. 단일차원 IRT 모델의 문항특성곡선(item characteristic curve)과 달리, MIRT 모델은 문항이 두 개의 잠재 차원, 즉 <span class="math inline">\(\theta_1\)</span>과 <span class="math inline">\(\theta_2\)</span>와 연관되어 있기 때문에 문항특성표면(item characteristic surface)을 산출합니다. 이 특정 문항의 경우, 두 차원은 상보적 관계를 갖습니다. 문항 표면은 차원 1의 숙련도가 낮고(예: <span class="math inline">\(\theta_1\)</span>=0), 차원 2의 숙련도가 높은(예: <span class="math inline">\(\theta_2\)</span>=2)피험자도 차원 1의 낮은 숙련도가 차원 2의 높은 숙련도로 보상되기 때문에 문항에 정답할 확률이 여전히 높다는 것을 보여줍니다.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="fig_71.jpg" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">보상적 MIRT 모델에 대한 문항특성표면</figcaption><p></p>
+</figure>
+</div>
+<p>보상적 모델과 달리, <em>비보상적</em> MIRT 모델의 곱셈적 특성은 각각 다른 잠재적 특성을 기반으로 한 확률의 곱셈을 기반으로 정합할 확률을 정의합니다. 따라서 한 차원에서의 약점은 다른 차원의 강점으로 보상할 수 없습니다. 예를 들어, 수학 실력이 낮은 피험자가 읽기 실력이 높다고 해서 단어 문제에서 정답을 못 맞힐 수 있는데, 이는 문항이 두 가지 능력이 모두 필요로 하기 때문입니다. 비보상적 MIRT 모델은 부분 보상적 모델이라고도 하는데, 이는 비보상적 모델도 일부 보상을 허용하기 때문입니다(Reckase, 2009). 인지평가 문헌에서 비보상적 MIRT 모델이 여러 번 적용되었지만(예: Embretson, 1997; Junker &amp; Sijtsma, 2001; Maris, 1995), 보상적 모델과 요인분석 모델 간의 이론적 유사성 때문에 연구자들 사이에서 보상적 MIRT 모델이 더 많이 사용되었습니다(Sijtsma &amp; Junker, 2006).</p>
+<p>그림 7.2는 2차원 비보상적 MIRT 모델에서 이분 문항에 대한 문항특성표면을 보여줍니다. 문항 표면도를 보면 두 차원 모두에서 높은 숙련도가 있어야 문항 정답을 맞힐 수 있음을 알 수 있습니다. 즉, 한 차원에서의 숙련도가 낮은 피험자는 다른 차원에서의 숙련도가 높더라도 해당 문항의 정답을 맞힐 수 없습니다.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="fig_72.jpg" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">비보상적 MIRT 모델에 대한 문항특성표면</figcaption><p></p>
+</figure>
+</div>
+</section>
+<section id="문항-간-및-문항-내-다차원성" class="level3" data-number="7.2.2">
+<h3 data-number="7.2.2" class="anchored" data-anchor-id="문항-간-및-문항-내-다차원성"><span class="header-section-number">7.2.2</span> 문항 간 및 문항 내 다차원성</h3>
+<p>MIRT 모델은 검사 구조에 따라 두 가지 그룹으로 분류할 수 있습니다. 문항 간 모델과 문항 내 MIRT 모델이 그것입니다(Adams et al., 1997; Wang et al., 2004). 문항 간 MIRT 모델에서는 각 잠재 특성이 고유한 문항 세트로 측정됩니다. 즉, 각 문항은 검사에서 측정된 잠재 특성 중 하나에만 연관됩니다. 이러한 유형의 검사 구조는 문항이 단일 요인에 적재되는 요인 분석 해와 마찬가지로 단순 구조라고도 합니다(요인 분석에 대한 검토는 제4장 참조). 문항 간 MIRT 모델은 일반적으로 상호 연관된 잠재 특성을 측정하는 하위 검사에서 하위 점수를 추정하는 데 사용됩니다(예: Bulut, Davison, &amp; Rodriguez, 2017; de la Torre, Song, &amp; Hong, 2011; Wang et al., 2004). 문항 내 MIRT 모델에서 각 문항은 검사에서 측정된 두 개 이상의 잠재 특성과 연관될 수 있습니다. 이러한 유형의 검사 구조를 비단순 또는 복합 구조라고 합니다. 문항 내 다차원성의 좋은 예는 인지 능력 평가의 이중 요인 검사 구조로, 모든 문항은 일반적인 잠재 특성(예: 일반 지능)과 연관되고 각 문항은 이차 잠재 특성(예: 특정 인지 능력)과 연관됩니다.</p>
+<p>그림 7.3은 두 개의 잠재 특성을 측정하는 검사에 대한 문항 간 및 문항 내 MIRT 모델을 보여줍니다. 문항 간 모델에서 문항 1부터 문항 5는 첫 번째 잠재 특성인 <span class="math inline">\(\theta_1\)</span>과 연관되고, 문항 6부터 문항 10은 두 번째 잠재 특성인 <span class="math inline">\(\theta_2\)</span>와 연관됩니다. <span class="math inline">\(\theta_1\)</span>과 <span class="math inline">\(\theta_2\)</span>는 공통 문항을 공유하지 않습니다. 따라서 검사 구조는 각 잠재 특성이 일련의 단차원 문항으로 정의되고 전체 구조는 다차원 구조가 되는 다차원 구조가 됩니다. 문항 내 모델에서는 문항이 <span class="math inline">\(\theta_1\)</span>과 <span class="math inline">\(\theta_2\)</span> 모두와 연관되어 있으므로 검사의 구조가 단순하지 않습니다. 그림 7.3에 제시된 MIRT 모델에서는 <span class="math inline">\(\theta_1\)</span>과 <span class="math inline">\(\theta_2\)</span>가 상관관계가 있을 가능성이 높습니다. 그러나 잠재 특성 간의 상관관계가 커질수록 추정 결과의 신뢰도가 낮아질 가능성이 높습니다(Bulut et al., 2017).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="fig_73.jpg" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">문항 간 구조(왼쪽)와 문항 내 구조(오른쪽)</figcaption><p></p>
+</figure>
+</div>
+</section>
+<section id="탐색적-mirt와-확인적-mirt-분석" class="level3" data-number="7.2.3">
+<h3 data-number="7.2.3" class="anchored" data-anchor-id="탐색적-mirt와-확인적-mirt-분석"><span class="header-section-number">7.2.3</span> 탐색적 MIRT와 확인적 MIRT 분석</h3>
+<p>MIRT 모델로 반응 데이터를 분석할 때 검사 구조는 탐색적 또는 확인적 방식으로 정의될 수 있습니다. 문항의 기저에 있는 검사 구조에 대한 선험적 가설이 없는 경우, 문항 모수와 잠재 특성 수준을 추정하기 전에 예상되는 차원 수만 지정하면 됩니다. 이것이 바로 데이터에서 잠재 특성과 문항 간의 연관성을 도출하는 탐색적 MIRT 접근 방식입니다. 검사 구조에 관한 가설이 있는 경우, 차원 수와 문항과 차원 간의 관계를 모두 지정해야 합니다(Reckase, 2009, 179쪽). 연구자가 이론에 근거하여 검사 구조를 지정하기만 하면 되기 때문에 이를 확인적 MIRT 접근법이라고 합니다. 탐색적 MIRT 분석은 데이터의 기초가 되는 차원 수를 찾는 데 자주 사용됩니다. 이러한 유형의 분석은 제4장에서 설명한 탐색적 요인 분석과 유사합니다. 이 장에서는 차원 수와 문항과 잠재 특성 간의 관계를 정의하는 확인적 MIRT 모델에 중점을 둡니다(제4장에서 설명한 확인적 요인 분석과 유사함).</p>
+</section>
+</section>
+<section id="일반적-mirt-모델" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="일반적-mirt-모델"><span class="header-section-number">7.3</span> 일반적 MIRT 모델</h2>
+<p>이 장에서는 몇 가지 일반적인 MIRT 모델을 살펴봅니다. 이러한 모델에는 다차원 2모수 모델, 다차원 Rasch 모델, 다차원 등급반응모델, 이요인 모델이 포함됩니다. 이어지는 섹션에서는 이러한 MIRT 모델에 대해 간략하게 설명하고 mirt 패키지를 사용해 이러한 모델을 적합하고 추정하는 방법을 보여줍니다.</p>
+<section id="다차원-2모수-모델" class="level3" data-number="7.3.1">
+<h3 data-number="7.3.1" class="anchored" data-anchor-id="다차원-2모수-모델"><span class="header-section-number">7.3.1</span> 다차원 2모수 모델</h3>
+<p>다차원 2모수(M2PL) 모델은 단일차원 2모수 모델을 확장한 것입니다. M2PL 모델은 다차원 검사에서 문항 난이도와 변별도 모수를 추정할 수 있는 보상적 MIRT 모델입니다. 검사 구조는 문항 간일 수도 있고 문항 내일 수도 있습니다. M2PL 모델은 다음과 같이 작성할 수 있습니다.</p>
+<p><span class="math display">\[
+P(X_{ij}=1|\theta_j, a_i, d_i)={exp(a_i\theta_j\prime+d_i) \over 1+exp(a_i\theta_j\prime+d_i)}
+\]</span></p>
+<ul>
+<li><p><span class="math inline">\(\theta_j\)</span>는 피험자 <span class="math inline">\(j\)</span>에 대한 잠재 특성 1 X <span class="math inline">\(M\)</span> 벡터( <span class="math inline">\(\theta_j\)</span> = <span class="math inline">\(\theta_{j1}, \theta_{j2},..., \theta_{jM}\)</span>))</p></li>
+<li><p><span class="math inline">\(a_i\)</span>는 문항 <span class="math inline">\(i\)</span>에 대한 기울기 모수(예: 문항 변별도) 1 X <span class="math inline">\(M\)</span> 벡터( <span class="math inline">\(a_i\)</span> = <span class="math inline">\(a_{i1}, a_{i2},..., a_{iM}\)</span>))</p></li>
+<li><p><span class="math inline">\(d_i\)</span>는 문항 <span class="math inline">\(i\)</span>에 대한 절편항</p></li>
+</ul>
+<p>절편 모수 <span class="math inline">\(d_i\)</span>는 문항의 난이도를 나타내는 고유한 지표로 간주할 수 없기 때문에 단일차원 IRT 모델에서의 문항 난이도 모수와는 유사하지 않습니다(Reckase, 2009). 절편 모수로부터 전통적인 난이도 모수를 얻기 위해 변환을 수행할 수 있습니다. 이 변환 공식은 다음과 같습니다.</p>
+<p><span class="math display">\[
+B_i= {-d_i \over \sqrt{\sum_{m=1}^M a^2_{im}}}
+\]</span></p>
+<ul>
+<li><span class="math inline">\(B_i\)</span>는 문항 <span class="math inline">\(i\)</span>의 다차원 난이도 모수(MDIFF라고도 함)</li>
+</ul>
+<p><span class="math inline">\(B_i\)</span> 값이 높을수록 문항의 난이도가 높아집니다.</p>
+<p>MIRT 모델의 문항 변별도 모수는 변환을 사용해 단일 값으로 요약할 수 있습니다. 실제로 이 변환은 방정식 7.2의 분모로 다음과 같습니다.</p>
+<p><span class="math display">\[
+A_i=\sqrt{\sum_{m=1}^M a^2_{im}}
+\]</span></p>
+<ul>
+<li>여기서 <span class="math inline">\(A_i\)</span>는 다차원 변별도 모수로 문헌에서는 MDISC라고도 합니다.</li>
+</ul>
+<p>다차원 변별도 모수는 단일차원 IRT 모델의 문항 변별도 모수와 유사합니다. 이 모수는 다차원 문항의 전반적인 변별도 수준을 나타냅니다. 문항이 단일 잠재 특성과만 연관된 경우, 방정식 7.1의 <span class="math inline">\(a_i\)</span>는 0이 아닌 요소가 하나만 있습니다(예: 3차원 검사에서 <span class="math inline">\(a_i\)</span>=(1.4,0,0). 이 경우에 다차원 변별도 모수는 <span class="math inline">\(a_i\)</span>의 0이 아닌 요소와 같습니다.</p>
+<p>M2PL 모델을 적합하고 추정하는 방법을 보여드리기 위해 hemp 패키지의 mimic 데이터 세트를 사용합니다. 분석을 시작하기 전에 먼저 library 명령으로 hemp 및 mirt 패키지를 활성화합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(hemp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: psych</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: lattice</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: lavaan</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This is lavaan 0.6-16
+lavaan is FREE software! Please report any bugs.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'lavaan'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:psych':
+
+    cor2cov</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: mirt</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: stats4</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: lme4</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: Matrix</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'lme4'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:mirt':
+
+    fixef</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: reshape2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: boot</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'boot'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:lattice':
+
+    melanoma</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:psych':
+
+    logit</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: equate</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mirt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>mimic 데이터 세트에는 24문항, 2000명의 피험자에 대한 응답이 포함되어 있습니다. 문항은 이분으로 채점되어 있습니다(예: 1=정답, 0=오답). 문항의 레이블은 item1, item2, …, item24로 표시됩니다. 검사 구조는 문항 내 다차원(복합)으로 item1부터 item6, item13부터 item21, item 23, item24가 첫 번째 잠재 특성과 연관되고, item7부터 item20, item22부터 item24는 두 번째 잠재 특성과 연관됩니다.</p>
+<p>M2PL 모델에 적합하기 위해 제5장과 제6장에서 단일차원 IRT 모델을 추정할 때와 마찬가지로 mirt 패키지의 mirt 함수를 다시 사용합니다. 다차원 IRT 모델을 추정하기 위한 R 명령은 제5장 및 제6장에서 설명한 명령과 매우 유사합니다. 가장 큰 차이점은 다차원 검사 구조는 단일 잠재 특성이 아닌 두 개 이상의 잠재 특성을 포함하므로 검사 구조의 정의입니다.</p>
+<p>mimic 데이터 세트는 2차원 구조를 가지고 있기 때문에 두 개의 잠재 특성(F1, F2)을 정의합니다. 검사 구조를 정의할 때 각 잠재 특성과 연관된 문항을 지정합니다. 각 문항을 하나씩 나열하는 대신 제5장과 제6장에서와 같이 각 잠재 특성에 대한 문항의 범위를 지정할 수 있습니다. 예를 들어 1-6은 item1부터 item6까지를 의미합니다. 쉼표를 사용해 문항 집합을 구분합니다(예: 1-6, 13-21, 23-24). mimic 데이터 세트에는 문항 내 검사 구조가 있으므로 item13부터 item 20, item 23, item24가 두 잠재 특성에 대해 나타납니다. 모델 정의의 마지막 줄 COV=F1 * F2는 추정하려는 공분산 항을 정의합니다. 이 예에서는 두 잠재 특성 간의 공분산을 추정하고자 합니다. 따라서 모델 정의에 COV=F1 * F2를 포함합니다. 이 줄을 건너뛰면 F1과 F2 사이의 공분산을 0으로 고정하고, 이것은 잠재 특성이 직교라고 가정합니다. 기본적으로 mirt 함수는 잠재 특성 F1 및 F2의 분산을 1로 고정합니다. 모델에서 이러한 분산을 추정하려면 현재 cov 구문을 COV=F1 * F2, F1 * F1, F2 * F2로 대체할 수 있습니다. 또한 잠재 특성의 평균은 0으로 고정됩니다. 만일 평균을 추정해야 한다면 검사 구조에 이를 지정해야 합니다(예: MEAN=F1, F2). 이러한 제약 조건은 제4장에서 요인 분석의 맥락에서 설명한 것처럼 식별을 위해 만들어졌습니다. 이 검사 구조를 m2pl2_mod로 저장합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>m2pl_mod <span class="ot">&lt;-</span> <span class="st">'F1 = 1 - 6, 13 - 21, 23 - 24</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="st">             F2 = 7 - 20, 22 - 24</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="st">             COV = F1 * F2'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>mirt 함수에서 적합할 모델을 model = mod2pl_mod로 지정하고 itemtype = “2PL”로 문항 유형을 지정합니다. mirt 함수의 기본 추정 알고리즘은 method = “EM”이며, 이는 기대치 최대화 알고리즘입니다. 차원이 최대 3개인 MIRT 모델의 경우 EM 알고리즘이 효과적인 것으로 간주되지만, 3차원 이상의 검사 구조일 때에는 다른 추정 알고리즘(예: method = “MHRM”)을 권장합니다(자세한 내용은 mirt 패키지 매뉴얼 참조). 적합된 모델을 m2pl_fit으로 저장하고, 추정된 모수를 coef 함수를 이용해 추출한 다음 m2pl_params로 저장합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>m2pl_fit <span class="ot">&lt;-</span> <span class="fu">mirt</span>(<span class="at">data =</span> mimic, <span class="at">model =</span> m2pl_mod, </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">itemtype =</span> <span class="st">"2PL"</span>, <span class="at">method =</span> <span class="st">"EM"</span>, </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">SE =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Iteration: 1, Log-Lik: -29633.944, Max-Change: 0.22211
+Iteration: 2, Log-Lik: -29536.223, Max-Change: 0.09403
+Iteration: 3, Log-Lik: -29512.690, Max-Change: 0.05431
+Iteration: 4, Log-Lik: -29502.680, Max-Change: 0.03441
+Iteration: 5, Log-Lik: -29497.895, Max-Change: 0.02708
+Iteration: 6, Log-Lik: -29495.001, Max-Change: 0.02022
+Iteration: 7, Log-Lik: -29493.137, Max-Change: 0.01722
+Iteration: 8, Log-Lik: -29491.960, Max-Change: 0.01206
+Iteration: 9, Log-Lik: -29491.290, Max-Change: 0.00994
+Iteration: 10, Log-Lik: -29490.819, Max-Change: 0.00801
+Iteration: 11, Log-Lik: -29490.517, Max-Change: 0.00559
+Iteration: 12, Log-Lik: -29490.343, Max-Change: 0.00504
+Iteration: 13, Log-Lik: -29490.209, Max-Change: 0.00466
+Iteration: 14, Log-Lik: -29490.108, Max-Change: 0.00252
+Iteration: 15, Log-Lik: -29490.062, Max-Change: 0.00200
+Iteration: 16, Log-Lik: -29490.029, Max-Change: 0.00148
+Iteration: 17, Log-Lik: -29490.008, Max-Change: 0.00323
+Iteration: 18, Log-Lik: -29489.970, Max-Change: 0.00085
+Iteration: 19, Log-Lik: -29489.966, Max-Change: 0.00303
+Iteration: 20, Log-Lik: -29489.940, Max-Change: 0.00221
+Iteration: 21, Log-Lik: -29489.927, Max-Change: 0.00146
+Iteration: 22, Log-Lik: -29489.921, Max-Change: 0.00098
+Iteration: 23, Log-Lik: -29489.919, Max-Change: 0.00065
+Iteration: 24, Log-Lik: -29489.917, Max-Change: 0.00043
+Iteration: 25, Log-Lik: -29489.917, Max-Change: 0.00030
+Iteration: 26, Log-Lik: -29489.916, Max-Change: 0.00020
+Iteration: 27, Log-Lik: -29489.916, Max-Change: 0.00014
+Iteration: 28, Log-Lik: -29489.916, Max-Change: 0.00012
+Iteration: 29, Log-Lik: -29489.916, Max-Change: 0.00008
+
+Calculating information matrix...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>m2pl_params <span class="ot">&lt;-</span> <span class="fu">coef</span>(m2pl_fit, <span class="at">simplify =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>추정된 문항 모수는 m2pl_params 끝에 $items를 추가하여 직접 출력할 수도 있습니다. 이전 장에서는 추정된 문항 모수를 별도의 데이터 세트로 저장했지만 여기서는 m2pl_params에서 직접 출력합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(m2pl_params<span class="sc">$</span>items)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             a1 a2           d g u
+item1 1.0451546  0  0.03009274 0 1
+item2 0.9549557  0 -0.30599493 0 1
+item3 1.0843917  0  0.23204938 0 1
+item4 1.2282254  0  0.20808671 0 1
+item5 0.9071266  0  0.16610451 0 1
+item6 0.8660056  0  0.77031887 0 1</code></pre>
+</div>
+</div>
+<p>결과는 단일차원 IRT 모델에서 보았던 출력과 매우 유사합니다. 그러나 변별도 모수가 하나만 있는 대신, 첫 번째 및 두 번째 잠재 특성에 대한 변별도(즉, 기울기) 모수를 각각 나타내는 두 개의 열, a1 및 a2가 있습니다. 일부 변별도 모수는 0과 같다는 것을 알 수 있습니다. 이는 일부 문항이 첫 번째 또는 두 번째 잠재 특성과만 연관되어 있고 두 가지 모두와 연관되어 있지 않기 때문입니다. 예를 들어, item1의 문항 변별도 값은 a1에 대해서는 0이 아니고 a2에 대해서는 0입니다. 이는 item1이 첫 번째 잠재 특성(즉, F1)과는 연관되어 있지만 두 번째 잠재 특성(즉, F2)과는 연관되어 있지 않음을 나타냅니다. item1과 달리 item13은 F1과 F2 모두에 연관되어 있기 때문에 a1 및 a2 모두 0이 아닌 문항 변별도 모수를 갖습니다. 다음 열인 d는 문항의 추정된 절편 모수를 나타냅니다. 마지막 두 열인 g와 u는 다시 하부 점근(즉, 추측도) 및 상부 점근 모수입니다. M2PL 모델을 사용했기 때문에 모든 문항에 대해 하한 점근 모수는 0으로 고정되고 상한 점근 모수는 1로 고정됩니다.</p>
+<p>다음으로, mirt 패키지의 MDIFF 및 MDISC 함수를 사용하여 변별도 및 절편 모수를 방정식 7.2 및 7.3에 따라 다차원 문항 난이도 및 변별도 모수로 변환합니다. 그런 다음 data.frame 함수를 사용하여 변환된 모수를 데이터 프레임으로 결합하고 이를 m2pl_items로 저장합니다. 마지막으로 다차원 문항 모수의 이름을 바꾸고 head 함수를 사용하여 처음 6개의 문항을 출력합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>m2pl_items <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">MDISC</span>(m2pl_fit),</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">MDIFF</span>(m2pl_fit))</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(m2pl_items) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"m2pl_mdisc"</span>, <span class="st">"m2pl_mdiff"</span>)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(m2pl_items)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      m2pl_mdisc  m2pl_mdiff
+item1  1.0451546 -0.02879262
+item2  0.9549557  0.32042841
+item3  1.0843917 -0.21399037
+item4  1.2282254 -0.16942062
+item5  0.9071266 -0.18311061
+item6  0.8660056 -0.88950791</code></pre>
+</div>
+</div>
+<p>문항 모수 외에도 m2pl_params 끝에 $cov를 추가하여 두 잠재 특성의 추정 분산-공분산 행렬을 볼 수도 있습니다. 결과에는 2 X 2 행렬이 표시되며, 대각선 요소는 잠재 특성인 F1 및 F2의 분산이고 대각선 아래쪽 요소는 두 잠재 특성의 공분산입니다. 아래 결과에서 F1과 F2의 분산은 위에서 언급한 식별상의 이유로 1이며, 두 잠재 특성의 공분산은 0.588로 추정됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>m2pl_params<span class="sc">$</span>cov</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         F1       F2
+F1 1.000000 0.588067
+F2 0.588067 1.000000</code></pre>
+</div>
+</div>
+<p>잠재 특성의 분산은 1로 고정되어 있으므로 분산-공분산 행렬은 실제로 잠재 특성의 상관 관계 행렬입니다. 따라서 F1과 F2의 상관관계도 .588이 됩니다. 그러나 모델에서 F1과 F2의 분산을 추정했다면 다음 공식을 사용하여 추정된 공분산을 상관 계수로 변환할 수 있습니다.</p>
+<p><span class="math display">\[
+r_{F1,F2}={cov(F1, F1) \over (S_{F1})(S_{F2})}={0.588 \over (\sqrt{1})(\sqrt{1})}=.588
+\]</span></p>
+<ul>
+<li>여기서 <span class="math inline">\(S_{F1}\)</span>과 <span class="math inline">\(S_{F2}\)</span>는 잠재 특성 F1과 F2의 표준 편차이고 <span class="math inline">\(cov(F1, F1)\)</span>는 두 잠재 특성 간의 공분산을 나타냅니다.</li>
+</ul>
+<p>단일차원 IRT 모델에서와 마찬가지로 MIRT 모델의 문항 및 검사 특성을 그래픽으로 살펴볼 수 있습니다. MIRT 모델은 중다 잠재 특성을 함께 사용하여 문항에 정답할 확률을 계산하고, 문항 및 검사 정보를 계산하고, 기타 속성을 조사하는 문항 및 검사 표면 그래프를 생성합니다. 표면 그래프와 동일한 정보를 전달할 수 있는 등고선 그래프도 있습니다. 등고선 그래프는 조감도에서 정보를 표시합니다. 즉, 등고선 그래프는 표면 그래프를 위에서 본 것처럼 보여줍니다. 등고선 그래프는 표면 그래프에 비해 해석하기 쉬운 경우가 많습니다. 두 개 이상의 잠재 특성을 포함하는 MIRT 모델은 어떤 유형의 그래프를 선택하든 그래픽으로 요약하기가 더 어렵다는 점에 유의해야 하는데, 그 이유는 (1) mirt 패키지의 plot 함수는 2차원만 처리할 수 있고 (2) R의 다른 그래픽 함수는 2차원 및 3차원 공간의 데이터로 제한되어 있기 때문입니다.</p>
+<p>다음 예제에서도 itemplot 함수를 사용하여 문항을 플롯합니다. item13은 두 잠재 특성과 연관된 문항 중 하나이므로 아래 예제에서는 이 문항을 사용합니다. itemplot 함수를 type = “trace” 옵션과 함께 사용하여 먼저 item13에 대한 문항 특성 표면 그래프를 만듭니다. 이 그래프는 x축에 첫 번째 잠재 특성, y축에 두 번째 잠재 특성, z축에 item13의 정답할 확률을 축으로 하는 3차원 그래프입니다. 그런 다음 type = “tracecontour”를 사용하여 동일한 문항에 대한 문항 등고선 그래프 그립니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">itemplot</span>(m2pl_fit, <span class="at">type =</span> <span class="st">"trace"</span>, <span class="at">item =</span> <span class="dv">13</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap07_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">itemplot</span>(m2pl_fit, <span class="at">type =</span> <span class="st">"tracecontour"</span>, <span class="at">item =</span> <span class="dv">13</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap07_files/figure-html/unnamed-chunk-7-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>그림 7.4와 7.5는 모두 첫 번째 잠재 특성(<span class="math inline">\(\theta_1\)</span>)과 두 번째 잠재 특성(<span class="math inline">\(\theta_2\)</span>)의 함수에 따라 item13의 정답 확률이 어떻게 변하는지를 보여줍니다. M2PL 모델은 보상적 MIRT 모델이기 때문에 한 잠재 특성의 약점은 다른 잠재 특성의 강점으로 보상될 수 있습니다. 예를 들어, <span class="math inline">\(\theta_1 = 0\)</span>이고 <span class="math inline">\(\theta_2 = 2\)</span>인 경우 <span class="math inline">\(\theta_1\)</span>이 <span class="math inline">\(\theta_2\)</span>보다 상대적으로 낮음에도 불구하고 item13의 정답 확률은 거의 .80(즉, 80%)입니다.</p>
+<p>문항 특성 표면 외에도, 잠재 특성 수준을 기반으로 문항이 제공하는 정보를 조사할 수도 있습니다. 문항 정보 그래프를 만들려면 itemplot 함수에서 type = “info”를 설정합니다. 결과 그래프는 문항 특성 표면 그래프과 유사하지만 이번에는 z축에 문항의 성공 확률 대신 문항 정보 수준이 표시됩니다. 그림 7.6은 두 잠재 특성이 모두 0에 가까울 때 문항 정보 수준이 가장 높은 반면, 두 잠재 특성이 모두 매우 낮거나 매우 높을 때 문항 정보가 가장 낮다는 것을 보여줍니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">itemplot</span>(m2pl_fit, <span class="at">type=</span><span class="st">"info"</span>, <span class="at">item =</span> <span class="dv">13</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap07_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>문항 특성 표면 그래프와 마찬가지로 문항 정보 그래프도 등고선 그래프로 그릴 수 있습니다. 또한 문항의 기대 점수 및 표준 오차 값을 검사하는 데 문항 플롯 함수를 사용할 수 있습니다. 이러한 그래프를 그리기 위한 R 명령은 다음과 같습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">itemplot</span>(m2pl_fit, <span class="at">type =</span> <span class="st">"infocontour"</span>, <span class="at">item =</span> <span class="dv">13</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap07_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">itemplot</span>(m2pl_fit, <span class="at">type =</span> <span class="st">"score"</span>, <span class="at">item =</span> <span class="dv">13</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap07_files/figure-html/unnamed-chunk-9-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">itemplot</span>(m2pl_fit, <span class="at">type =</span> <span class="st">"SE"</span>, <span class="at">item =</span> <span class="dv">13</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap07_files/figure-html/unnamed-chunk-9-3.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>위에 요약된 문항 수준 그래프 외에도 검사 수준에서 그래프를 그릴 수도 있습니다. 이러한 그래프는 검사 정보 함수 및 조건부 측정의 표준 오차를 요약합니다. 다음 명령은 TIF 그래프 및 cSEM 그래프를 만들기 위한 plot 함수의 사용을 보여줍니다. 그림 7.7은 mimic 데이터 세트에 포함된 모든 문항에 대한 TIF 및 cSEM 그래프를 보여줍니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(m2pl_fit, <span class="at">type =</span> <span class="st">"info"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap07_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(m2pl_fit, <span class="at">type =</span> <span class="st">"SE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap07_files/figure-html/unnamed-chunk-10-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>제5장에서는 잠재 특성 수준을 추정하기 위해 mirt 패키지의 fscores 함수를 사용하는 방법을 보여드렸습니다. MIRT 모델의 경우, 동일한 절차에 따라 다차원 평가에서 잠재 특성 수준을 추정할 수 있습니다. 아래 예에서는 M2PL 모델에서 잠재 특성 수준을 추정하기 위해 최대 사후 추정(MAP) 및 기대 사후 추정(EAP) 방법을 사용합니다. MAP 및 EAP 추정량에 대해서는 각각 method = “MAP” 및 method = “EAP”를 지정합니다. ML 기반 추정치는 fscores 함수에서 method = “ML”을 사용하여 얻을 수도 있습니다. 제5장에서 설명했듯이 최대 우도(ML) 추정에서는 피험자가 모든 문항의 응답이 틀리거나 정답인 경우 결과를 제공하지 못합니다. MIRT 모델에서 잠재 특성 수준을 추정할 때도 동일한 문제가 지속됩니다. 아래에서는 잠재 특성 수준을 추정하고 결과를 m2pl_map 및 m2pl_eap으로 저장한 다음 head 함수를 사용하여 처음부터 6행을 출력합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>m2pl_map <span class="ot">&lt;-</span> <span class="fu">fscores</span>(m2pl_fit, <span class="at">method =</span> <span class="st">"MAP"</span>, <span class="at">full.scores =</span> <span class="cn">TRUE</span>, <span class="at">full.scores.SE =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(m2pl_map)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             F1          F2     SE_F1     SE_F2
+[1,]  0.4244960  0.03977301 0.4836689 0.4734518
+[2,]  0.8752283  1.29303637 0.5318044 0.5312877
+[3,]  1.1437356  0.51740865 0.5330358 0.4934871
+[4,] -0.2365629 -0.45059857 0.4752881 0.4787024
+[5,]  0.9421421 -0.12299459 0.5066176 0.4782289
+[6,]  0.3985295  1.09251385 0.4975982 0.5062713</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>m2pl_eap <span class="ot">&lt;-</span> <span class="fu">fscores</span>(m2pl_fit, <span class="at">method =</span> <span class="st">"EAP"</span>, <span class="at">full.scores =</span> <span class="cn">TRUE</span>, <span class="at">full.scores.SE =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(m2pl_eap)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             F1         F2     SE_F1     SE_F2
+[1,]  0.4453246  0.0453828 0.4918731 0.4803416
+[2,]  0.9311577  1.3492089 0.5424382 0.5421459
+[3,]  1.1960052  0.5477967 0.5417752 0.5022786
+[4,] -0.2446835 -0.4667777 0.4834888 0.4855015
+[5,]  0.9780828 -0.1158884 0.5144185 0.4850905
+[6,]  0.4324385  1.1331393 0.5072794 0.5155978</code></pre>
+</div>
+</div>
+<p>결과에서 F1 및 F2 열은 잠재 특성 추정치이고 SE_F1 및 SE_F2는 추정된 잠재 특성에 대한 표준 오차입니다. 다음으로, MAP 및 EAP 방법의 잠재 특성 추정치를 m2pl_scores라는 새 데이터 세트에 결합한 다음 잠재 특성 추정치 간의 상관 관계를 살펴봅니다. 결과는 MAP 방법과 EAP 방법의 잠재 특성 추정치가 높은 상관관계가 있음을 보여줍니다. 또한 두 잠재 특성 간의 점수도 높은 상관관계가 있음을 알 수 있습니다(MAP와 EAP의 경우 약 0.78).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>m2pl_scores <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">map1 =</span> m2pl_map[, <span class="dv">1</span>], <span class="at">map2 =</span> m2pl_map[, <span class="dv">2</span>], <span class="at">eap1 =</span> m2pl_eap[, <span class="dv">1</span>], <span class="at">eap2 =</span> m2pl_eap[, <span class="dv">2</span>])</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(m2pl_scores)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          map1      map2      eap1      eap2
+map1 1.0000000 0.7788795 0.9999633 0.7838897
+map2 0.7788795 1.0000000 0.7841330 0.9999640
+eap1 0.9999633 0.7841330 1.0000000 0.7890935
+eap2 0.7838897 0.9999640 0.7890935 1.0000000</code></pre>
+</div>
+</div>
+<p>문항 및 검사 구조에 대한 이론적 가정과 기대치에 따라 검사 구조의 정의를 수정하여 보다 구체적인 MIRT 모델을 추정할 수도 있습니다. 예를 들어, 일부 문항은 동일한 기울기 및 절편 모수를 갖도록 제약할 수 있습니다. 두 잠재 특성 사이의 고유 문항이 동일한 기울기 모수를 가질 것으로 예상한다고 가정하면 모델 정의에서 CONSTRAIN 문을 사용할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>m2pl_mod_constrant <span class="ot">&lt;-</span> <span class="st">'</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="st">        F1 = 1 - 6, 13 - 21, 23 - 24</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="st">        F2 = 7 - 20, 22 - 24</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="st">        COV = F1 * F2</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="st">        CONSTRAIN = (1 - 6, 21, a1), (7 - 12, 22, a2)'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>M2PL 모델의 비보상적 버전도 있습니다. 비보상적 M2PL을 추정하려면 itemtype = “2PL”을 itemtype = “PC2PL”로 바꿔야 합니다. 보상적 M2PL 모델과 달리 문항은 두 잠재 특성 각각에 대해 별도의 기울기 및 절편 모수를 갖게 됩니다. 또한 비보상적 M2PL 모델에서는 잠재 특성 간에 보상이 이루어지지 않습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>m2pl_fit <span class="ot">&lt;-</span> <span class="fu">mirt</span>(<span class="at">data =</span> mimic, <span class="at">model =</span> m2pl_mod, <span class="at">itemtype =</span> <span class="st">"PC2PL"</span>, <span class="at">SE =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Iteration: 1, Log-Lik: -31012.172, Max-Change: 1.76320
+Iteration: 2, Log-Lik: -29807.467, Max-Change: 0.74238
+Iteration: 3, Log-Lik: -29701.719, Max-Change: 0.27453
+Iteration: 4, Log-Lik: -29671.810, Max-Change: 0.10395
+Iteration: 5, Log-Lik: -29662.257, Max-Change: 0.10827
+Iteration: 6, Log-Lik: -29657.956, Max-Change: 0.10588
+Iteration: 7, Log-Lik: -29655.308, Max-Change: 0.04655
+Iteration: 8, Log-Lik: -29653.744, Max-Change: 0.05054
+Iteration: 9, Log-Lik: -29653.039, Max-Change: 0.04176
+Iteration: 10, Log-Lik: -29652.375, Max-Change: 0.05004
+Iteration: 11, Log-Lik: -29651.894, Max-Change: 0.06030
+Iteration: 12, Log-Lik: -29651.501, Max-Change: 0.06543
+Iteration: 13, Log-Lik: -29651.159, Max-Change: 0.09873
+Iteration: 14, Log-Lik: -29650.505, Max-Change: 0.08045
+Iteration: 15, Log-Lik: -29650.283, Max-Change: 0.06853
+Iteration: 16, Log-Lik: -29650.062, Max-Change: 0.05434
+Iteration: 17, Log-Lik: -29649.924, Max-Change: 0.04601
+Iteration: 18, Log-Lik: -29649.831, Max-Change: 0.02968
+Iteration: 19, Log-Lik: -29649.749, Max-Change: 0.02124
+Iteration: 20, Log-Lik: -29649.687, Max-Change: 0.03626
+Iteration: 21, Log-Lik: -29649.640, Max-Change: 0.00528
+Iteration: 22, Log-Lik: -29649.609, Max-Change: 0.00468
+Iteration: 23, Log-Lik: -29649.582, Max-Change: 0.00571
+Iteration: 24, Log-Lik: -29649.559, Max-Change: 0.00718
+Iteration: 25, Log-Lik: -29649.536, Max-Change: 0.00257
+Iteration: 26, Log-Lik: -29649.519, Max-Change: 0.00106
+Iteration: 27, Log-Lik: -29649.508, Max-Change: 0.00114
+Iteration: 28, Log-Lik: -29649.498, Max-Change: 0.00079
+Iteration: 29, Log-Lik: -29649.492, Max-Change: 0.00092
+Iteration: 30, Log-Lik: -29649.487, Max-Change: 0.00083
+Iteration: 31, Log-Lik: -29649.482, Max-Change: 0.00120
+Iteration: 32, Log-Lik: -29649.479, Max-Change: 0.00164
+Iteration: 33, Log-Lik: -29649.476, Max-Change: 0.00193
+Iteration: 34, Log-Lik: -29649.473, Max-Change: 0.00111
+Iteration: 35, Log-Lik: -29649.471, Max-Change: 0.00164
+Iteration: 36, Log-Lik: -29649.469, Max-Change: 0.00175
+Iteration: 37, Log-Lik: -29649.468, Max-Change: 0.00163
+Iteration: 38, Log-Lik: -29649.466, Max-Change: 0.00020
+Iteration: 39, Log-Lik: -29649.466, Max-Change: 0.00019
+Iteration: 40, Log-Lik: -29649.465, Max-Change: 0.00018
+Iteration: 41, Log-Lik: -29649.464, Max-Change: 0.00016
+Iteration: 42, Log-Lik: -29649.464, Max-Change: 0.00015
+Iteration: 43, Log-Lik: -29649.464, Max-Change: 0.00014
+Iteration: 44, Log-Lik: -29649.463, Max-Change: 0.00013
+Iteration: 45, Log-Lik: -29649.463, Max-Change: 0.00012
+Iteration: 46, Log-Lik: -29649.463, Max-Change: 0.00011
+Iteration: 47, Log-Lik: -29649.463, Max-Change: 0.00010
+Iteration: 48, Log-Lik: -29649.462, Max-Change: 0.00009
+
+Calculating information matrix...</code></pre>
+</div>
+</div>
+<p>mimic 데이터 세트에서 문항에는 추측도가 포함되지 않습니다. 그러나 문항 응답이 추측도의 영향을 받는 것으로 의심되는 경우 itemtype = “3PL”을 사용하여 다차원 3PL 모델을 선택할 수 있습니다. 또는 mirt 함수에서 추측도 모수를 설정하여 모든 문항에 대해 고정된 낮은 점근값을 정의할 수 있습니다(예: guess = 0.10).</p>
+</section>
+<section id="다차원-rasch-모델" class="level3" data-number="7.3.2">
+<h3 data-number="7.3.2" class="anchored" data-anchor-id="다차원-rasch-모델"><span class="header-section-number">7.3.2</span> 다차원 Rasch 모델</h3>
+<p>Adams 외(1997)는 중다 잠재 특성을 측정하는 검사에서 문항 모수를 추정할 수 있는 다차원 형태의 Rasch 모델을 도입했습니다. 이 모델은 문헌에서 다차원 무선 계수 다항식 로짓 모델이라고도 알려져 있습니다. Adams 외(1997)가 설명한 이 모델은 Rasch 모델의 일반적인 형태이며 이분 및 다분 문항을 모두 처리할 수 있습니다. Adams 외(1997)의 표기법을 사용하여, 다차원 Rasch 모형은 피험자 <span class="math inline">\(j\)</span>가 <span class="math inline">\(M\)</span>-차원 검사의 문항 <span class="math inline">\(i\)</span>에서 응답 범주 <span class="math inline">\(k(k = 0, 1, 2, ..., K)\)</span>를 선택할 확률을 다음과 같이 정의합니다.</p>
+<p><span class="math display">\[
+P(X_{ijk}=1|\xi,\theta_j)={exp(b_{ik}\prime\theta_j + a_{ik}\prime\xi) \over \sum_{k=0}^K exp(b_{ik}\prime\theta_j + a_{ik}\prime\xi)}
+\]</span></p>
+<ul>
+<li><p>여기서 <span class="math inline">\(b_{ik}\)</span>는 <span class="math inline">\(M\)</span>-차원에 걸쳐 문항 <span class="math inline">\(i\)</span>의 점수 범주 <span class="math inline">\(k\)</span>에 대한 점수 벡터이고,</p></li>
+<li><p><span class="math inline">\(a_{ik}\)</span>은 문항 난이도 모수 간의 관계를 정의하는 문항 <span class="math inline">\(i\)</span>의 점수 범주 <span class="math inline">\(k\)</span>에 대한 설계 벡터이며,</p></li>
+<li><p><span class="math inline">\(\theta_j\)</span>는 잠재 특성( <span class="math inline">\(\theta_j = (\theta_{j1}, \theta_{j2}, ..., \theta_{jM})\)</span>)이며,</p></li>
+<li><p><span class="math inline">\(\xi\)</span>는 문항 <span class="math inline">\(i\)</span>의 문항 난이도 모수 벡터입니다.</p></li>
+</ul>
+<p><span class="math inline">\(a_{ik}\)</span>과 <span class="math inline">\(b_{ik}\)</span>는 문항 변별도와 문항 난이도 모수를 나타내는 것이 아니라 가설을 바탕으로 검사 구조에서 도출된 가중치라는 점에 주의해야 합니다. 방정식 7.5에서 추정되는 유일한 모수는 <span class="math inline">\(\xi\)</span> 및 <span class="math inline">\(\theta_j\)</span>입니다.</p>
+<p>다차원 Rasch 모델은 중다 잠재 특성을 측정하는 문항 간 및 문항 내 검사 구조에 모두 사용할 수 있습니다. 다차원 Rasch 모델에서 잠재 특성 간의 상관관계는 추가 정보로 사용됩니다. 잠재 특성 간의 상관관계를 통해, 특히 검사가 짧고 추정되는 잠재 특성의 수가 많은 경우 정밀도를 크게 향상시킬 수 있습니다(Wang et al., 2004). 다음 예에서는 mimic 데이터 세트를 사용하여 다차원 Rasch 모델을 적합하는 방법을 보여줍니다. 예상된 검사 구조가 모델 간에 변경되지 않기 때문에 모델 정의는 M2PL 모델의 정의와 동일합니다. 다차원 Rasch 모델을 추정하려면 itemtype = “Rasch”를 지정하기만 하면 됩니다. 나머지 요소는 M2PL 모델의 이전 예와 동일합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>mrasch_mod <span class="ot">&lt;-</span> <span class="st">'F1 = 1 - 6, 13 - 21, 23 - 24</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="st">F2 = 7 - 20, 22 - 24</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="st">COV = F1 * F2'</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>mrasch_fit <span class="ot">&lt;-</span> <span class="fu">mirt</span>(<span class="at">data =</span> mimic, <span class="at">model =</span> mrasch_mod, <span class="at">itemtype =</span> <span class="st">"Rasch"</span>, <span class="at">SE =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Iteration: 1, Log-Lik: -29656.952, Max-Change: 0.10045
+Iteration: 2, Log-Lik: -29637.972, Max-Change: 0.05761
+Iteration: 3, Log-Lik: -29628.772, Max-Change: 0.03570
+Iteration: 4, Log-Lik: -29623.389, Max-Change: 0.02400
+Iteration: 5, Log-Lik: -29619.969, Max-Change: 0.01717
+Iteration: 6, Log-Lik: -29617.689, Max-Change: 0.01287
+Iteration: 7, Log-Lik: -29616.114, Max-Change: 0.01013
+Iteration: 8, Log-Lik: -29614.997, Max-Change: 0.00794
+Iteration: 9, Log-Lik: -29614.206, Max-Change: 0.00648
+Iteration: 10, Log-Lik: -29613.633, Max-Change: 0.00545
+Iteration: 11, Log-Lik: -29613.199, Max-Change: 0.00445
+Iteration: 12, Log-Lik: -29612.883, Max-Change: 0.00378
+Iteration: 13, Log-Lik: -29612.649, Max-Change: 0.00330
+Iteration: 14, Log-Lik: -29612.464, Max-Change: 0.00273
+Iteration: 15, Log-Lik: -29612.328, Max-Change: 0.00237
+Iteration: 16, Log-Lik: -29612.225, Max-Change: 0.00215
+Iteration: 17, Log-Lik: -29612.142, Max-Change: 0.00177
+Iteration: 18, Log-Lik: -29612.080, Max-Change: 0.00155
+Iteration: 19, Log-Lik: -29612.032, Max-Change: 0.00143
+Iteration: 20, Log-Lik: -29611.994, Max-Change: 0.00118
+Iteration: 21, Log-Lik: -29611.965, Max-Change: 0.00104
+Iteration: 22, Log-Lik: -29611.942, Max-Change: 0.00098
+Iteration: 23, Log-Lik: -29611.924, Max-Change: 0.00080
+Iteration: 24, Log-Lik: -29611.910, Max-Change: 0.00071
+Iteration: 25, Log-Lik: -29611.899, Max-Change: 0.00068
+Iteration: 26, Log-Lik: -29611.890, Max-Change: 0.00055
+Iteration: 27, Log-Lik: -29611.883, Max-Change: 0.00049
+Iteration: 28, Log-Lik: -29611.878, Max-Change: 0.00047
+Iteration: 29, Log-Lik: -29611.874, Max-Change: 0.00039
+Iteration: 30, Log-Lik: -29611.870, Max-Change: 0.00034
+Iteration: 31, Log-Lik: -29611.868, Max-Change: 0.00033
+Iteration: 32, Log-Lik: -29611.865, Max-Change: 0.00027
+Iteration: 33, Log-Lik: -29611.864, Max-Change: 0.00024
+Iteration: 34, Log-Lik: -29611.862, Max-Change: 0.00023
+Iteration: 35, Log-Lik: -29611.861, Max-Change: 0.00019
+Iteration: 36, Log-Lik: -29611.861, Max-Change: 0.00017
+Iteration: 37, Log-Lik: -29611.860, Max-Change: 0.00016
+Iteration: 38, Log-Lik: -29611.859, Max-Change: 0.00013
+Iteration: 39, Log-Lik: -29611.859, Max-Change: 0.00012
+Iteration: 40, Log-Lik: -29611.859, Max-Change: 0.00011
+Iteration: 41, Log-Lik: -29611.858, Max-Change: 0.00009
+
+Calculating information matrix...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>mrasch_params <span class="ot">&lt;-</span> <span class="fu">coef</span>(mrasch_fit, <span class="at">simplify =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>다음으로 head 함수를 사용하여 추정된 문항 모수의 첫 열 행을 출력합니다. 결과는 M2PL 모델에서 보았던 결과와 매우 유사합니다. 그러나 다차원 Rasch 모델의 문항에 대해서는 문항 변별도 모수가 1로 고정되어 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mrasch_params<span class="sc">$</span>items, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       a1 a2           d g u
+item1   1  0  0.02939223 0 1
+item2   1  0 -0.29424422 0 1
+item3   1  0  0.21640938 0 1
+item4   1  0  0.18627651 0 1
+item5   1  0  0.16313753 0 1
+item6   1  0  0.76289969 0 1
+item7   0  1  0.02322099 0 1
+item8   0  1 -0.90995145 0 1
+item9   0  1  0.53984398 0 1
+item10  0  1  0.88886343 0 1</code></pre>
+</div>
+</div>
+<p>다음으로 MDIFF 함수를 사용하여 절편 모수를 문항 난이도 모수로 변환합니다. 결과에서 단일 잠재 특성과 관련된 문항의 경우 d 모수의 부호만 변경된 반면, 두 잠재 특성과 관련된 문항의 경우 변환 후 문항 난이도 모수가 달라진 것을 확인할 수 있습니다. 다차원 Rasch 모델에 따르면 item10이 가장 쉬운 문항이고 item11(출력되지 않음)이 가장 어려운 문항입니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>mrasch_mdiff <span class="ot">&lt;-</span> <span class="fu">MDIFF</span>(mrasch_fit)</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mrasch_mdiff)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          MDIFF_1
+item1 -0.02939223
+item2  0.29424422
+item3 -0.21640938
+item4 -0.18627651
+item5 -0.16313753
+item6 -0.76289969</code></pre>
+</div>
+</div>
+<p>마지막으로 두 잠재 특성의 추정된 분산-공분산 행렬을 출력합니다. 출력에 따르면 F1과 F2의 분산은 각각 0.689와 0.739입니다. 두 잠재 특성의 공분산은 0.344입니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>mrasch_params<span class="sc">$</span>cov</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          F1        F2
+F1 0.6892990 0.3436748
+F2 0.3436748 0.7388482</code></pre>
+</div>
+</div>
+<p>M2PL 모델에서와 마찬가지로 itemplot 및 plot 함수를 사용하여 문항 및 검사 특성을 시각적으로 조사할 수 있습니다. 이러한 그래프에 대한 R 명령은 아래에 나와 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">itemplot</span>(mrasch_fit, <span class="at">type =</span> <span class="st">"trace"</span>, <span class="at">item =</span> <span class="dv">13</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap07_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">itemplot</span>(mrasch_fit, <span class="at">type =</span> <span class="st">"tracecontour"</span>, <span class="at">item =</span> <span class="dv">13</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap07_files/figure-html/unnamed-chunk-20-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mrasch_fit, <span class="at">type =</span> <span class="st">"info"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap07_files/figure-html/unnamed-chunk-20-3.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mrasch_fit, <span class="at">type =</span> <span class="st">"SE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap07_files/figure-html/unnamed-chunk-20-4.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mrasch_fit, <span class="at">type =</span> <span class="st">"score"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap07_files/figure-html/unnamed-chunk-20-5.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="다차원-등급-반응-모델" class="level3" data-number="7.3.3">
+<h3 data-number="7.3.3" class="anchored" data-anchor-id="다차원-등급-반응-모델"><span class="header-section-number">7.3.3</span> 다차원 등급 반응 모델</h3>
+<p>앞서 소개한 M2PL 모델과 다차원 Rasch 모델 모두 이분 문항에 적합합니다. 다분 문항에도 MIRT 프레임워크를 사용할 수 있습니다. 제6장에서는 서열 및 명목형 응답 범주가 있는 다분 문항에 대한 단일차원 IRT 모형을 제시했습니다. 제6장에서 제시된 각 IRT 모델에는 다차원 형태가 있지만, 이 섹션에서는 특히 다차원 등급 반응 모델(MGRM)에 중점을 둡니다. 다른 다차원 IRT 모델(예: 부분 점수 모델 및 등급 척도 모델)의 다차원 형태도 유사한 방식으로 추정할 수 있습니다.</p>
+<p>MGRM에서 피험자 <span class="math inline">\(j\)</span>가 문항 <span class="math inline">\(i\)</span>, <span class="math inline">\(\theta_j\)</span>에서 응답 범주 <span class="math inline">\(k\)</span>를 선택할 확률은 다음과 같이 쓸 수 있습니다.</p>
+<p><span class="math display">\[
+P(X_{ij}=k|\theta_j,a_i,\delta_{ik})={1 \over 1 + exp \begin{bmatrix}-\sum_{m=1}^M = [a_{im}(\theta_{jm}-\delta_{ik})]\end{bmatrix}}
+\]</span></p>
+<ul>
+<li><p>여기서 <span class="math inline">\(\theta_j\)</span>는 피험자 <span class="math inline">\(j\)</span>에 대한 잠재 특성의 1 X <span class="math inline">\(M\)</span> 벡터( <span class="math inline">\(\theta_j =(\theta_{j1}, \theta_{ j2}, ... , \theta_{jM})\)</span>),</p></li>
+<li><p><span class="math inline">\(a_i\)</span>는 문항 <span class="math inline">\(i\)</span>에 대한 기울기(즉, 문항의 변별도) 모수의 1 X <span class="math inline">\(M\)</span> 벡터이고(<span class="math inline">\(a_i =(a_{i1}, a_{i2}, ... , a_{iM})\)</span>),</p></li>
+<li><p><span class="math inline">\(\delta_{ik}\)</span>는 문항 <span class="math inline">\(i\)</span>의 반응 범주 <span class="math inline">\(k\)</span>에 대한 범주 경계 위치입니다.</p></li>
+<li><p>또한 <span class="math inline">\(P(X_{ij} = 0|\theta_j, a_i, \delta_{ik}) = 1\)</span>과 <span class="math inline">\(P(X_{ij}=K + 1|\theta_j, a_i, \delta_{ik})=0\)</span></p></li>
+</ul>
+<p>MGRM을 추정하는 방법을 설명하기 위해, hemp 패키지의 depression 데이터 세트를 사용합니다. depression 데이터 세트에는 2000명의 피험자가 가상의 우울 척도 20개 문항에 대해 응답한 내용이 포함되어 있습니다. 간단한 다차원 구조 내에서, 첫 번째 10개 문항은 우울의 인지적 증상을 측정하고, 두 번째 10개 문항 세트는 우울의 신체적 증상을 측정합니다. 문항 이름은 depression 데이터 세트의 item1, item2, …, item20에 해당합니다. 모든 문항은 5개의 반응 범주로 다분으로 채점됩니다(0 = 매우 동의하지 않음, 1 = 동의하지 않음, 2 = 동의나 동의하지도 않음, 3 = 동의함, 4 = 매우 동의함).</p>
+<p>MGRM을 추정하기 위해 다시 mirt 패키지의 mirt 함수를 사용합니다. mirt의 모델 구문을 사용하여 인지적 특성과 신체적 특성이라는 두 가지 잠재적 특성을 정의하고 이를 mgrm_mod로 저장합니다. 구조가 단순하기 때문에 두 잠재 특성 간에 공통 문항이 없습니다. mirt 함수에서 itemtype = “graded”를 지정하여 mgrm_mod에 정의된 2차원 구조를 기반으로 MGRM을 추정합니다. 모델을 적합하고, 문항 모수를 추출하고, 아래에 처음부터 6개 문항을 출력합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>mgrm_mod <span class="ot">&lt;-</span> <span class="st">'Cognitive = 1 - 10</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="st">             Somatic = 11 - 20</span></span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a><span class="st">             COV = Cognitive * Somatic'</span></span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>mgrm_fit <span class="ot">&lt;-</span> <span class="fu">mirt</span>(<span class="at">data =</span> depression, <span class="at">model =</span> mgrm_mod, </span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">itemtype =</span> <span class="st">"graded"</span>, <span class="at">SE =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Iteration: 1, Log-Lik: -52635.219, Max-Change: 0.44654
+Iteration: 2, Log-Lik: -52322.125, Max-Change: 0.31998
+Iteration: 3, Log-Lik: -52229.422, Max-Change: 0.12739
+Iteration: 4, Log-Lik: -52203.970, Max-Change: 0.04304
+Iteration: 5, Log-Lik: -52196.405, Max-Change: 0.02456
+Iteration: 6, Log-Lik: -52193.744, Max-Change: 0.01904
+Iteration: 7, Log-Lik: -52192.102, Max-Change: 0.00851
+Iteration: 8, Log-Lik: -52191.797, Max-Change: 0.00482
+Iteration: 9, Log-Lik: -52191.673, Max-Change: 0.00280
+Iteration: 10, Log-Lik: -52191.596, Max-Change: 0.00235
+Iteration: 11, Log-Lik: -52191.571, Max-Change: 0.00103
+Iteration: 12, Log-Lik: -52191.565, Max-Change: 0.00074
+Iteration: 13, Log-Lik: -52191.559, Max-Change: 0.00053
+Iteration: 14, Log-Lik: -52191.558, Max-Change: 0.00022
+Iteration: 15, Log-Lik: -52191.558, Max-Change: 0.00046
+Iteration: 16, Log-Lik: -52191.557, Max-Change: 0.00016
+Iteration: 17, Log-Lik: -52191.557, Max-Change: 0.00029
+Iteration: 18, Log-Lik: -52191.557, Max-Change: 0.00013
+Iteration: 19, Log-Lik: -52191.557, Max-Change: 0.00027
+Iteration: 20, Log-Lik: -52191.556, Max-Change: 0.00010
+
+Calculating information matrix...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>mgrm_params <span class="ot">&lt;-</span> <span class="fu">coef</span>(mgrm_fit, <span class="at">simplify =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mgrm_params<span class="sc">$</span>items)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             a1 a2         d1          d2         d3         d4
+item1 1.1614261  0  0.6317042  0.08701621 -0.9142739 -1.3964973
+item2 1.3414987  0  1.9962391  1.29332975  0.8924567 -0.1588539
+item3 1.7877303  0  0.2533062 -0.41532154 -0.9713472 -1.7667465
+item4 1.1584236  0 -0.6316110 -0.96876368 -1.9789404 -2.3165054
+item5 1.1091947  0  0.7715137 -0.05149029 -0.9521263 -1.3720682
+item6 0.8885139  0  2.3027712  1.81327409  1.1001075  0.6448772</code></pre>
+</div>
+</div>
+<p>결과에서 열 a1 및 a2는 기울기 모수이고 나머지 열은 절편 모수(즉, 범주 임계값)입니다. 앞서 설명했듯이 기울기 및 절편 모수는 방정식 7.6에 정의된 모수와 동일하지 않습니다. 추정된 문항 모수(즉, 기울기 및 절편)를 다차원 문항 변별도 및 범주 임계값 모수로 변환하기 위해 다시 MDISC 및 MDIFF 함수를 사용합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>mgrm_items <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">MDISC</span>(mgrm_fit), </span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">MDIFF</span>(mgrm_fit))</span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mgrm_items)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                   MDIFF_1     MDIFF_2    MDIFF_3    MDIFF_4
+item1 1.1614261 -0.5439039 -0.07492186  0.7871993  1.2023988
+item2 1.3414987 -1.4880664 -0.96409322 -0.6652684  0.1184152
+item3 1.7877303 -0.1416915  0.23231779  0.5433410  0.9882623
+item4 1.1584236  0.5452332  0.83627756  1.7083046  1.9997049
+item5 1.1091947 -0.6955621  0.04642133  0.8583942  1.2369949
+item6 0.8885139 -2.5917108 -2.04079420 -1.2381432 -0.7257930</code></pre>
+</div>
+</div>
+<p>또한 잠재 특성의 추정된 분산-공분산 행렬을 출력합니다. 아래 결과는 인지적 특성과 신체적 특성의 분산이 1이고 두 잠재 특성의 공분산(상관 관계)이 0.462임을 보여줍니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>mgrm_params<span class="sc">$</span>cov</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          Cognitive   Somatic
+Cognitive 1.0000000 0.4616181
+Somatic   0.4616181 1.0000000</code></pre>
+</div>
+</div>
+<p>마지막으로 depression 데이터 세트의 문항을 시각적으로 살펴봅니다. 문항 표면 그래프는 이분 문항에 대한 다차원 IRT 모델에 비해 다분 문항에 대한 다차원 IRT 모델의 경우 약간 더 복잡합니다. 다음 예에서는 item7과 item13에 대한 문항 표면 그래프를 만듭니다. 그림 7.8은 두 문항 모두 중다 반응 범주가 있기 때문에 각 문항 표면 그래프에 여러 개의 표면이 있음을 보여줍니다. 각 표면은 문항에서 특정 응답 범주를 선택할 확률을 표시합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">itemplot</span>(mgrm_fit, <span class="at">type =</span> <span class="st">"trace"</span>, <span class="at">item =</span> <span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap07_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">itemplot</span>(mgrm_fit, <span class="at">type =</span> <span class="st">"trace"</span>, <span class="at">item =</span> <span class="dv">13</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap07_files/figure-html/unnamed-chunk-24-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>plot 함수를 사용하여 검사 특성을 시각적으로 살펴볼 수도 있습니다. 아래에는 다양한 검사 특성 그래프를 생성하기 위한 R 명령이 나와 있습니다. 각 그래프는 검사 수준에서 다양한 유형의 정보(예: 정보, cSEM 및 기대점수)를 요약합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mgrm_fit, <span class="at">type =</span> <span class="st">"info"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap07_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mgrm_fit, <span class="at">type =</span> <span class="st">"SE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap07_files/figure-html/unnamed-chunk-25-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mgrm_fit, <span class="at">type =</span> <span class="st">"score"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap07_files/figure-html/unnamed-chunk-25-3.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="이요인-irt-모델" class="level3" data-number="7.3.4">
+<h3 data-number="7.3.4" class="anchored" data-anchor-id="이요인-irt-모델"><span class="header-section-number">7.3.4</span> 이요인 IRT 모델</h3>
+<p>이요인 IRT 모델은 문항 내 검사 구조를 위한 MIRT 모델링 프레임워크의 특수한 형태입니다. 이요인 IRT 모델에서는 모든 문항이 일반 잠재 특성과 연관되며, 각 문항은 보조 잠재 특성과도 연관됩니다. 일반 잠재 특성은 문항의 공통된 변산성을 설명하는 반면, 보조 잠재 특성은 문항의 고유한 변산성을 포착합니다. 모델 식별을 보장하기 위해, 일반 잠재 특성과 보조 잠재 특성은 이요인 모델에서 상관 관계가 없는 것으로 제약합니다. 이요인 구조는 다양한 MIRT 모델에 적용될 수 있지만, 문항 변별도 모수가 문항에 따라 달라지는 MIRT 모델(예: M2PL, M3PL 및 MGRM 모델)에 특히 유용합니다. 이요인 IRT 모델은 이분 및 다분 채점 문항 모두에 사용할 수 있습니다.</p>
+<p>그림 7.9는 문항 1부터 문항 5까지는 첫 번째 잠재 특성(<span class="math inline">\(\theta_1\)</span>), 문항 6부터 문항 10까지는 두 번째 잠재 특성(<span class="math inline">\(\theta_2\)</span>), 모든 문항은 일반 잠재 특성(<span class="math inline">\(\theta_G\)</span>)과 연관된 이요인 구조의 예시를 보여줍니다. 잠재 특성 <span class="math inline">\(\theta_1\)</span>, <span class="math inline">\(\theta_2\)</span>, <span class="math inline">\(\theta_G\)</span>는 이요인 구조에서 서로 상관관계가 없습니다.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="fig_79.jpg" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">이요인 검사 구조</figcaption><p></p>
+</figure>
+</div>
+<p>이요인 IRT 모델을 추정하는 방법을 보여드리기 위해 다시 한 번 mirt 패키지의 depression 데이터 세트와 bfactor 함수를 사용합니다. 먼저, 각 문항과 두 잠재 특성(즉, 인지 및 신체) 간의 연관성을 지정하는 차원이라는 벡터를 정의합니다. 이 벡터의 길이는 depression 데이터 세트의 문항 수와 동일합니다. 다음으로 bfactor 함수의 model = dimensions을 사용하여 검사 구조를 지정합니다. bfactor 함수는 차원 벡터에 지정된 모든 문항을 기반으로 추가적인 잠재 특성(즉, 일반 잠재 특성)이 있다고 가정합니다. depression 데이터 집합의 문항은 다분이기 때문에 결과 모델은 이요인 등급 반응 모델(GRM)이 됩니다. 모델을 적합하고, 추정된 모수를 추출하고, 처음 6개의 모수 추정치를 출력합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>dimensions <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">each =</span> <span class="dv">10</span>)</span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>bifactor_fit <span class="ot">&lt;-</span> <span class="fu">bfactor</span>(<span class="at">data =</span> depression, <span class="at">model =</span> dimensions)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Iteration: 1, Log-Lik: -53157.515, Max-Change: 0.68532
+Iteration: 2, Log-Lik: -52437.900, Max-Change: 0.30837
+Iteration: 3, Log-Lik: -52267.074, Max-Change: 0.12316
+Iteration: 4, Log-Lik: -52216.821, Max-Change: 0.07036
+Iteration: 5, Log-Lik: -52201.304, Max-Change: 0.04233
+Iteration: 6, Log-Lik: -52193.343, Max-Change: 0.02895
+Iteration: 7, Log-Lik: -52190.831, Max-Change: 0.02384
+Iteration: 8, Log-Lik: -52188.845, Max-Change: 0.01867
+Iteration: 9, Log-Lik: -52187.574, Max-Change: 0.01462
+Iteration: 10, Log-Lik: -52185.087, Max-Change: 0.00700
+Iteration: 11, Log-Lik: -52184.880, Max-Change: 0.00610
+Iteration: 12, Log-Lik: -52184.704, Max-Change: 0.00492
+Iteration: 13, Log-Lik: -52184.272, Max-Change: 0.00338
+Iteration: 14, Log-Lik: -52184.201, Max-Change: 0.00291
+Iteration: 15, Log-Lik: -52184.162, Max-Change: 0.00229
+Iteration: 16, Log-Lik: -52184.070, Max-Change: 0.00154
+Iteration: 17, Log-Lik: -52184.054, Max-Change: 0.00111
+Iteration: 18, Log-Lik: -52184.046, Max-Change: 0.00106
+Iteration: 19, Log-Lik: -52184.016, Max-Change: 0.00026
+Iteration: 20, Log-Lik: -52184.016, Max-Change: 0.00042
+Iteration: 21, Log-Lik: -52184.015, Max-Change: 0.00012
+Iteration: 22, Log-Lik: -52184.015, Max-Change: 0.00044
+Iteration: 23, Log-Lik: -52184.014, Max-Change: 0.00046
+Iteration: 24, Log-Lik: -52184.013, Max-Change: 0.00019
+Iteration: 25, Log-Lik: -52184.013, Max-Change: 0.00015
+Iteration: 26, Log-Lik: -52184.013, Max-Change: 0.00030
+Iteration: 27, Log-Lik: -52184.012, Max-Change: 0.00033
+Iteration: 28, Log-Lik: -52184.012, Max-Change: 0.00027
+Iteration: 29, Log-Lik: -52184.011, Max-Change: 0.00026
+Iteration: 30, Log-Lik: -52184.011, Max-Change: 0.00013
+Iteration: 31, Log-Lik: -52184.011, Max-Change: 0.00010
+Iteration: 32, Log-Lik: -52184.011, Max-Change: 0.00022
+Iteration: 33, Log-Lik: -52184.011, Max-Change: 0.00007</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>bifactor_params <span class="ot">&lt;-</span> <span class="fu">coef</span>(bifactor_fit, <span class="at">simplify =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(bifactor_params<span class="sc">$</span>items)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             a1        a2 a3         d1          d2         d3         d4
+item1 0.8636558 0.7747101  0  0.6326557  0.08814625 -0.9124955 -1.3943250
+item2 0.8937414 1.0200484  0  2.0073519  1.30153921  0.8989060 -0.1573527
+item3 1.2319292 1.3070443  0  0.2570879 -0.41338002 -0.9709465 -1.7684132
+item4 0.8702281 0.7613767  0 -0.6294679 -0.96622324 -1.9754034 -2.3128019
+item5 0.9002669 0.6639381  0  0.7746956 -0.05007499 -0.9528938 -1.3737999
+item6 0.7307330 0.5215354  0  2.3086226  1.81822267  1.1036505  0.6473923</code></pre>
+</div>
+</div>
+<p>결과에서 처음 세 열(a1, a2, a3)은 일반 잠재 특성 및 보조 잠재 특성(인지 및 신체)에 대한 기울기 모수를 표시합니다. 첫 번째 기울기 모수는 모든 문항에 대해 0보다 크지만, 두 번째 및 세 번째 기울기 모수는 특정 잠재 특성과 연관되지 않은 문항에 대해 0 요소를 갖습니다. 예를 들어 item1은 일반 잠재 특성 및 첫 번째 보조 잠재 특성과 연관되어 있습니다. 따라서 item1의 첫 번째 및 두 번째 기울기 모수는 a1 = 0.8637, a2 = 0.7747이고 세 번째 기울기 모수는 a3 = 0입니다. 다음 열(d1, d2, d3 및 d4)은 이요인 GRM의 절편 모수입니다.</p>
+<p>또한 MDISC 및 MDIFF 함수를 사용하여 추정된 기울기 및 절편 모수를 다차원 문항 변별도 및 범주 임계값 모수로 변환할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>bifactor_items <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">MDISC</span>(bifactor_fit), </span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">MDIFF</span>(bifactor_fit))</span>
+<span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(bifactor_items)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                   MDIFF_1     MDIFF_2    MDIFF_3    MDIFF_4
+item1 1.1602056 -0.5452962 -0.07597468  0.7864947  1.2017913
+item2 1.3561978 -1.4801320 -0.95969715 -0.6628133  0.1160249
+item3 1.7961109 -0.1431359  0.23015284  0.5405827  0.9845791
+item4 1.1562834  0.5443890  0.83562838  1.7084076  2.0002033
+item5 1.1186127 -0.6925504  0.04476526  0.8518532  1.2281283
+item6 0.8977583 -2.5715413 -2.02529196 -1.2293403 -0.7211209</code></pre>
+</div>
+</div>
+<p>앞서 설명했듯이 이요인 모델에서 잠재 특성 간의 상관관계는 0으로 제약하며, 잠재 특성의 공분산 행렬을 출력하면 이러한 제약을 확인할 수 있습니다. 이 행렬에서 대각선 요소는 1이고 대각선이 아닌 요소는 모두 0이므로 모델에서 정의한 세 가지 잠재 특성이 직교(즉, 상관관계가 없음)임을 나타냅니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>bifactor_params<span class="sc">$</span>cov</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   G S1 S2
+G  1  0  0
+S1 0  1  0
+S2 0  0  1</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="요약" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="요약"><span class="header-section-number">7.4</span> 요약</h2>
+<p>이 장에서는 MIRT 프레임워크를 소개하고 mirt 패키지를 사용하여 여러 MIRT 모델을 추정하고 적합하는 방법을 시연했습니다. MIRT 모델은 두 개 이상의 잠재 특성을 측정하려는 다차원 검사 구조에 적합합니다. 반응 데이터 세트에 MIRT 모델을 적용하기 전에는 몇 가지 단계가 있습니다. 첫 번째 단계는 검사 구조를 결정하는 것입니다. 검사 구조를 알 수 없는 경우, 탐색적 MIRT 접근 방식을 사용하여 반응 패턴을 기반으로 검사 구조를 결정할 수 있습니다. 이는 데이터 기반 접근 방식으로 간주할 수 있습니다. 문항과 잠재 특성 간의 관계를 이미 알고 있는 경우에는 확인적 MIRT 접근법을 사용해야 합니다. 검사 구조는 문항 내 다차원성 또는 문항 간 다차원성을 나타낼 수 있습니다. 두 번째 단계는 잠재 특성 간에 보상 관계가 있는지 여부를 결정하는 것입니다. 보상적 MIRT 모델은 한 잠재 특성의 강점이 다른 잠재 특성의 약점을 보완할 수 있도록 합니다. 비보상적 MIRT 모델은 잠재 특성 간에 어떠한 보상도 허용하지 않습니다. 세 번째 단계는 MIRT 모델을 선택하는 것입니다. 제5장과 제6장에서 설명한 단일차원 IRT 모델은 MIRT 모델로 추정할 수 있습니다. 즉, 이분 문항과 다분 문항 모두에 MIRT 모델을 사용할 수 있습니다. mirt 패키지는 다양한 MIRT 모델을 추정할 수 있지만, 여기서는 교육 및 심리 측정에 사용되는 일반적인 MIRT 모델만 시연했습니다. mirt의 기능에 대한 자세한 내용은 mirt 패키지 매뉴얼(Chalmers, 2012)을 참조하시기 바랍니다.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./chap06.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">다분 문항반응이론</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./chap08.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">설명적 문항반응이론</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

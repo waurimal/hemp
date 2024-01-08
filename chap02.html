@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.475">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>HEMP Using R - 2&nbsp; 고전검사이론</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./chap03.html" rel="next">
+<link href="./chap01.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">고전검사이론</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">HEMP Using R</a> 
+        <div class="sidebar-tools-main">
+    <a href="./HEMP-Using-R.pdf" title="Download PDF" class="sidebar-tool px-1"><i class="bi bi-file-pdf"></i></a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">머리말</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap01.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">R 소개</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap02.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">고전검사이론</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap03.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">일반화가능도 이론</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap04.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">측정에서 요인분석적 접근</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap05.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">이분 문항반응이론</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap06.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">다분 문항반응이론</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap07.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">다차원 문항반응이론</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap08.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">설명적 문항반응이론</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap09.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">데이터 시각화 및 측정 모델</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap10.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">동등화</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">측정 불변성과 차별기능문항</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap12.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">측정의 고급 주제</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#개요" id="toc-개요" class="nav-link active" data-scroll-target="#개요"><span class="toc-section-number">2.1</span>  개요</a></li>
+  <li><a href="#측정이란-무엇인가" id="toc-측정이란-무엇인가" class="nav-link" data-scroll-target="#측정이란-무엇인가"><span class="toc-section-number">2.2</span>  측정이란 무엇인가?</a></li>
+  <li><a href="#측정의-문제" id="toc-측정의-문제" class="nav-link" data-scroll-target="#측정의-문제"><span class="toc-section-number">2.3</span>  측정의 문제</a>
+  <ul class="collapse">
+  <li><a href="#척도의-종류" id="toc-척도의-종류" class="nav-link" data-scroll-target="#척도의-종류"><span class="toc-section-number">2.3.1</span>  척도의 종류</a></li>
+  </ul></li>
+  <li><a href="#고전검사이론-프레임워크" id="toc-고전검사이론-프레임워크" class="nav-link" data-scroll-target="#고전검사이론-프레임워크"><span class="toc-section-number">2.4</span>  고전검사이론 프레임워크</a>
+  <ul class="collapse">
+  <li><a href="#신뢰도" id="toc-신뢰도" class="nav-link" data-scroll-target="#신뢰도"><span class="toc-section-number">2.4.1</span>  신뢰도</a></li>
+  <li><a href="#타당도" id="toc-타당도" class="nav-link" data-scroll-target="#타당도"><span class="toc-section-number">2.4.2</span>  타당도</a></li>
+  <li><a href="#문항-분석" id="toc-문항-분석" class="nav-link" data-scroll-target="#문항-분석"><span class="toc-section-number">2.4.3</span>  문항 분석</a></li>
+  </ul></li>
+  <li><a href="#요약" id="toc-요약" class="nav-link" data-scroll-target="#요약"><span class="toc-section-number">2.5</span>  요약</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">고전검사이론</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="개요" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="개요"><span class="header-section-number">2.1</span> 개요</h2>
+<p>이 장에서는 고전검사이론 프레임워크를 이용해 교육측정 및 심리측정을 소개하고자 합니다. 측정, 검사, 척도를 정의하는 것으로 시작한 다음 CTT 맥락에서 신뢰도와 타당도를 살펴봅니다. 간략하게 소개한 후, R에서 CTT 기반 통계치들을 어떻게 구하는지 다양한 예를 제시합니다. 추가적으로 표집분포가 불분명하거나 가정에 위배되었을 경우 CTT 기반 모수에 대한 신뢰구간을 얻기 위한 옵션으로 부트스트래핑을 소개합니다. 문항 분석으로 장을 마무리합니다. 이 장에서 사용하는 R 함수는 hemp와 boot 패키지에서 가져옵니다.</p>
+</section>
+<section id="측정이란-무엇인가" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="측정이란-무엇인가"><span class="header-section-number">2.2</span> 측정이란 무엇인가?</h2>
+<p>일반적으로 측정이란 일련의 규칙이나 원리, 조작에 기반해 구인에 숫자 또는 이름(라벨링)을 부여하는 것입니다. 예를 들어, 고등학교 수학교사인 김선생님은 학생들의 대수학 지식을 측정하려 합니다. 이 작업을 완수하기 위해 김선생님은 학생들의 대수학 지식을 측정하는 수학시험을 설계하고 시행하기로 했습니다. 수학시험을 개발하는 동안, 김선생님은 다음과 같은 몇 가지 측정 문제에 부딪힙니다.</p>
+<ul>
+<li><p>학생들이 알아야 할 대수학 개념은 무엇입니까?</p></li>
+<li><p>몇 문제를 사용해야 할까요?</p></li>
+<li><p>영역당 포함해야 하는 문제 수와 질문의 형식을 어떻게 해야 할까요?</p></li>
+<li><p>문제를 새로 만들어야 할까요? 아니면 기존문제를 사용할 수 있을까요?</p></li>
+<li><p>부정행위가 발생할 수 있기 때문에 검사지를 여러 개로 만들어야 할까요? 만일 그렇다면 난이도가 같거나 비슷하다는 것을 어떻게 확신할 수 있을까요?</p></li>
+<li><p>문제가 실제 대수학 지식만을 측정한다고 어떻게 확신할 수 있을까요?</p></li>
+<li><p>채점은 어떻게 해야 할까요?</p></li>
+<li><p>각각의 문제는 같은 방식으로 채점해야 할까요? 예를 들어, 각각의 문제에 동일한 점수를 부여해야 할까요? 또한 학생들은 완전히 정답일 때에만 점수를 받을 수 있을까요? 부분 점수를 받을 수는 없나요?</p></li>
+</ul>
+<p>검사, 척도, 설문조사, 설문지와 같은 측정 도구는 교사, 교육자, 심리학자, 실무자 또는 연구원이 구인, 특성, 또는 관심 영역을 측정하는 데 사용하는 일반적인 수단입니다. 우리는 대수학 지식을 측정하기 위한 수학 시험 개발과 같이 특정 목적을 염두에 두고 측정 도구를 개발합니다. 구인, 특성, 영역은 읽기 능력, 지능, 또는 집행기능과 같은 이론적 실체 또는 개념입니다. 교육학과 심리학에서는 일반적으로 구인이 잠재적(관찰되지 않음)이기 때문에 직접적으로 측정할 수 없으며 발현된 것으로부터 추론을 해야 합니다. 잠재 구인을 측정하기 위해 측정 도구에서 문항(또는 과제)을 개발하고 사용합니다. 이러한 문항은 일반적으로 측정 중인 잠재 구인의 조작적 정의를 제공하는 “발현변수”라고 합니다. 잠재구인은 때때로 지능과 같이 광범위하게 정의되거나 수학의 삼각함수 지식과 같이 좁은 범위로 정의될 수 있습니다. 이 책에서 설명할 측정 프레임워크와 개념이 모든 유형의 측정도구에 일반화될 수 있기 때문에 검사, 검사도구, 설문조사와 같은 용어 간의 구분이 이책에서는 중요하지 않습니다. 따라서 이러한 용어는 이 책 전반에 걸쳐 같은 의미로 사용됩니다.</p>
+</section>
+<section id="측정의-문제" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="측정의-문제"><span class="header-section-number">2.3</span> 측정의 문제</h2>
+<p>교육 및 심리 측정에 있어 중요한 주제는 타당도, 신뢰도, 불변성(예: 공정성), 척도화 등입니다(De Ayala, 2013). 지금까지 이 주제와 관련된 측정의 문제는 교육 및 심리 측정에 관한 문헌의 주요 초점이었습니다. 타당도는 측정하고자 하는 것을 측정하고 있는 정도를 의미합니다. 타당도의 목표는 명시 변수가 대상이 되는 구인 등의 진정한 발현인지의 여부를 조사하는 것입니다. 타당도는 증거를 수집하고 측정 도구의 사용을 지원하는 사례를 구축하는 것을 포함합니다. 모든 타당도의 증거는 본질적으로 구인 타당도의 범주에 속합니다. 제4장에서 구인타당도를 평가하는 방법으로 간주되는 요인분석을 다룹니다.</p>
+<p>항상 독립적인 개념으로 간주되어 왔지만 사실상 신뢰도는 타당도 증거의 한 형태입니다. 신뢰도는 측정 도구에서 얻은 결과의 일관성을 나타냅니다. 예를 들어, 검사도구를 반복적으로 시행하면 결과가 동일하거나 유사합니까? 아니면 유의하게 다릅니까? 점수가 유의하게 다르면 신뢰도가 낮고 측정오차가 큽니다. 측정 도구의 결과를 기반으로 타당한 추론을 하려면 결과의 신뢰도가 필수적입니다. 즉, 측정 도구는 결과의 신뢰도가 높지 않으면 타당한 추론을 할 수 없습니다. 그러나 높은 신뢰도만으로는 타당한 추론을 하기에 충분하지 않습니다. 예를 들어, 운전 면허를 취득하기 위한 지식 검사는 높은 신뢰도를 가진 검사일 수 있습니다. 그러나 이 검사 개발자가 그 결과를 경주용 자동차 운전자가 될 수 있는 사람을 결정하기 위해 사용했다면 이 측정 과정은 타당하지 않은 추론을 생성할 것입니다.</p>
+<p>일반적으로 검사도구의 결과나 점수가 측정하려는 것을 반영하기를 원합니다. 결과가 피험자의 특성(예: 성별, 민족, 문화적 배경) 및 검사 시행(예: 2016년과 2017년 시험 시행)과 무관한 경우 검사도구가 불변이라 말할 수 있습니다. 불변성의 위반은 결과를 기반으로 한 추론의 타당성을 위태롭게 할 수 있습니다. 이 책에서 고려하는 많은 심리 측정 모델은 불변성을 가정하거나 이 가정을 명시적으로 검사하는 것을 포함합니다. 불변성의 하나의 형태인 측정동일성은 11장에서 자세히 다룹니다.</p>
+<p>마지막으로 측정 도구의 기저에 있는 점수 척도에는 중요한 속성이 있습니다. 척도는 일반적으로 측정 대상을 범주화하거나 정량화하는 데 사용되는 일련의 값 또는 레이블로 구성됩니다. 대수 검사 예에서, 연속 점수 척도는 0에서 100 사이의 총점 또는 0에서 4 사이의 숫자값을 할당하는 데 사용할 수 있습니다. 서열 척도는 A에서 F까지와 같은 문자 등급을 할당하는 데 사용할 수 있습니다. 명목 척도는 합격 또는 불합격, 능숙함 또는 능숙하지 않음과 같은 범주 레이블을 할당하는 데 사용될 수 있습니다. 다음 섹션에서 어떤 유형의 측정 척도를 사용해야 하는지 결정하는 방법에 대해 간략하게 설명하겠습니다.</p>
+<section id="척도의-종류" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="척도의-종류"><span class="header-section-number">2.3.1</span> 척도의 종류</h3>
+<p>척도의 특성은 선택한 방법과 모델에 영향을 미치기 때문에 측정에서 매우 중요합니다. 이 책 전반에 걸쳐 모델은 척도에 따라 달라지기 때문에 측정 척도에 대한 보다 철저한 논의가 필요합니다. 측정 척도는 일반적으로 명속, 서열, 등간, 비율 척도로 분류됩니다. 명목 척도는 질적이고 서열이 없는 범주로 구성됩니다. 예를 들어, 좋아하는 색깔에 숫자를 할당한 척도는 본질적으로 서열이 없으며 색깔의 순위를 매길 수 없기 때문에 질적입니다. 예를 들어 빨간색에는 “1”, 파란색에는 “2”, 녹색은 “3” 등으로 할당될 수 있습니다. 그러나 할당된 값이 정량적인 것처럼(예: 녹색이 파란색 및 빨간색보다 크다거나 녹색이 빨간색보다 3배 더 크다) 해석하는 것은 부적절합니다. 유사하게, 선호하는 성별 또는 인종에 따라 숫자를 할당하는 척도는 본질적으로 순서가 없기 때문에 명목 척도입니다.</p>
+<p>명목 척도와는 달리 서열척도는 본질적으로 순서가 있습니다. 서열 척도는 정량적(예: 경주에서 1위, 2위, 3위) 또는 정성적(예: 점수 루브릭에서 매우 우수, 우수, 보통, 기초)일 수 있습니다. 그러나 서열 척도를 사용하면 인접한 범주 간의 거리를 알 수 없으며 인접한 범주 간의 거리가 동일하다고 가정할 수 없습니다. 서열 척도의 대표적인 예는 특정 주제에 대해 동의 정도를 묻는 리커트 유형의 문항입니다. 다음 진술문을 고려하십시오: 나는 대수 문제를 푸는 것을 즐깁니다. 이 문항은 매우 동의하지 않는 경우 “1”, 동의하지 않는 경우 “2”, 보통인 경우 “3”, 동의하는 경우 “4”, 매우 동의하는 경우 “5”로 점수를 매길 수 있습니다. 사람들이 대수학의 근본적인 즐거움이 다양하고 그들의 즐거움이 실제로 지속된다고 상상하는 것은 가능합니다. 그러나 검사 도구 덕분에 그들의 즐거움은 세분화되고 사람들은 척도와 일치하는 방식으로 반응해야 합니다. “대수학 문제 해결의 즐거움”의 거리가 동의하지 않는다고 응답하는 사람과 동의도 반대도 아닌 것으로 응답하는 사람, 또는 동의하지 않는다고 응답하는 사람과 강하게 응답하는 사람 사이에 동일하다고 믿을 이유가 없습니다. 동의하지 않는다. 서수 수준에 할당된 수치는 수준 간의 거리가 1점임을 암시할 수 있지만 임의로 선택한 값이므로 정량적으로 비교할 수 없습니다. 예를 들어, 매우 반대하는 경우 “1”, 반대하는 경우 “3”, 중립적인 경우 “4”, 동의하는 경우 “5”, 매우 동의하는 경우 “7”을 할당할 수 있습니다. 이렇게 하면 인접한 범주 사이의 거리가 변경됩니다. 그러나 순서는 동일하게 유지됩니다. 따라서 서수 척도를 다룰 때 우리는 척도의 정렬된 특성을 이용해야 하지만 할당된 숫자는 임의의 레이블에 지나지 않는다는 것을 깨달아야 합니다.</p>
+<p>동일한 간격으로 정렬된 척도가 있다면, 그 척도는 적어도 등간 척도라고 할 수 있습니다. 척도가 절대 0이면 비율 척도이고, 그렇지 않으면 등간 척도입니다. 등간 척도의 대표적인 예는 섭씨 또는 화씨로 기록된 온도입니다. 섭씨에서 0도는 온도나 열이 없음을 의미하지는 않습니다. 그러나 인접한 두 온도 사이의 거리는 섭씨 척도에서 항상 동일합니다. 비율 척도도 등간 척도와 동일한 거리 기능을 가지고 있습니다. 또한 비율 척도는 측정 중인 구인이 없음을 나타내는 실제 영점이 있습니다. 서열 및 등간 척도와 달리 비율 척도는 척도에 있는 값의 비율을 해석할 수 있습니다(예: 10인치는 5인치의 두 배입니다).</p>
+<p>명목 및 서열 척도의 데이터를 범주형 또는 불연속형 데이터라고 하는 반면, 등간 및 비율 척도의 데이터를 연속형 데이터라고 합니다. 연속형 데이터의 경우, 데이터가 일련의 예측 변수, 공변인 또는 독립 변수에 따라 주변 또는 조건부 정규분포를 갖는다고 가정하는 경우가 있습니다. 등간 및 비율 척도를 사용하면 기술 통계(예: 평균 및 표준 편차)를 계산할 수 있지만, 명목 및 서열 척도에서는 이러한 통계가 부적절합니다. 등간 및 비율 척도를 사용하여 산점도, 히스토그램 또는 줄기 및 잎 도표를 조사할 수 있습니다. 명목척도 또는 서열척도를 사용하여 특정 응답을 지지하는 응답자의 수 또는 비율을 표시하는 분할표를 구성하고 막대 그래프, 점도표 또는 모자이크 플롯을 만들 수 있습니다.</p>
+<p>범주형 데이터와 연속형 데이터를 요약하는 방법의 차이점을 간략하게 보여주기 위해 hemp 패키지의 interest 데이터 세트를 사용합니다. interest 데이터는 가상의 인지, 성격 및 직업흥미 설문에서 가져옵니다. 이 데이터 세트에 대한 자세한 내용은 R 콘솔에서 ?interest를 실행할 수 있습니다. hemp 패키지의 함수 및 데이터 세트를 활성화하려면 다음과 같이 library 명령을 사용해야 합니다:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(hemp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: psych</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: lattice</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: lavaan</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This is lavaan 0.6-16
+lavaan is FREE software! Please report any bugs.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'lavaan'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:psych':
+
+    cor2cov</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: mirt</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: stats4</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: lme4</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: Matrix</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'lme4'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:mirt':
+
+    fixef</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: reshape2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: boot</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'boot'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:lattice':
+
+    melanoma</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:psych':
+
+    logit</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: equate</code></pre>
+</div>
+</div>
+<p>hemp 패키지가 활성화되면 interest 데이터 세트를 사용할 수 있게 됩니다. interest 데이터 세트의 변수 중 하나는 성별입니다. 성별 변수는 원래 여성 응답자의 경우 1, 남성 응답자의 경우 2로 코딩되었습니다. 이 숫자 변수를 ifelse 함수를 사용하여 실제 성별 레이블이 있는 범주형 변수로 레코딩하는 것으로 시작합니다. ifelse 함수는 “이 문장이 참이면 do … 그렇지 않으면 do ….” 아래 예에서는 ifelse를 사용하여 성별 변수가 1과 같은 관측값(즉, 응답자)을 찾아서 다시 코딩합니다. gender==1 조건이 충족되면 “여성” 레이블을 할당하고, 그렇지 않으면 “남성” 레이블을 할당합니다. 마지막으로 이 새 변수를 gender_nominal로 저장합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>gender_nominal <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(interest<span class="sc">$</span>gender<span class="sc">==</span><span class="dv">1</span>,<span class="st">"female"</span>,<span class="st">"male"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>다음으로, interest 데이터 세트의 연속형 숫자 변수인 나이를 교육적인 목적으로 서열 변수로 변환합니다. 나이를 서열 변수로 변환하면 정보 손실이 발생할 수 있지만, 비율 척도의 연속형 변수를 서열 변수로 변환하는 방법을 보여드리고자 합니다. 나이를 서열 변수로 변환하기 위해 cut 함수를 사용하여 10세부터 70세까지 폭이 10년인 구간차원을 만듭니다. 첫 번째 구간차원에는 10~19세 피험자가 포함되고, 두 번째 구간차원에는 20~29세 피험자가 포함되는 식입니다. 이 새 변수가 명목 변수가 아닌 서열 변수(R에서 기본적으로 가정)임을 R이 알 수 있도록 ordered 함수를 사용하여 age_ordinal로 저장합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>age_nominal <span class="ot">&lt;-</span> <span class="fu">cut</span>(interest<span class="sc">$</span>age,<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">10</span>, <span class="dv">70</span>, <span class="at">by =</span> <span class="dv">10</span>))</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>age_ordinal <span class="ot">&lt;-</span> <span class="fu">ordered</span>(age_nominal)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>새 변수를 요약하기 위해 table 함수를 사용합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(gender_nominal)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>gender_nominal
+female   male 
+   128    122 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(age_ordinal)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>age_ordinal
+(10,20] (20,30] (30,40] (40,50] (50,60] (60,70] 
+      9      34      89      88      23       7 </code></pre>
+</div>
+</div>
+<p>위의 결과에서 남성보다 여성이 약간 더 많으며, 피험자의 대부분이 30세에서 50세 사이라는 것을 알 수 있습니다. ftable 함수를 사용하면 여러 개의 명목 및 서열 변수가 포함된 분할표를 만들 수도 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ftable</span>(age_ordinal, gender_nominal)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            gender_nominal female male
+age_ordinal                           
+(10,20]                         4    5
+(20,30]                        19   15
+(30,40]                        51   38
+(40,50]                        39   49
+(50,60]                        11   12
+(60,70]                         4    3</code></pre>
+</div>
+</div>
+<p>ftable 함수에서 반환된 분할표는 남성과 여성 모두 대부분 30세에서 50세 사이라는 것을 보여줍니다. table 함수를 사용하여 빈도표를 만드는 것 외에도 prop.table 함수를 사용하여 비율표를 만들 수도 있습니다. prop.table은 table 함수에서 파생된 빈도표를 기반으로 비율표를 만듭니다. 서열 연령 변수에 대한 비율표를 만들려면 먼저 빈도표를 생성하고 이 표를 prop.table 함수에 인수로 전달합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>age_table <span class="ot">&lt;-</span> <span class="fu">table</span>(age_ordinal)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.table</span>(age_table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>age_ordinal
+(10,20] (20,30] (30,40] (40,50] (50,60] (60,70] 
+  0.036   0.136   0.356   0.352   0.092   0.028 </code></pre>
+</div>
+</div>
+<p>prop.table의 결과는 interest 데이터 세트의 피험자 중 약 70%가 30세에서 50세 사이라는 것을 보여줍니다. table 함수와 마찬가지로 prop.table 함수는 분할표에도 적용할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.table</span>(<span class="fu">table</span>(age_ordinal, gender_nominal))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           gender_nominal
+age_ordinal female  male
+    (10,20]  0.016 0.020
+    (20,30]  0.076 0.060
+    (30,40]  0.204 0.152
+    (40,50]  0.156 0.196
+    (50,60]  0.044 0.048
+    (60,70]  0.016 0.012</code></pre>
+</div>
+</div>
+<p>지금까지 살펴본 예제에서는 모든 것을 저장하고 향후 함수에 전달할 수 있다는 R의 중요한 기능을 다시 한 번 확인했습니다. 이를 통해 함수에 함수를 중첩할 필요 없이 더 읽기 쉬운 코드를 만들 수 있습니다.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>명목변수와 서열 변수를 시각적으로 조사하기 위해 lattice 패키지의 barchart 및 dotplot 함수를 사용하여 막대그래프와 점도표를 만들 수 있습니다(Sarkar, 2008). 예를 들어, 막대그래프를 만들려면 다음 코드를 실행하면 됩니다:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"lattice"</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">barchart</span>(age_ordinal)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap02_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>많은 독자들이 점도표에 익숙하지 않을 수 있습니다. 점도표는 범주형 데이터에서 패턴을 발견하는 데 매우 유용한 통찰력을 제공합니다(예시적인 예는 Cleveland (1985) 및 Cleveland (1993) 참조). 명목 변수에서 범주의 빈도가 필요하기 때문에 만들기가 조금 더 어렵습니다. 다행히도 이 정보는 age_table 객체에 이미 포함되어 있으므로 다음과 같이 이 객체를 dotplot 함수에 전달하기만 하면 됩니다:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dotplot</span>(age_table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap02_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>또 다른 매우 강력한 플롯은 격자형(trellis) 또는 패싯형(facet) 플롯으로 알려진 플롯 유형입니다. 격자형 플롯은 세 번째 변수를 조건으로 하는 두 변수 간의 관계를 보여줄 수 있습니다(1장에서 간략히 언급했듯이). 예를 들어, 수험생의 연령 분포가 성별에 따라 어떻게 다른지 확인하려면 다음과 같이 할 수 있습니다:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>age_gender_table <span class="ot">&lt;-</span> <span class="fu">table</span>(gender_nominal, age_ordinal)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>age_gender_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(age_gender_table)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dotplot</span>(age_ordinal <span class="sc">~</span> Freq <span class="sc">|</span> gender_nominal,</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>age_gender_df, <span class="at">xlab =</span> <span class="st">"Frequency"</span>, <span class="at">ylab =</span> <span class="st">"Age"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap02_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>위의 코드는 먼저 2원 테이블(age_gender_table)을 만든 다음 이를 데이터 프레임(age_gender_df)으로 변환합니다. 이는 dotplot 함수를 사용하여 플로팅하기 위해 필요한 중간 단계입니다. 참고로 “|” 기호는 부울 “또는”이 아닌 “조건부”로 해석할 수 있습니다. 위의 예에서 dotplot 함수는 성별 변수에 대한 조건부 연령 변수의 빈도 분포를 플롯합니다.</p>
+<p>그림 2.1은 이 코드를 실행한 결과를 보여줍니다.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> 점도표에서 남성의 최빈값은 40~50 사이인 반면 여성의 최빈값은 30~40 사이라는 점을 제외하고는 여성과 남성의 연령 분포가 비슷하다는 것을 알 수 있는데, 이는 우리 샘플에서 여성 피험자가 남성 피험자보다 약간 더 젊다는 것을 의미합니다.</p>
+<p>다음으로, interest 데이터 세트에서 어휘 시험에 해당하는 어휘 변수를 고려합니다. 이 변수는 등간 척도입니다. 이 변수에 대한 요약 데이터는 summary 함수를 사용하여 쉽게 얻을 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(interest<span class="sc">$</span>vocab)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+-2.62000 -0.60500  0.04000  0.09016  0.86000  2.63000 </code></pre>
+</div>
+</div>
+<p>어휘력 검사의 최소 점수는 -2.62점, 최대 점수는 2.63점인 것을 알 수 있습니다. 평균은 .09입니다. summary 함수에서는 1사분위수 및 3사분위수와 중앙값도 제공합니다.</p>
+<p>등간 또는 비율 척도를 사용하면 변수가 정규 분포하는 정도를 조사하는 데 관심이 있는 경우가 많습니다. 정규성 가정을 평가하는 데 사용할 수 있는 다양한 통계와 플롯이 있지만, 특히 유용한 옵션은 Q-Q 플롯입니다(Faraway, 2014). 정규성을 평가할 때 히스토그램보다 Q-Q 플롯을 선호하는 이유는 구간차원 폭과 숫자가 임의적이기 때문입니다. 일반적으로 변수의 분포를 보고 편차의 특성을 이해하는 것이 더 유용하므로 왜도 및 첨도 통계는 계산하지 않는 것이 좋습니다.</p>
+<p>Q-Q 플롯을 생성하는 코드는 아래와 같으며, 결과는 그림 2.2에 나와 있습니다. qqnorm 함수를 사용하여 Q-Q 플롯을 만든 다음 qqline을 사용하여 분포가 완벽하게 정규 분포일 경우 점들이 어디에 속할지를 보여주는 선을 오버레이합니다. 이 플롯에서는 꼬리 부분에 약간의 편차가 있지만 정규성을 크게 위반하지 않는 것을 볼 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qqnorm</span>(interest<span class="sc">$</span>vocab, <span class="at">ylab =</span> <span class="st">"vocab"</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(interest<span class="sc">$</span>vocab)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap02_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>이 책의 범위를 벗어나지만, 척도 유형은 고려해야 하는 통계 검증 유형에 영향을 미친다는 점에 유의하시기 바랍니다. 등간 또는 비율 척도 데이터에 적합한 검정(예: t 검정, 선형 회귀)은 일반적으로 범주형 데이터에는 적합하지 않습니다. 범주형 데이터 분석에 익숙하지 않은 독자는 Agresti(2002) 및 Faraway(2016)를 참조하시기 바랍니다. 이 책 전체에 걸쳐 제시된 많은 방법은 모든 척도에 적합하지만, 일부는 특정 척도에 한정되어 있습니다. 어떤 방법이 특정 측정 척도를 필요로 하는 경우 이를 명확히 하기 위해 전체적으로 주의를 기울였습니다.</p>
+</section>
+</section>
+<section id="고전검사이론-프레임워크" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="고전검사이론-프레임워크"><span class="header-section-number">2.4</span> 고전검사이론 프레임워크</h2>
+<p>진점수 이론이라고도 하는 고전 검사 이론(CTT)은 측정된 결과를 이해하고, 조작하고, 해석할 수 있게 해주는 측정 프레임워크입니다. CTT의 전제는 모든 측정에는 오차가 포함되며 모든 관찰은 불완전하다는 것입니다. CTT 모델은 측정 도구에서 관찰 점수를 진점수와 오차 점수 구성 요소로 분해합니다. 수학적으로 CTT는 다음과 같이 표현됩니다:</p>
+<p><span class="math display">\[
+X=T+E.
+\]</span></p>
+<p>CTT 모델에서 X는 관찰 가능한 측정/검사 점수, T는 실제(잠재) 측정/총 검사 점수, E는 무선 오차입니다. 관찰할 수 없는 총점보다는 개별 문항에 초점을 맞추고자 할 때는 CTT 모델보다는 공통 요인 모델(4장에서 제시)이나 문항 반응 이론(5장에서 소개)이 더 적합합니다. CTT 모델을 사용하려면 방정식 2.1에 제시된 일반적인 형태 외에 네 가지 추가 가정이 필요합니다:</p>
+<ol type="1">
+<li><span class="math inline">\(E(X)=T\)</span>, 관찰점수의 기댓값이 진점수임</li>
+<li><span class="math inline">\(Cov(T,E)=0\)</span>, 진점수와 오차점수는 독립적임</li>
+<li><span class="math inline">\(Cov(E_1,E_2)=0\)</span>, 검사 간의 오차점수는 독립적임</li>
+<li><span class="math inline">\(Cov(E_1,T_2)=0\)</span>, 한 검사의 오차점수와 다른 검사의 진점수는 독립적</li>
+</ol>
+<p>이러한 가정으로 인해 CTT 모델은 아래와 같이 직교(즉, 상관관계가 없는) 분산 성분의 단순 합으로 다시 표현할 수 있습니다:</p>
+<p><span class="math display">\[
+\sigma^2_X=\sigma^2_T+\sigma^2_E
+\]</span></p>
+<p>방정식 2.2에 따르면 관찰 점수 분산은 진점수 분산과 오차점수 분산의 합입니다. 이 모델에서 진점수 분산은 일정하다고 가정하고(예: 검사도구의 형태, 평가 날짜 등에 관계없이 절대 변하지 않음), 오차점수 분산은 변동한다고 가정합니다(예: 일부 검사는 다른 검사보다 더 많은 오차점수를 포함할 수 있음). 측정 오차는 무선(예측 불가능하고 일관되지 않은) 오차와 체계적(일정하고 예측 가능한) 오차로 나눌 수 있습니다.</p>
+<section id="신뢰도" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="신뢰도"><span class="header-section-number">2.4.1</span> 신뢰도</h3>
+<p>신뢰도는 진점수 분산에 기인할 수 있는 관찰 점수 분산의 비율입니다. 방정식 2.2에서 검사 신뢰도 지수는 다음과 같이 도출할 수 있습니다:</p>
+<p><span class="math display">\[
+reliability = {\sigma^2_T \over \sigma^2_X}
+\]</span></p>
+<p>신뢰도에는 일반적으로 검사-재검사(안정성 계수), 동형검사(parallel forms)(동등성 계수), 대안검사(alternate forms)(대안 검사 신뢰도), 내적 일관성의 네 가지 유형이 있습니다. 여기서는 내적 일관성에 초점을 맞추고 있는데, 피험자가 여러 양식을 응시하거나 여러 번의 시험에서 동일한 양식을 응시하는 경우가 실제 드물기 때문입니다. 대부분의 경우, 다른 형태의 신뢰도는 범위 제한이 있는 경우 감소에 대한 일부 보정과 함께 피어슨 또는 사분산 상관관계를 사용하여 추정할 수 있습니다.</p>
+<p>다음 예에서는 SAPA 데이터 세트를 사용하여 R에서 다양한 내적 일관성 추정치를 계산하는 방법을 보여줍니다. 원래 psych 패키지(Revelle, 2017)에 포함된 SAPA 데이터 집합은 독자의 편의를 위해 hemp 패키지에서 재패키징 및 채점되었습니다. 이 도구는 웹 기반 성격 평가 프로젝트인 합성 식별 인성 평가(SAPA)에서 가져온 16개 문항의 선다형 능력 검사에 대한 1525개의 응답으로 구성되어 있습니다.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> 첫 번째 4개 문항은 기본 추론, 두 번째 4개 문항은 영숫자 계열, 세 번째 4개 문항은 행렬 추론, 마지막 4개 문항은 공간 회전을 측정합니다.</p>
+<p>분석은 hemp의 num_miss 함수를 사용하여 각 문항에 대한 결측 관측값의 수를 계산하는 것으로 시작합니다. 결과에는 letter.58에만 결측치가 없고 다른 문항에는 하나 또는 두 개의 결측치가 포함되어 있음을 보여줍니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">num_miss</span>(SAPA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          num_miss perc_miss
+reason.4         2      0.13
+reason.16        1      0.07
+reason.17        2      0.13
+reason.19        2      0.13
+letter.7         1      0.07
+letter.33        2      0.13
+letter.34        2      0.13
+letter.58        0      0.00
+matrix.45        2      0.13
+matrix.46        1      0.07
+matrix.47        2      0.13
+matrix.55        1      0.07
+rotate.3         2      0.13
+rotate.4         2      0.13
+rotate.6         2      0.13
+rotate.8         1      0.07</code></pre>
+</div>
+</div>
+<p>내적 일관성을 측정하는 간단한 방법은 반분 신뢰도입니다. 반분 신뢰도 추정치는 검사를 동등한 두 개의 검사로 나누고, 두 검사의 총 점수를 계산한 다음, 이들의 상관을 살펴봄으로써 얻을 수 있습니다. 두 검사로 생성하는 방법은 무수히 많습니다(예: 다른 모든 문항을 무작위로 선택하는 등). 아래에서는 split_half 함수를 사용하여 다른 모든 문항을 선택하고 type = “alternate”를 지정하여 반분 신뢰도를 계산합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">split_half</span>(SAPA, <span class="at">type =</span> <span class="st">"alternate"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.758</code></pre>
+</div>
+</div>
+<p>SAPA 데이터 세트의 경우, 반분 신뢰도는 0.758로 추정되었습니다. type = “random”를 지정하여 검사를 무작위로 분할하여 반분 신뢰도를 계산할 수도 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">split_half</span>(SAPA, <span class="at">type =</span> <span class="st">"random"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.723</code></pre>
+</div>
+</div>
+<p>무선 분할로 한 반분 신뢰도는 0.717의 신뢰도 추정치를 얻었습니다. set.seed(1)을 지정하여 독자의 결과가 위에 제시된 결과와 동일하도록 난수 생성기를 설정했습니다.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> 이는 나중에 동일한 결과를 재현할 때 유용합니다. 다른 무선 분할에 기반한 새로운 추정치를 얻으려면 set.seed(1) 명령을 제거하거나 시드를 다른 값(예: set.seed(555))으로 변경하면 됩니다.</p>
+<p>반분 신뢰도 추정치는 하향 편향이 있는 것으로 알려져 있습니다(R. J. Cohen, Swerdlik, &amp; Sturman, 2013). 스피어만-브라운 보정을 적용하여 이를 조정할 수 있습니다. 이렇게 하려면 split_half 함수에 sb = TRUE 인수를 전달하면 됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">split_half</span>(SAPA, <span class="at">type =</span> <span class="st">"alternate"</span>, <span class="at">sb =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8623436</code></pre>
+</div>
+</div>
+<p>스피어만-브라운 보정을 적용한 후, 이제 반분 신뢰도는 0.862로 추정되며, 이는 상당히 높은 수치입니다. 현재 신뢰도 추정치를 고려할 때 원하는 신뢰도를 얻기 위해 검사의 길이를 결정할 수도 있습니다. 이 작업은 hemp의 test_length 함수를 사용하여 수행할 수 있습니다. 0.95의 신뢰도를 원한다고 가정하면 검사의 길이를 결정할 수 있습니다. test_length를 호출할 때, 스피어만-브라운 보정을 적용한 반분 신뢰도를 사용하여 현재 신뢰도를 계산할 수 있도록 r_type = “split”을 지정합니다. 위에서 한 것처럼 다른 곳에서 신뢰도를 계산한 경우 r_type에 숫자를 지정할 수도 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">test_length</span>(SAPA, <span class="at">r =</span> .<span class="dv">95</span>, <span class="at">r_type =</span> <span class="st">"split"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 49</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">test_length</span>(SAPA, <span class="at">r =</span> .<span class="dv">95</span>, <span class="at">r_type =</span> .<span class="dv">862</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 49</code></pre>
+</div>
+</div>
+<p>현재 검사의 신뢰도가 16개 문항 기준 0.862라는 점을 감안할 때 원하는 신뢰도가 0.95인 검사를 원한다면 최소 49개 문항으로 구성된 검사가 필요합니다.</p>
+<p>내적 일관성을 측정하는 가장 일반적인 방법은 계수 알파(Cronbach, 1951)입니다. 계수 알파는 가능한 모든 반분 상관관계의 평균을 나타냅니다. 계수 알파는 hemp의 coef_alpha 함수를 사용하여 계산할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef_alpha</span>(SAPA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.841</code></pre>
+</div>
+</div>
+<p>coef_alpha 함수에서 반환된 출력은 SAPA 데이터 세트에 대한 계수 알파의 추정치가 0.841임을 보여줍니다. 신뢰도를 점으로 추정하는 것도 유용할 수 있지만, 일반적으로 추정치에 대한 변이를 파악하는 것이 도움이 됩니다. 신뢰 구간은 신뢰 수준(일반적으로 95%)이 주어졌을 때 알 수 없는 모수에 대한 그럴듯한 값의 범위를 정량화하는 수단을 제공합니다. 표본 크기가 작거나, 모델링 가정이 충족되지 않거나, 모수의 표본 분포를 알 수 없는 경우 부트스트랩을 사용하여 경험적 표본 분포를 구성한 다음 신뢰 구간을 만드는 데 사용할 수 있습니다(Efron &amp; Tibshirani, 1986).<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
+<p>부트스트래핑을 도입하게 된 동기는 추정되는 모수에 관계없이 신뢰 구간과 불확실성을 생성할 수 있기 때문입니다. 따라서 계수 알파에 부트스트랩을 사용하는 방법을 설명했지만, 위의 반분 신뢰도, 이 장의 뒷부분에 제시된 타당도 또는 문항 분석 통계, 그리고 이 책 전체에 제시된 다른 많은 맥락에서 쉽게 적용할 수 있습니다.</p>
+<p>부트스트랩을 수행하기 위해 boot 패키지를 사용합니다(Canty &amp; Ripley, 2017). 부트 패키지는 boot 함수를 통해 모수적 부트스트랩과 비모수적 부트스트랩 모두에 대한 수많은 옵션을 제공합니다. 이러한 방법에 대한 기술적 세부 사항은 A. C. Davison과 Hinkley(1997)에 설명되어 있으며 이 책의 범위를 벗어납니다. 분석을 시작하려면 먼저 boot 패키지를 활성화합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"boot"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>다음으로 boot 함수를 사용하여 부트스트랩 절차를 구현합니다. boot 함수에는 최소한 데이터 세트, 부트스트랩할 함수, 추출할 샘플 수가 필요합니다. 먼저, boot 함수에 전달할 함수를 만들어야 하는데, 이 함수를 alpha_fun이라고 부릅니다. 이 함수는 data라고 하는 데이터 세트와 row이라고 하는 인덱스 행렬이라는 두 개의 인수를 받습니다. 그런 다음 이 인수는 coef_alpha 함수에 전달됩니다. 이렇게 하면 부트 함수가 SAPA에서 대체된 피험자를 샘플링하여 계수 알파에 대한 경험적 분포를 생성할 수 있습니다(자세한 내용은 Canty(2002) 참조).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>alpha_fun <span class="ot">&lt;-</span> <span class="cf">function</span>(data, row){</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef_alpha</span>(data[row, ])}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>아래에서는 10,000회 수행으로 부트스트랩을 사용하여 경험적 분포를 생성하고 결과를 alpha_boot로 저장한 다음 결과를 출력합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>alpha_boot <span class="ot">&lt;-</span> <span class="fu">boot</span>(SAPA, alpha_fun, <span class="at">R =</span> <span class="fl">1e4</span>)</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>alpha_boot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ORDINARY NONPARAMETRIC BOOTSTRAP
+
+
+Call:
+boot(data = SAPA, statistic = alpha_fun, R = 10000)
+
+
+Bootstrap Statistics :
+    original     bias    std. error
+t1*    0.841 -0.0002698 0.005548143</code></pre>
+</div>
+</div>
+<p>결과에서 t1*은 계수 알파를 나타내고 original은 모든 데이터를 사용한 원본 추정치, bias는 이 원본 추정치를 뺀 경험적 분포의 평균, std. error는 추정자의 표준 오차입니다.</p>
+<p>그림 2.3은 10,000개의 샘플을 기준으로 한 계수 알파의 경험적 분포의 히스토그램과 Q-Q 플롯을 보여줍니다. 이 분포는 꼬리 부분의 약간의 편차를 제외하고는 거의 정규 분포입니다. 이는 신뢰 구간을 구성할 때 점근 정규 분포를 가정하는 부트스트랩 정규 구간을 사용하는 것이 적절할 수 있음을 의미합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(alpha_boot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap02_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>또한 boot.ci 함수를 사용하여 부트스트랩 정규, 기본 부트스트랩, 부트스트랩 백분위수 및 조정된 부트스트랩 백분위수(BCa) 구간을 사용하여 95% 신뢰 구간을 계산합니다. 간단히 말해, 기본, 백분위수 및 BCa 구간은 부트스트랩 정규 구간보다 더 적은 가정(즉, 점근 정규성 가정 없음)을 하며, BCa 구간은 기본 및 백분위수 구간보다 점근적으로 더 잘 작동합니다. 경험적 분포가 정규성에서 벗어나는 경우 기본, 백분위수 및 BCa 구간이 더 나은 선택입니다. 이러한 구간 간의 차이에 대한 자세한 설명은 A. C. Davison과 Hinkley(1997)에서 자세히 확인할 수 있으며, 이 예에서 중요한 점은 구간이 백분위수와 일치하고 부트스트랩 정규 구간이 약간 더 정밀하다는 것입니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boot.ci</span>(alpha_boot, <span class="at">type =</span> <span class="fu">c</span>(<span class="st">"norm"</span>, <span class="st">"basic"</span>, <span class="st">"perc"</span>, <span class="st">"bca"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>BOOTSTRAP CONFIDENCE INTERVAL CALCULATIONS
+Based on 10000 bootstrap replicates
+
+CALL : 
+boot.ci(boot.out = alpha_boot, type = c("norm", "basic", "perc", 
+    "bca"))
+
+Intervals : 
+Level      Normal              Basic         
+95%   ( 0.8304,  0.8521 )   ( 0.8310,  0.8530 )  
+
+Level     Percentile            BCa          
+95%   ( 0.829,  0.851 )   ( 0.829,  0.851 )  
+Calculations and Intervals on Original Scale</code></pre>
+</div>
+</div>
+<p>대부분의 목적에 있어서는 검사의 길이를 늘려 피험자에게 추가적인 부담을 줄 필요가 없을 정도로 신뢰도가 높은 것으로 보이며, 이 신뢰도 추정치로 대부분의 의사 결정을 내리는 데 무리가 없을 것으로 판단됩니다(극도로 중요한 결정이 아닌 경우).</p>
+</section>
+<section id="타당도" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="타당도"><span class="header-section-number">2.4.2</span> 타당도</h3>
+<p>타당도 증거는 다양한 형태를 취하며, R을 사용하면 타당도 증거를 정량화하는 것이 매우 간단합니다. 타당도 증거의 일반적인 형태는 전문가 의견입니다. 전문가의 의견은 문항 내용의 적절성, 측정 도구가 구성 요소 내의 모든 개념을 적절하게 샘플링하고 있는지 여부, 문항이 목표 구성 요소를 측정하는 데 필수적인지 여부에 대한 의견을 제시할 수 있습니다. 후자를 정량화하는 한 가지 방법은 내용 타당도 비율인 CVR을 사용하는 것입니다(Lawshe, 1975). CVR은 다음과 같이 정의됩니다:</p>
+<p><span class="math display">\[
+CVR={n_e-(N/2) \over N/2}
+\]</span></p>
+<p>여기서 n은 해당 문항을 필수 문항으로 간주하는 전문가 수이고, 총 전문가 수는 N입니다. 예를 들어, 부모에게 자녀의 공격성에 대해 질문하는 도구를 만들 수 있습니다. 한 문항은 “귀하의 자녀가 다른 아이를 무는가?”라고 질문할 수 있습니다. 20명의 전문가에게 이 문항이 아동의 공격성을 측정하는 데 필수적이라고 생각하는지 물어보고 17명이 동의하면, hemp에서 cvr 함수를 사용하여 CVR을 계산할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cvr</span>(<span class="at">N =</span> <span class="dv">20</span>, <span class="at">n_e =</span> <span class="dv">17</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.7</code></pre>
+</div>
+</div>
+<p>이 특정 문항에 대한 CVR이 0.70이라는 것을 알았지만 0.70이 해당 문항을 검사도구에 포함시킬 만큼 충분히 큰 값인지는 알 수 없습니다. Lawshe(1975)의 표 1은 전문가 수가 정해져 있을 때 CVR의 임계값을 제공합니다. 전문가가 20명일 경우, CVR의 최소값은 0.42이며, 전문가들이 이 문항이 우연이 아닌 필수적인 문항이라고 생각하며 이 문항을 측정문항에 포함시킬 가능성이 높다고 결론 내릴 수 있습니다.</p>
+<p>다른 형태의 타당도 증거는 검사 점수가 어떤 외부 기준과 어느 정도 관련되어 있는지를 측정합니다(준거 관련 타당도 증거). 이러한 타당도 증거에 대한 통계적 지원에는 단순 상관관계 계산 또는 회귀 분석이 포함될 수 있습니다. interest 데이터 세트로 돌아가서, 어휘력 테스트(vocab)는 독해력(reading) 및 문장 완성도(sentcomp)를 측정하는 평가와 상관관계가 있을 것으로 예상할 수 있습니다. 따라서 cor 함수를 사용하여 이러한 변수 간의 피어슨 상관관계를 계산할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(interest[, <span class="fu">c</span>(<span class="st">"vocab"</span>, <span class="st">"reading"</span>, <span class="st">"sentcomp"</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             vocab   reading  sentcomp
+vocab    1.0000000 0.8030912 0.8132765
+reading  0.8030912 1.0000000 0.7252155
+sentcomp 0.8132765 0.7252155 1.0000000</code></pre>
+</div>
+</div>
+<p>어휘와 읽기 간의 피어슨 상관계수는 0.803이고, 어휘와 문장 완성도 간의 상관계수는 0.813입니다. 이는 어휘 시험이 읽기 및 문장 완성도 시험과 동시에 시행되었다면 공인 타당도 증거가 될 수 있습니다. 어휘 시험이 읽기 및 문장 완성 시험보다 먼저 시행된 경우, 피어슨 상관관계는 예언 타당도를 뒷받침하는 증거를 나타냅니다.</p>
+<p>사회적 우세성(socdom)이라는 성격 측정치를 사용하여 교사(교사)가 되고자 하는 사람의 흥미를 측정하고 있는데, 성격 측정치만으로 독해력 평가를 시행할 때 추가적인 예측 능력이 있는지 알고 싶다고 가정해 보겠습니다. 우리는 독해력이 부가적 타당도를 갖는지 평가하려고 하며, 이는 단계적 회귀를 사용하는 회귀 프레임워크 내에서 평가할 수 있습니다.</p>
+<p>이를 위해 두 가지 선형 회귀 모델을 적용합니다. 첫 번째 모델(mod_old)은 교사의 사회적 우세성을 회귀 분석하고, 두 번째 모델(mod_new)은 교사의 사회적 우세성과 읽기 능력을 모두 회귀 분석합니다. 선형 회귀 모델은 R의 lm 함수를 사용하여 추정할 수 있습니다. 이 함수를 사용하려면 하나 이상의 독립 변수(socdom 및 reading)로 예측되는 종속 변수(교사)와 이러한 변수가 포함된 데이터 세트의 이름(interest)이 포함된 회귀 공식을 지정해야 합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>mod_old <span class="ot">&lt;-</span> <span class="fu">lm</span>(teacher <span class="sc">~</span> socdom, interest)</span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>mod_new <span class="ot">&lt;-</span> <span class="fu">lm</span>(teacher <span class="sc">~</span> socdom <span class="sc">+</span> reading, interest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>mod_new에는 mod_old에 사용된 것과 동일한 종속변수와 독립변수가 포함되어 있고 읽기 변수도 포함되어 있기 때문에 결과 모델은 내재됩니다. 교사를 예측하는 데 있어 socdom을 넘어선 읽기의 기여도를 조사하기 위해 두 모델 간의 R-제곱(<span class="math inline">\(R^2\)</span>) 값의 변화를 추출할 수 있습니다. 또한 R의 anova 함수를 사용하여 두 모델을 통계적으로 비교할 수 있습니다. 이 테스트는 두 모델 간의 <span class="math inline">\(R^2\)</span> 변화가 통계적으로 유의미한지(즉, <span class="math inline">\(R^2\)</span> &gt; 0)를 검사합니다. <span class="math inline">\(R^2\)</span> 변화가 통계적으로 유의미한 경우, 읽기가 종속 변수인 교사의 사회적 우세성을 넘어서는 상당한 양의 변이를 설명한다고 결론을 내릴 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod_new)<span class="sc">$</span>r.squared <span class="sc">-</span> <span class="fu">summary</span>(mod_old)<span class="sc">$</span>r.squared</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.09125979</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(mod_old, mod_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Model 1: teacher ~ socdom
+Model 2: teacher ~ socdom + reading
+  Res.Df    RSS Df Sum of Sq      F    Pr(&gt;F)    
+1    248 244.98                                  
+2    247 221.03  1    23.951 26.765 4.754e-07 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>위의 결과에서 독해력 평가는 사회적 지배력 측정치만으로는 설명할 수 없는 부가적 타당도를 가지고 있으며(<em>p</em> &lt; .001), 교직에 대한 흥미의 변산도를 약 9% 더 설명한다는 것을 알 수 있습니다.</p>
+</section>
+<section id="문항-분석" class="level3" data-number="2.4.3">
+<h3 data-number="2.4.3" class="anchored" data-anchor-id="문항-분석"><span class="header-section-number">2.4.3</span> 문항 분석</h3>
+<p>문항 분석은 측정 도구를 개발하고 수정하는 데 중요한 역할을 합니다. 문항 분석은 R과 함께 제공되는 기본 함수를 사용하여 수행할 수 있습니다. SAPA 데이터 세트로 돌아가 이분법적으로 채점된 문항에 대해 문항 분석을 수행하는 방법을 보여 드리겠습니다.</p>
+<p>문항 분석을 수행할 때 계산하는 일반적인 통계는 각 문항에 정답을 맞힌 피험자의 비율입니다. 이를 문항 난이도, p 또는 p 값이라고 합니다. 이는 문항 반응 이론의 문항 난이도(제5장 참조)나 통계적 가설 검증의 p값과 혼동해서는 안 됩니다. 문항 난이도가 가장 높은 문항이 아이러니하게도 피험자에게 가장 쉬운 문항이기 때문에 문항 난이도를 문항 용이성이라고 부르기도 합니다.</p>
+<p>colMeans 함수를 사용하여 문항 난이도를 계산할 수 있습니다. 일부 문항에서 결측치가 있는 피험자가 있으므로 계산에서 결측치를 무시하려면 na.rm = TRUE 인수를 전달해야 합니다. 그렇지 않으면 colMeans 함수는 하나 이상의 결측치가 있는 문항에 대해 “NA”를 반환합니다. 문항의 난이도를 더 쉽게 읽을 수 있도록 반올림 함수를 사용하여 소수점 이하 세 자리로 반올림합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>item_diff <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(SAPA, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(item_diff, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> reason.4 reason.16 reason.17 reason.19  letter.7 letter.33 letter.34 letter.58 
+    0.640     0.698     0.697     0.615     0.600     0.571     0.613     0.444 
+matrix.45 matrix.46 matrix.47 matrix.55  rotate.3  rotate.4  rotate.6  rotate.8 
+    0.526     0.550     0.614     0.374     0.194     0.213     0.299     0.185 </code></pre>
+</div>
+</div>
+<p>출력 결과, reason.16과 reason.17의 문항 난이도가 가장 높았고, rotate.8의 문항 난이도가 가장 낮은 것으로 나타났습니다. 학생의 약 70%가 reason.16과 reason.17을 정답으로 맞힌 반면, 19%만이 rotate.8을 정답으로 맞혔습니다.</p>
+<p>문항 분석에서 널리 사용되는 또 다른 통계는 문항 변별도로, 문항이 높은 능력을 가진 피험자와 낮은 능력을 가진 피험자를 구분하는 변별력을 말합니다. 문항 변별도를 계산하는 방법에는 여러 가지가 있지만, 가장 일반적인 형태는 문항에 대한 피험자의 응답과 시험 총점 간의 점-이연 상관관계입니다. 양수 값이 크면 문항에 정답을 맞추는 것과 시험에서 높은 점수를 받는 것 사이에 강한 관계가 있음을 나타내고, 0에 가까운 값은 관계가 없음을 나타내며, 음수 값은 문항에 정답을 맞추는 것이 전체 시험 점수를 낮추는 것과 관련이 있음을 나타냅니다. 0에 가깝거나 음수에 가까운 값은 해당 문항이 제대로 작동하지 않을 수 있음을 나타냅니다. 문항 변별도가 낮거나 음수인 이유로는 해당 문항에 잘못된 정답 키를 사용했거나, 정답이 여러 개이거나, 정답이 전혀 없는 경우 등이 있을 수 있습니다. 원인에 관계없이 점수 간 상관관계가 낮거나 음수인 문항은 시험/검사 도구가 수정 상태인 경우 수정하거나 시험 및 채점에서 제거해야 합니다.</p>
+<p>SAPA의 문항 변별도를 계산하려면 먼저 na.rm = TRUE 옵션과 함께 rowSums 함수를 사용하여 총 시험 점수를 계산하고 이를 total_score로 저장합니다. 그런 다음 cor 함수를 사용하여 SAPA의 문항과 총점의 상관 관계를 파악합니다. 응답이 누락되었으므로 cor 함수에서 use = “pairwise.complete.obs” 인수를 지정합니다. 마지막으로 상관 관계 행렬을 item_discr로 저장하고 출력합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>total_score <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(SAPA, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>item_discr <span class="ot">&lt;-</span> <span class="fu">cor</span>(SAPA, total_score,</span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a><span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span>)</span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>item_discr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               [,1]
+reason.4  0.5875787
+reason.16 0.5326660
+reason.17 0.5859068
+reason.19 0.5582773
+letter.7  0.5835910
+letter.33 0.5569431
+letter.34 0.5946924
+letter.58 0.5750172
+matrix.45 0.5095047
+matrix.46 0.5138256
+matrix.47 0.5478686
+matrix.55 0.4468619
+rotate.3  0.5100778
+rotate.4  0.5559848
+rotate.6  0.5542336
+rotate.8  0.4807175</code></pre>
+</div>
+</div>
+<p>결과에 따르면 SAPA의 모든 문항이 총점과 적당히 양의 상관 관계가 있는 것으로 나타났습니다. 이는 모든 문항이 제대로 작동하고 있음을 나타내며, 제거하거나 수정해야 할 문항에 대한 두드러진 정보를 제공하지 않습니다.</p>
+<p>문항 변별도를 계산하는 또 다른 방법은 총점을 기준으로 피험자를 두 그룹(예: 1 = 고득점자, 0 = 저득점자)으로 나누고 이 그룹화 변수를 문항 응답과 연관시키는 것입니다. 이를 문항 변별도 지수라고 합니다. 고성취 그룹과 저성취 그룹을 만드는 한 가지 방법은 총점을 기준으로 피험자 중 상위 27%와 하위 27%를 선택하는 것입니다. 여기서 27%를 사용하기로 한 결정은 다소 임의적이라는 점에 유의해야 합니다. 다른 값(예: 10% 또는 20%)을 사용하여 성취도가 높은 그룹과 낮은 그룹을 쉽게 정의할 수 있습니다. 그룹의 커트라인을 정의한 후에는 고성취 그룹과 저성취 그룹에서 해당 문항에 정답을 맞힌 피험자의 비율을 계산합니다.</p>
+<p>다음 예에서는 hemp 패키지의 idi 함수를 사용하여 SAPA 데이터 세트의 reason.4에 대한 문항 변별도 지수를 계산합니다. 성취도가 높은 그룹과 낮은 그룹을 지정하기 위해 idi 함수에서 perc_cut = .27을 사용합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">idi</span>(SAPA, SAPA<span class="sc">$</span>reason<span class="fl">.4</span>, <span class="at">perc_cut =</span> .<span class="dv">27</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Upper 27% Lower 27% 
+ 0.805136  0.194864 </code></pre>
+</div>
+</div>
+<p>성취도가 높은 그룹의 피험자 중 81%가 해당 문항을 맞힌 반면, 성취도가 낮은 그룹의 피험자 중 19%만이 해당 문항을 맞힌 것으로 나타났습니다. 이는 해당 문항이 고득점자에게는 쉬웠고 저득점자에게는 어려웠다는 것을 시사합니다. 따라서 이 특정 문항은 두 그룹을 구분하는 데는 유용하지만 각 그룹 내에서 반드시 유용하지는 않다고 말할 수 있습니다.</p>
+<p>문항 난이도 및 문항 변별도 지수 외에도 문항 분석에 유용한 또 다른 통계는 문항 신뢰도 지수입니다. 문항 신뢰도 지수(IRI)는 다음과 같이 정의됩니다:</p>
+<p><span class="math display">\[
+IRI=S_i*r_{i,tt}
+\]</span></p>
+<p>여기서 <span class="math inline">\(S_i\)</span>는 문항 <span class="math inline">\(i\)</span>의 표준 편차이고, <span class="math inline">\(r_{i,tt}\)</span>는 문항 <span class="math inline">\(i\)</span>와 총점 간의 상관관계입니다. IRI는 이론적으로 -0.5에서 0.5 사이의 범위이며, 값이 크고 양수이면 신뢰도가 높음을 나타냅니다. 아래에서는 SAPA 데이터 세트의 모든 문항에 대한 IRI를 계산합니다. 이 작업은 hemp에서 IRI 함수를 사용하여 수행할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">iri</span>(SAPA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               [,1]
+reason.4  0.2820989
+reason.16 0.2451971
+reason.17 0.2692675
+reason.19 0.2717135
+letter.7  0.2865325
+letter.33 0.2757209
+letter.34 0.2897118
+letter.58 0.2863221
+matrix.45 0.2544930
+matrix.46 0.2562540
+matrix.47 0.2668171
+matrix.55 0.2161230
+rotate.3  0.2016459
+rotate.4  0.2276081
+rotate.6  0.2539219
+rotate.8  0.1867207</code></pre>
+</div>
+</div>
+<p>iri 함수에서 반환된 결과에 따르면 SAPA 데이터 세트의 IRI 범위는 약 0.19에서 0.29 사이입니다. 이 값은 모두 IRI에 적합한 값입니다(즉, 음수이거나 0에 가까운 값은 없습니다).</p>
+<p>총점 대신 외부 기준을 사용하는 경우, 이 지수를 문항 타당도 지수(IVI)라고 합니다. IVI는 - 0.5에서 0.5 사이일 수 있으며, 절대값이 클수록 타당도가 높음을 나타냅니다. 음수 값이 크면 문항이 기준과 음의 상관관계가 있을 것으로 예상되는 경우 타당도가 높음을 나타냅니다.</p>
+<p>다음 예에서는 hemp의 ivi 함수를 외부 기준으로 reason.17, 흥미 문항으로 reason.4로 설정하여 IVI가 0.19로 나타났습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ivi</span>(<span class="at">item =</span> SAPA<span class="sc">$</span>reason<span class="fl">.4</span>, <span class="at">crit =</span> SAPA<span class="sc">$</span>reason<span class="fl">.17</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1903219</code></pre>
+</div>
+</div>
+<p>분석해야 하는 문항의 또 다른 중요한 측면은 선택지입니다. 선다형 시험의 맥락에서 대체 가능한(즉, 틀린) 선택지를 방해 요소라고 합니다. 방해 요소는 선다형 문항에서 중요한 역할을 합니다. 고품질의 선다형 문항을 만들려면 부분적인 지식을 가진 피험자의 관심을 끌 가능성이 높은, 잘 작동하고 그럴듯한 방해 요소를 포함시키는 것이 중요합니다. 그럴듯하지 않은 방해 요소는 다시 작성하거나 더 나은 방해 요소로 교체해야 할 수 있습니다. 방해 요소의 품질은 일반적으로 방해 요소 분석을 사용하여 평가합니다(Gierl, Bulut, Guo, &amp; Zhang, 2017). 방해 요인 분석은 피험자가 특정 방해 요인을 선택하는 비율을 살펴보는 방식으로 수행되는 경우가 많습니다(방해 요인 분석에 대한 종합적인 검토는 Gierl 외(2017) 참조).</p>
+<p>방해 요인 분석을 시연하기 위해 multiplechoice 데이터 세트의 문항을 hemp에서 사용합니다. 이는 496명의 수험생에게 27개의 선다형 문항으로 구성된 가상의 선다형 시험입니다. 네 가지 선택지는 데이터 세트에서 1, 2, 3, 4로 코딩되었습니다. 각 문항의 정답은 R에서 ?multiplechoice 명령을 실행하여 확인할 수 있으며, hemp의 distract 함수를 사용하여 각 방해 요소를 선택한 피험자의 비율을 계산합니다. 방해 요인 분석 결과를 distractors로 저장한 다음 head 함수를 사용하여 처음 6개 문항에 대한 결과를 출력합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>distractors <span class="ot">&lt;-</span> <span class="fu">distract</span>(multiplechoice)</span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(distractors)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          1     2     3     4
+item1 0.044 0.058 0.052 0.845
+item2 0.109 0.069 0.792 0.030
+item3 0.188 0.562 0.058 0.192
+item4 0.034 0.125 0.742 0.099
+item5 0.351 0.254 0.042 0.353
+item6 0.081 0.198 0.558 0.163</code></pre>
+</div>
+</div>
+<p>위의 표를 보면 모든 문항에서 약 5% 이하의 비율로 선택된 방해 요소가 있음을 알 수 있습니다. 이러한 방해 요소는 대부분의 수험생이 실행 가능하고 그럴듯한 선택지라고 생각하지 않을 정도로 낮은 수준의 지지를 받았기 때문에 수정이 필요한 후보일 수 있습니다. 문항 1의 경우, 방해 요인들은 모두 거의 동일한 기능을 하고 있었으며(즉, 각각 약 5%의 지지를 받음), 이는 모든 방해 요인들이 서로에 대해 잘 기능하고 있지만 문항이 너무 쉽다는 것을 시사합니다(정답은 4번 선택지로, 수험생의 84.5%가 선택함). 이와는 대조적으로 5번 문항은 더 어려운 문항으로, 정답은 역시 4번 선택지였습니다. 선택지 1과 2는 오답 가능성이 매우 높았고, 선택지 3은 지지율이 낮아(4.2%에 불과) 이 문항에서 수정되거나 삭제될 가능성이 있습니다. 선택지 1의 지지율(35.1%)이 매우 높다는 점을 고려할 때, 이 선택지도 정답일 가능성이 매우 높습니다. 이 문항을 더 자세히 분석하려면 이 문항에 대한 문항 변별도 지수를 계산하면 전반적인 문항 기능에 대한 추가적인 통찰력을 얻을 수 있으므로 매우 유용할 것입니다.</p>
+</section>
+</section>
+<section id="요약" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="요약"><span class="header-section-number">2.5</span> 요약</h2>
+<p>이 장에서는 몇 가지 기초적인 측정 주제를 소개했습니다. 이 장에서는 측정 척도, 타당도, 신뢰도, CTT 프레임워크 및 문항 분석에 중점을 두었습니다. 또한 표본 분포가 불분명할 때 모수에 대한 신뢰 구간을 구하기 위한 옵션으로 부트스트랩을 소개했습니다. 이 장의 개괄적인 성격 때문에 독자는 제시된 통계 및 방법에 대한 자세한 정보를 얻으려면 보다 전통적인 측정 입문 교재를 참조하는 것이 좋습니다. 교육에 초점을 맞춘 측정에 대한 좋은 일반 입문서로는 Thorndike와 Thorndike-Christ(2010)를, 심리학에서 검사에 대한 보다 일반적인 접근 방식에 대해서는 R. J. Cohen 외(2013)를 추천합니다.</p>
+<p>이 장에서 소개한 통계를 확장하는 훌륭한 R용 패키지가 많이 있습니다. 예를 들어, psych 패키지(Revelle, 2017)는 범용 심리 측정 패키지이며 제4장에서 더 자세히 다룰 것입니다. 다음 장에서는 CTT 프레임워크의 몇 가지 단점을 해결하고 신뢰도 계산을 위한 보다 강력하고 유연한 모델을 제공합니다.</p>
+
+
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>또다른 방법은 원래 magrittr 패키지를 위해 만들어진 파이프 연산자 %&gt;%를 사용하는 것입니다(Bache &amp; Wickham, 2014). 파이프 연산자를 사용하면 R에서 중첩 함수 및 난독화 코드를 작성할 필요 없이 함수를 문자열로 연결할 수 있습니다.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>이 책에서는 그레이 스케일을 사용했기 때문에 점도표의 색상이 저희와 다를 수 있습니다.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p><a href="https://sapa-project.org/" class="uri">https://sapa-project.org/</a>. 자세한 내용은 심리 패키지(Revelle, 2017)를 참조하세요.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>난수 생성은 R 버전에 따라 다르게 작동할 수 있으며, 따라서 결과가 여전히 다를 수 있다는 점에 유의하세요.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>계수 알파에 대한 기존의 신뢰 구간은 psych 패키지의 알파 함수에서도 사용할 수 있습니다.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./chap01.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">R 소개</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./chap03.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">일반화가능도 이론</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

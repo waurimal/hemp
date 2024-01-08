@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.475">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>HEMP Using R - 8&nbsp; 설명적 문항반응이론</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./chap09.html" rel="next">
+<link href="./chap07.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">설명적 문항반응이론</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">HEMP Using R</a> 
+        <div class="sidebar-tools-main">
+    <a href="./HEMP-Using-R.pdf" title="Download PDF" class="sidebar-tool px-1"><i class="bi bi-file-pdf"></i></a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">머리말</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap01.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">R 소개</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap02.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">고전검사이론</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap03.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">일반화가능도 이론</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap04.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">측정에서 요인분석적 접근</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap05.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">이분 문항반응이론</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap06.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">다분 문항반응이론</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap07.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">다차원 문항반응이론</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap08.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">설명적 문항반응이론</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap09.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">데이터 시각화 및 측정 모델</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap10.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">동등화</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">측정 불변성과 차별기능문항</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chap12.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">측정의 고급 주제</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#개요" id="toc-개요" class="nav-link active" data-scroll-target="#개요"><span class="toc-section-number">8.1</span>  개요</a></li>
+  <li><a href="#설명적-문항-반응-모델링" id="toc-설명적-문항-반응-모델링" class="nav-link" data-scroll-target="#설명적-문항-반응-모델링"><span class="toc-section-number">8.2</span>  설명적 문항 반응 모델링</a>
+  <ul class="collapse">
+  <li><a href="#데이터-구조" id="toc-데이터-구조" class="nav-link" data-scroll-target="#데이터-구조"><span class="toc-section-number">8.2.1</span>  데이터 구조</a></li>
+  <li><a href="#glmm으로서-rasch-모델" id="toc-glmm으로서-rasch-모델" class="nav-link" data-scroll-target="#glmm으로서-rasch-모델"><span class="toc-section-number">8.2.2</span>  GLMM으로서 Rasch 모델</a></li>
+  <li><a href="#선형-로지스틱-검사-모델" id="toc-선형-로지스틱-검사-모델" class="nav-link" data-scroll-target="#선형-로지스틱-검사-모델"><span class="toc-section-number">8.2.3</span>  선형 로지스틱 검사 모델</a></li>
+  <li><a href="#잠재-회귀-rasch-모델" id="toc-잠재-회귀-rasch-모델" class="nav-link" data-scroll-target="#잠재-회귀-rasch-모델"><span class="toc-section-number">8.2.4</span>  잠재 회귀 Rasch 모델</a></li>
+  <li><a href="#상호작용-모델" id="toc-상호작용-모델" class="nav-link" data-scroll-target="#상호작용-모델"><span class="toc-section-number">8.2.5</span>  상호작용 모델</a></li>
+  </ul></li>
+  <li><a href="#요약" id="toc-요약" class="nav-link" data-scroll-target="#요약"><span class="toc-section-number">8.3</span>  요약</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">설명적 문항반응이론</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="개요" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="개요"><span class="header-section-number">8.1</span> 개요</h2>
+<p>제5장부터 제7장까지는 이분 및 다분으로 채점된 문항에 대한 단일차원 및 다차원 IRT 모델에 대해 설명했습니다. 이러한 IRT 모델은 응답 범주의 수에 관계없이 피험자의 잠재적 특성 수준에 대한 직접적인 정보를 제공하며, 선택한 IRT 모델에 따라 각 문항의 난이도, 변별도 및 추측도에 관한 정보를 제공합니다. 개별 문항과 피험자에 대한 정보를 제공하지만, 전통적인 IRT 모델은 측정 도구의 설계 또는 이론에 따라 문항이나 피험자 간의 공통된 변산을 설명할 수 없습니다. De Boeck과 Wilson(2004)은 문항군, 피험자 그룹 또는 문항군과 피험자 그룹 간의 상호 작용에서 공통적인 변산을 측정하는 데 사용할 수 있는 설명적 IRT 모델링(EIRM)을 소개했습니다. 기존의 IRT 모델과 달리 EIRM은 문항(예: 내용, 인지 복합성, 문항 형식) 및 피험자(예: 성별, 인종, 학년 수준)와 관련된 설명 변수(공변량이라고도 함)를 사용하여 문항 응답의 공통성을 설명하는 것을 목표로 합니다. 제8장에서는 다양한 설명적 IRT 모델에 대한 요약을 제공하고 R의 lme4 패키지(Bates et al., 2015)를 사용하여 이러한 모델을 추정하는 방법을 보여줍니다. 설명적 IRT 모델은 mirt(Chalmers, 2012), flirt(Jeon et al., 2014) 및 eRm(Mair &amp; Hatzinger, 2007a) 패키지로도 추정할 수 있습니다.</p>
+</section>
+<section id="설명적-문항-반응-모델링" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="설명적-문항-반응-모델링"><span class="header-section-number">8.2</span> 설명적 문항 반응 모델링</h2>
+<p>설명적 IRT 모델링(EIRM)은 측정과 설명적 목적 모두에 IRT를 활용할 수 있습니다(De Boeck &amp; Wilson, 2004). 기존 IRT 모델에 비해 EIRM의 주요 장점은 문항과 피험자를 유연하게 분석하는 동시에 문항과 피험자 간의 공통 변산를 분해할 수 있다는 점입니다(Briggs, 2008). EIRM 프레임워크에서 전통적인 IRT 모델은 더 큰 종류의 모델인 일반화된 선형 혼합 모델(GLMM)에 속하는 모델의 하위 집합으로 간주됩니다. GLMM은 모델에 문항 응답의 예측 변수로 설명 변수가 포함되어 있는 경우 설명적 IRT 모델로 기능할 수 있습니다. 이러한 설명 변수는 문항 군집, 피험자 그룹 또는 문항과 피험자 간의 상호 작용에서 공통적인 변산성을 설명할 수 있습니다(De Boeck &amp; Wilson, 2004).</p>
+<p>EIRM 접근법에서는 피험자를 군집으로, 문항을 반복 관찰로, 문항 반응을 다층 구조 내의 종속 변수로 정의합니다. 설명 공변량을 사용하면 종속 변수(즉, 문항 반응)를 보다 간결한 방식으로 예측할 수 있습니다. 예를 들어 수학 표현, 표기법, 용어가 포함된 대수 문항과 시나리오 내에서 수학 문제를 구두로 설명하는 단어 문제라는 두 가지 유형의 문항으로 구성된 수학 시험이 있다고 가정해 보겠습니다. 문항 난이도 모수를 추정할 때 각 문항에 대해 고유한 문항 난이도 모수를 추정하는 대신 문항 유형(예: 수학 시험의 대수 문항 및 단어 문제)을 공변량으로 사용하여 문항 유형에 따른 문항 난이도의 변산성을 설명할 수 있습니다. 이렇게 하면 대수 문항이 단어 문제보다 더 어렵거나 더 쉬울 가능성이 있는지 조사할 수 있습니다. 그런 다음 문항 유형이 문항에 미치는 전반적인 영향을 설명할 수 있습니다.</p>
+<p>다음 섹션에서는 선형 로지스틱 검사 모델, 잠재 회귀 모델, 상호작용 모델 등 세 가지 EIRM의 적용 사례를 보여드리겠습니다. 간결성을 위해, 이분 문항 응답에만 초점을 맞추었지만, 다분 문항 응답에도 EIRM을 사용할 수 있습니다. 위에서 언급한 세 가지 적용 사례는 EIRM 프레임워크 내에서 가능한 것의 일부에 불과하다는 점에 유의해야 합니다. EIRM 프레임워크에 대한 보다 포괄적인 논의는 다른 자료에서 찾을 수 있습니다(예: De Boeck &amp; Wilson, 2004).</p>
+<section id="데이터-구조" class="level3" data-number="8.2.1">
+<h3 data-number="8.2.1" class="anchored" data-anchor-id="데이터-구조"><span class="header-section-number">8.2.1</span> 데이터 구조</h3>
+<p>이 장에서는 설명적 IRT 모델을 추정하기 위해 lme4(Bates et al., 2015) 패키지를 사용합니다. 이 패키지는 제3장에서 일반화 가능성 이론을 논의할 때 사용한 것과 동일한 패키지입니다. 지금까지 다양한 IRT 모형을 추정하기 위해 mirt 패키지를 사용하는 방법을 살펴보았습니다. mirt 패키지를 사용하려면 문항 응답 데이터가 피험자당 하나의 행과 하나의 열이 있는 와이드 또는 깔끔한(Wickham, 2017) 포맷으로 구성되어야 합니다.</p>
+<p>mirt 패키지와 달리 lme4 패키지는 피험자와 문항의 고유한 조합마다 행이 하나씩 있는 롱 포맷으로 데이터를 구성해야 합니다. 예를 들어, 500명의 피험자가 있는 10문항 검사의 롱 포맷은 5000행(10문항 x 500명의 피험자)의 문항 응답이 있는 단일 열을 갖습니다. 추가 식별 변수(예: 문항 및 피험자 식별자)도 lme4 패키지의 추정 프로세스에 필요합니다.</p>
+<p>다음 예에서는 hemp 패키지의 multiplechoice 데이터 세트를 사용하여 데이터 세트를 와이드 포맷에서 롱 포맷으로 변환하는 방법을 보여줍니다. multiplechoice 데이터 세트는 item1부터 item27까지 레이블이 지정된 27개 문항에 대한 27개 열의 응답으로 구성됩니다. 행은 496개로, 데이터 세트에 496명의 피험자가 있음을 나타냅니다. 이 변환에는 reshape 함수를 사용합니다. reshape 함수에는 몇 가지 인수가 필요합니다:</p>
+<ul>
+<li><p>포맷을 변경하려는 데이터 세트의 이름, multiplechoice;</p></li>
+<li><p>응답이 포함된 원래 데이터 세트의 열(이 경우 열 1부터 27까지, varying = 1:27);</p></li>
+<li><p>변경할 데이터의 목표 포맷, direction = “long”;</p></li>
+<li><p>새 시간 변수의 이름(이 경우 시간이 아닌 문항에 대한 측정을 반복했기 때문에 시간 변수는 실제로 item이라고 함, timevar = “item”);</p></li>
+<li><p>새(또는 기존) 식별자 변수의 이름, idvar = “id”;</p></li>
+<li><p>마지막으로 문항 응답을 포함하는 새 변수의 이름, v.names = “response”.</p></li>
+</ul>
+<p>변환된 데이터 세트를 각 피험자가 27개의 행(즉, multiplechoice 데이터 세트의 문항당 하나의 행)을 갖는 mc_long이라는 새 데이터 세트로 저장합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(hemp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: psych</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: lattice</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: lavaan</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This is lavaan 0.6-16
+lavaan is FREE software! Please report any bugs.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'lavaan'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:psych':
+
+    cor2cov</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: mirt</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: stats4</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: lme4</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: Matrix</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'lme4'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:mirt':
+
+    fixef</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: reshape2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: boot</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'boot'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:lattice':
+
+    melanoma</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:psych':
+
+    logit</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: equate</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>mc_long <span class="ot">&lt;-</span> <span class="fu">reshape</span>(multiplechoice,</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">varying =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">27</span>,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">direction =</span> <span class="st">"long"</span>,</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">timevar =</span> <span class="st">"item"</span>,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">idvar =</span> <span class="st">"id"</span>,</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">v.names =</span> <span class="st">"response"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>mc_long 데이터 세트는 기본적으로 ’문항’을 기준으로 정렬됩니다. 피험자 식별자(즉, id)를 먼저 정렬한 다음 문항 식별자(즉, item)를 기준으로 데이터를 정렬하고 싶으면 order 함수를 사용하여 이 작업을 수행할 수 있습니다. head 함수를 사용하여 롱 포맷의 데이터 세트의 처음 여섯 행을 출력합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>mc_long <span class="ot">&lt;-</span> mc_long[<span class="fu">order</span>(mc_long<span class="sc">$</span>id, mc_long<span class="sc">$</span>item), ]</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mc_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    item response id
+1.1    1        4  1
+1.2    2        1  1
+1.3    3        2  1
+1.4    4        3  1
+1.5    5        4  1
+1.6    6        3  1</code></pre>
+</div>
+</div>
+</section>
+<section id="glmm으로서-rasch-모델" class="level3" data-number="8.2.2">
+<h3 data-number="8.2.2" class="anchored" data-anchor-id="glmm으로서-rasch-모델"><span class="header-section-number">8.2.2</span> GLMM으로서 Rasch 모델</h3>
+<p>제5장에서는 1PL IRT 모델의 특수한 경우로 Rasch 모델을 제시했습니다. Rasch 모델은 문항 난이도와 피험자의 잠재 특성 수준이 주어졌을 때 문항에 정답을 맞힐 확률을 예측하는 모형입니다. Rasch 모형에서는 모든 문항에 대해 문항 변별도 모수가 1로 가정되며, 낮은 점근값(즉, 추측도 모수가 없음)을 추정하는 모델이 없습니다. Rasch 모델은 종속 변수(이분 문항 응답)가 무선 효과(피험자의 잠재 특성 수준)와 함께 일부 고정 효과(문항)에 의해 예측되는 GLMM으로 정의할 수 있습니다.</p>
+<p>GLMM에서 문항 응답은 <span class="math inline">\(Y_{ij} = 0\)</span> 또는 <span class="math inline">\(Y_{ij} = 1\)</span>로 표시되며, 여기서 <span class="math inline">\(j = 1, …, J\)</span>는 피험자의 지수이고 <span class="math inline">\(i = 1, …, K\)</span>는 문항의 지수입니다. <span class="math inline">\(Y_{ij}\)</span> 는 베르누이 분포를 가지며 평균은 <span class="math inline">\(\pi_{ij}\)</span> 입니다. 일반적으로 로짓 연결 함수<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>를 적용하여 <span class="math inline">\(\pi_{ij}\)</span>를 <span class="math inline">\(-\infty\)</span> 에서 <span class="math inline">\(\infty\)</span> 사이의 연속 척도에 배치합니다.</p>
+<p><span class="math display">\[
+\eta_{ij} = log({\pi_{ij} \over 1-\pi_{ij}})
+\]</span></p>
+<p>De Boeck과 Wilson(2004)의 표기법에 따라 Rasch 모델의 GLMM 공식은 다음과 같이 작성할 수 있습니다.</p>
+<p><span class="math display">\[
+\eta_{ij}=\theta_j+\sum_{k=1}^K \beta_i X_{ik}
+\]</span></p>
+<ul>
+<li><p>여기서 <span class="math inline">\(\theta_j\)</span>는 피험자 <span class="math inline">\(j\)</span>의 잠재 특성 수준이고,</p></li>
+<li><p><span class="math inline">\(\beta_i\)</span>는 전통적인 IRT 모델에서의 문항 난이도와는 반대로 문항 <span class="math inline">\(i(i = 1, 2, …, K)\)</span>에 대한 문항의 쉬움을 의미하며,</p></li>
+<li><p><span class="math inline">\(X_{ik}\)</span>는 <span class="math inline">\(i = k\)</span>이면 1이고 그렇지 않으면 0입니다.</p></li>
+<li><p>방정식 8.2에서 <span class="math inline">\(\theta_j\)</span>는 정규 분포를 갖는 무선 절편, 즉 <span class="math inline">\(\theta_j \sim N(0, \sigma^2)\)</span>이고</p></li>
+<li><p><span class="math inline">\(X_{ik}\)</span>는 모델에서 고정 절편 역할을 하는 문항 지표입니다.</p></li>
+</ul>
+<p>방정식 8.2는 다음과 같이 더 간결하게 작성할 수 있습니다:</p>
+<p><span class="math display">\[
+\eta_{ij}=\theta_j+\beta_i
+\]</span></p>
+<p>여기서 <span class="math inline">\(\beta_i\)</span>는 <span class="math inline">\(\beta_i\)</span>와 <span class="math inline">\(X_{ik}\)</span>의 곱의 합입니다. 방정식 8.3에서 <span class="math inline">\(\beta_i\)</span>에 -1을 곱하면 문항의 쉬움 모수의 부호가 반전되어 문항의 쉬움에서 문항 난이도로 해석이 바뀔 수 있습니다.</p>
+<p>설명적 IRT 모델을 추정하는 방법을 보여드리기 위해 hemp 패키지의 eirm 데이터 세트를 사용합니다. 분석을 시작하기 전에 먼저 library 명령을 사용하여 hemp 및 lme4 패키지를 활성화합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"hemp"</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"lme4"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>eirm 데이터 세트에는 10개의 문항으로 구성된 가상 퀴즈에 대한 1000명의 피험자의 응답이 포함되어 있습니다. 문항은 이분법적으로 채점되었습니다(1 = 정답, 0 = 오답). eirm 데이터 세트는 이미 롱 포캣으로 되어 있으므로 데이터 변환이 필요하지 않습니다. 피험자(person), 문항(item), 문항에 대한 응답(response)을 식별하는 세 개의 열 외에 gender(F = 여성, M = 남성)과 문항에 시각적 요소(예: 그래프, 차트, 이미지)가 포함되어 있는지 여부와 관련된 itemtype(비시각적 또는 시각적)이라는 두 가지 설명 변수가 있습니다. 성별과 문항 유형은 모두 데이터 세트의 문자 변수입니다. head 함수를 사용하여 eirm 데이터 세트의 처음 열 행을 출력합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(eirm, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   person item response gender  itemtype
+1       1    1        0      F Nonvisual
+2       1    2        0      F Nonvisual
+3       1    3        0      F Nonvisual
+4       1    4        0      F Nonvisual
+5       1    5        0      F Nonvisual
+6       1    6        0      F    Visual
+7       1    7        0      F    Visual
+8       1    8        0      F    Visual
+9       1    9        0      F    Visual
+10      1   10        0      F    Visual</code></pre>
+</div>
+</div>
+<p>다음으로 table 함수를 사용하여 문항 유형별로 문항에 대한 피험자의 응답을 2원으로 표시하는 표를 생성합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(eirm<span class="sc">$</span>item, eirm<span class="sc">$</span>itemtype)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    
+     Nonvisual Visual
+  1       1000      0
+  2       1000      0
+  3       1000      0
+  4       1000      0
+  5       1000      0
+  6          0   1000
+  7          0   1000
+  8          0   1000
+  9          0   1000
+  10         0   1000</code></pre>
+</div>
+</div>
+<p>위의 결과는 eirm 데이터 세트의 처음 5개 문항은 비시각적 문항이고 마지막 5개 문항은 시각적 요소를 포함하고 있음을 보여줍니다. 모든 피험자는 퀴즈의 모든 문항에 응답했습니다(즉, 문항과 피험자가 완전히 교차되어 있습니다. 교차 설계에 대한 자세한 내용은 제3장 참조). 또한 성별에 따라 피험자의 균형을 맞췄습니다.</p>
+<p>Rasch 모델을 사용하여 eirm 데이터 세트에 대한 IRT 분석을 시작합니다. Rasch 모델을 추정할 때는 설명 변수의 영향을 무시하고 개별 문항과 피험자에 초점을 맞춥니다. Rasch 모델을 추정하기 위해 lme4 패키지의 glmer 함수를 사용합니다. glmer 함수는 고정 효과와 무선 효과가 있는 일반화 선형 혼합 모델을 추정할 수 있습니다. 제3장과 달리 glmer 함수를 사용하기 전에 최적화 프로그램과 최대 함수 평가 횟수를 지정하는 것으로 시작합니다. 다음 설정만으로도 대부분의 설명적 IRT 모델을 추정할 수 있지만, 제어 옵션에 대한 자세한 내용은 lme4 패키지 설명서를 살펴보는 것이 좋습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>control <span class="ot">&lt;-</span> <span class="fu">glmerControl</span>(<span class="at">optimizer =</span> <span class="st">"bobyqa"</span>,</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>                        <span class="at">optCtrl =</span> <span class="fu">list</span>(<span class="at">maxfun =</span> <span class="dv">100000</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>다음으로 glmer 함수를 사용하여 Rasch 모델을 추정하고 결과를 rasch_mod로 저장합니다. 아래 glmer 함수 호출에서 response는 응답을 모델의 종속 변수로 정의하고, -1 + item은 응답을 예측하는 고정 효과로 문항을 정의하며, -1은 모델에서 절편을 제거하고, (1 | person)은 피험자를 무선 효과로 정의하고, family = binomial은 로짓 연결 함수가 있는 이항 분포를 지정하고, control = control은 위에서 정의한 제어문을 활성화합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>rasch_mod <span class="ot">&lt;-</span> <span class="fu">glmer</span>(response <span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> item <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> person),</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">family =</span> binomial, <span class="at">data =</span> eirm,</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">control =</span> control)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>다음으로 추정된 모수를 rasch_params라는 데이터 프레임에 저장합니다. fixef 함수는 rasch_mod에서 추정된 고정 효과(Rasch 모델의 문항 모수)를 검색합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>rasch_params <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">easiness =</span> <span class="fu">fixef</span>(rasch_mod))</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>rasch_params</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         easiness
+item1   1.7265649
+item2   0.8168163
+item3   0.4346284
+item4   0.4157487
+item5   0.2385415
+item6  -0.2482371
+item7  -0.7259674
+item8  -0.9741760
+item9  -0.9741735
+item10 -1.3409841</code></pre>
+</div>
+</div>
+<p>앞서 설명했듯이 GLMM에서 문항 난이도를 양수로 모수화하기 때문에 GLM 함수에서 얻은 모수는 문항 난이도가 아닌 문항의 쉬운 정도를 나타냅니다(방정식 8.3 참조). 결과에 따르면 item 1이 가장 쉬운 문항이고 item 10이 가장 어려운 문항임을 알 수 있습니다. 문항 난이도 모수 외에도 rasch_mod에서 무선 효과(잠재 특성 추정치)를 추출할 수도 있습니다. 나머지 열은 문항 모수이므로 coef 함수를 사용하여 피험자에 대한 추정 계수의 첫 번째 열만 검색합니다. 잠재 특성 추정치를 rasch_ability로 저장합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>rasch_ability <span class="ot">&lt;-</span> <span class="fu">coef</span>(rasch_mod)<span class="sc">$</span>person[, <span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>마지막으로, 문항 모수와 잠재 특성 추정치를 모두 사용하여 hemp 패키지의 itemperson_map 함수를 사용하여 Rasch 모델에 대한 문항-피험자 맵을 그립니다. 먼저 문항 모수를 난이도라는 새 데이터 세트에 저장하고 열 이름을 1부터 10까지로 바꿉니다(item 1부터 item 10까지 참조). 그런 다음 difficulty와 rasch_ability를 모두 사용하여 문항-피험자 맵을 그립니다. 그림 8.1은 피험자의 잠재 특성 수준과 관련된 문항 난이도 모수의 분포를 보여줍니다. 이 도표는 피험자의 잠재 특성 수준 범위를 고려할 때 검사의 난이도 범위가 적절한지 검토하는 데 특히 유용합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>difficulty <span class="ot">&lt;-</span> rasch_params<span class="sc">$</span>easiness</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(difficulty) <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="fu">itemperson_map</span>(difficulty, rasch_ability, <span class="at">n =</span> <span class="dv">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap08_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>각 문항에는 고유한 난이도 모수가 있고 각 피험자에게는 고유한 잠재 특성 추정치가 있기 때문에, De Boeck과 Wilson(2004)은 Rasch 모형을 이중 설명적 모델이라고 설명했습니다. 문항과 피험자의 개별 효과를 설명하는 예측 변수를 Rasch 모형에 통합하면 결과 모형은 설명적 IRT 모형이 되며, 이는 종종 Rasch 모델의 더 간결한 형태(즉, 문항을 설명하는 모수가 더 적음)가 됩니다. 다음으로, 문항 관련 예측 변수와 피험자 관련 예측 변수를 포함하여 기존의 Rasch 모형을 설명적 IRT 모형으로 변환하는 방법을 설명합니다.</p>
+</section>
+<section id="선형-로지스틱-검사-모델" class="level3" data-number="8.2.3">
+<h3 data-number="8.2.3" class="anchored" data-anchor-id="선형-로지스틱-검사-모델"><span class="header-section-number">8.2.3</span> 선형 로지스틱 검사 모델</h3>
+<p>선형 로지스틱 검사 모델(LLTM; Fischer, 1973)은 문항 속성을 예측 변수로 통합하여 문항이 성공 확률(즉, <span class="math inline">\(\eta_{ij}\)</span> )에 미치는 영향에 관한 문항 간 차이를 설명합니다. Rasch 모델의 고유한 문항 난이도 모수와 달리 LLTM은 문항 속성에 기반한 난이도 모수가 더 적습니다. LLTM의 수학적 공식은 다음과 같습니다:</p>
+<p><span class="math display">\[
+\eta_{ij}=\theta_j+\sum_{m=1}^M \beta_mX_{im}
+\]</span></p>
+<ul>
+<li><p>여기서 <span class="math inline">\(\eta_{ij}\)</span>는 피험자 <span class="math inline">\(j\)</span>의 문항 <span class="math inline">\(i\)</span>에 대한 성공 확률(로짓 척도로 표시),</p></li>
+<li><p><span class="math inline">\(\theta_j\)</span>는 피험자 <span class="math inline">\(j\)</span>의 잠재 특성 수준,</p></li>
+<li><p><span class="math inline">\(X_{im}\)</span>은 문항 속성 <span class="math inline">\(m\)</span> (<span class="math inline">\(m=1,2,…,M\)</span>)에 대한 문항 <span class="math inline">\(i\)</span>의 값</p></li>
+<li><p><span class="math inline">\(\beta_m\)</span>은 문항 속성 <span class="math inline">\(m\)</span>의 회귀 가중치입니다.</p></li>
+</ul>
+<p>LLTM에서는 여러 문항 속성 변수와 그 상호작용을 예측 요인으로 함께 사용할 수 있습니다. 문항 속성 변수의 수(<span class="math inline">\(M\)</span>)가 시험의 문항 수(<span class="math inline">\(K\)</span>)보다 적을 것으로 예상되므로 예측의 정확도가 떨어질 수 있습니다. 즉, 방정식 8.4의 <span class="math inline">\(\sum_{m=1}^M \beta_mX_{im}\)</span>은 방정식 8.3의 <span class="math inline">\(\beta_i\)</span>와 같지 않을 것입니다. 그러나 문항 속성의 질에 따라 더 적은 난이도 모수로도 매우 정밀한 예측을 달성할 수 있습니다.</p>
+<p>대안적으로 잔차 항을 LLTM에 포함할 수도 있습니다. 결과 모델을 종종 오차가 있는 LLTM이라고 합니다. 이 모델을 사용하려면 추정 과정에서 문항을 무작선 효과로 처리해야 합니다. 오차가 있는 LLTM은 회귀 기반의 완벽한 예측을 하는 일반 LLTM과 달리 불완전한 예측을 허용합니다(De Boeck, 2008; Doran, Bates, Bliese, &amp; Dowling, 2007). 오차가 있는 LLTM의 수학적 공식은 다음과 같습니다.</p>
+<p><span class="math display">\[
+\eta_{ij}=\theta_j+\sum_{m=1}^M \beta_mX_{im}+\epsilon_i
+\]</span></p>
+<ul>
+<li>여기서 <span class="math inline">\(\epsilon_i\)</span>는 정규 분포의 잔차 항, <span class="math inline">\(\epsilon_i \sim N(0, \sigma_\epsilon^2\)</span> )이고 나머지 요소는 방정식 8.4의 요소와 동일합니다.</li>
+</ul>
+<p>오차가 있는 LLTM은 잔차 분산에 대해 등분산성을 가정합니다(De Boeck et al., 2011).</p>
+<p>LLTM과 오차가 있는 LLTM을 추정하는 방법을 설명하기 위해, eirm 데이터 세트의 “itemtype” 변수를 사용하여 문항에 성공적으로 응답할 확률을 예측합니다. 개별 문항 난이도 모수를 추정하는 대신, 문항에 시각적 요소가 포함되어 있는지 여부에 따라 문항 난이도를 설명하는 단일 난이도 모수를 추정합니다. 즉, eirm 데이터 세트의 itemtype을 LLTM의 문항 관련 예측 변수로 사용합니다.</p>
+<p>lme4 패키지로 LLTM을 추정하기 위해 다시 glmer 함수를 사용합니다. 이 코드는 item 대신 itemtype을 사용한다는 점을 제외하면 Rasch 모델용 코드와 매우 유사합니다. 이렇게 수정하면 두 개의 문항 난이도 모수(하나는 비시각적 문항, 다른 하나는 시각적 문항)를 추정할 수 있습니다. 문항 난이도 모수가 두 개뿐이므로(Rasch 모델의 모수가 10개인 것과는 대조적으로) LLTM의 추정 속도가 약간 빨라집니다. summary 함수를 사용하여 결과를 출력합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>lltm_mod <span class="ot">&lt;-</span> <span class="fu">glmer</span>(response <span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> itemtype <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> person),</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">family =</span> binomial, <span class="at">data =</span> eirm,</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">control =</span> control)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lltm_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Generalized linear mixed model fit by maximum likelihood (Laplace
+  Approximation) [glmerMod]
+ Family: binomial  ( logit )
+Formula: response ~ -1 + itemtype + (1 | person)
+   Data: eirm
+Control: control
+
+     AIC      BIC   logLik deviance df.resid 
+ 12496.0  12517.6  -6245.0  12490.0     9997 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.3908 -0.7656 -0.4033  0.7917  2.4795 
+
+Random effects:
+ Groups Name        Variance Std.Dev.
+ person (Intercept) 0.548    0.7403  
+Number of obs: 10000, groups:  person, 1000
+
+Fixed effects:
+                  Estimate Std. Error z value Pr(&gt;|z|)    
+itemtypeNonvisual  0.67779    0.03949   17.16   &lt;2e-16 ***
+itemtypeVisual    -0.82425    0.04014  -20.53   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Correlation of Fixed Effects:
+            itmtyN
+itemtypeVsl 0.321 </code></pre>
+</div>
+</div>
+<p>위의 glmer 함수의 결과 중 일부, 특히 무선 효과 및 고정 효과 섹션만 출력했습니다. LLTM은 피험자에 대한 분산 추정치를 <span class="math inline">\(\sigma_{\theta_j}^2\)</span> = 0.548로 제공하며, 이는 잠재 특성 수준에 따른 피험자 간의 변산을 나타냅니다. 시각적 문항과 비시각적 문항에 대한 추정된 난이도 모수는 각각 0.677과 -0.824입니다. 앞서 언급했듯이 glmer 함수의 문항 모수는 문항의 쉬운 정도를 나타냅니다. 즉, 값이 높을수록 쉬운 문항을 의미합니다. 결과는 eirm 데이터 세트에서 비시각적 문항이 시각적 문항보다 더 쉽다는 것을 보여줍니다. 같은 표에서 추정된 모수에 대한 표준 오차, <span class="math inline">\(z\)</span> 통계 및 해당 <span class="math inline">\(p\)</span>값을 확인할 수 있습니다. 이러한 유의성 검정은 추정된 모수가 0과 유의하게 다른지 여부를 나타냅니다. 이 예에서는 두 난이도 모수 모두 <span class="math inline">\(\alpha\)</span> 수준 .05에서 0과 유의하게 다릅니다.</p>
+<p>다음으로 오차가 있는 LLTM을 추정합니다. 이 모델에서는 문항을 무선 효과로 모델에 추가합니다. 오차가 있는 LLTM을 사용하면 문항 난이도 모수와 잠재 특성 추정치가 무선 효과로 변화하면서 문항 유형의 영향을 설명 변수로 제어할 수 있습니다. 추정 결과를 lltme_mod로 저장하고 summary 함수를 사용하여 결과를 확인합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>lltme_mod <span class="ot">&lt;-</span> <span class="fu">glmer</span>(response <span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> itemtype <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> person) <span class="sc">+</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>                     (<span class="dv">1</span> <span class="sc">|</span> item), <span class="at">family =</span> binomial, <span class="at">data =</span> eirm,</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">control =</span> control)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lltme_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Generalized linear mixed model fit by maximum likelihood (Laplace
+  Approximation) [glmerMod]
+ Family: binomial  ( logit )
+Formula: response ~ -1 + itemtype + (1 | person) + (1 | item)
+   Data: eirm
+Control: control
+
+     AIC      BIC   logLik deviance df.resid 
+ 12178.1  12206.9  -6085.0  12170.1     9996 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.4102 -0.7376 -0.3627  0.7624  3.1882 
+
+Random effects:
+ Groups Name        Variance Std.Dev.
+ person (Intercept) 0.6124   0.7825  
+ item   (Intercept) 0.1983   0.4453  
+Number of obs: 10000, groups:  person, 1000; item, 10
+
+Fixed effects:
+                  Estimate Std. Error z value Pr(&gt;|z|)    
+itemtypeNonvisual   0.7218     0.2033   3.551 0.000384 ***
+itemtypeVisual     -0.8495     0.2032  -4.180 2.92e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Correlation of Fixed Effects:
+            itmtyN
+itemtypeVsl 0.014 </code></pre>
+</div>
+</div>
+<p>다시 glmer 함수에서 반환된 결과 중 일부를 표시합니다. 문항을 추가하면 무선 효과 섹션에 잠재 특성과 문항의 분산이 모두 표시됩니다. 이 결과를 LLTM과 비교하면 오차가 있는 LLTM의 잠재 특성의 분산이 더 큽니다(<span class="math inline">\(\sigma_{\theta_j}^2\)</span> = 0.612). 왜냐하면 LLTM은 잔차 항이 0이라고 가정하고 itemtype만을 기준으로 문항 간의 변산을 설명하기 때문입니다. 문항 분산 추정치는 0.198입니다. 고정 효과 섹션에는 시각적 문항과 비시각적 문항의 추정 효과가 표시됩니다. 오차가 있는 LLTM의 추정 효과가 LLTM의 추정 효과보다 약간 더 큽니다.</p>
+<p>anova 함수를 사용하여 지금까지 추정했던 두 가지 설명적 IRT 모델과 Rasch 모델을 비교할 수 있습니다. anova 함수는 여러 가지 적합도 통계(예: 로그-우도, AIC, BIC)를 제공합니다. anova 함수는 우도비 검정도 제공하지만, Rasch 모델과 설명적 IRT 모델이 서로 내재되어 있지 않기 때문에 이 검사는 여기서는 적절하지 않습니다. 먼저 Rasch 모델을 LLTM과 비교합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(rasch_mod, lltm_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Data: eirm
+Models:
+lltm_mod: response ~ -1 + itemtype + (1 | person)
+rasch_mod: response ~ -1 + item + (1 | person)
+          npar   AIC   BIC  logLik deviance  Chisq Df Pr(&gt;Chisq)    
+lltm_mod     3 12496 12518 -6245.0    12490                         
+rasch_mod   11 12142 12221 -6059.8    12120 370.33  8  &lt; 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>결과에서 Rasch 모델이 로그 우도, AIC, BIC 값이 더 작아 LLTM보다 데이터에 더 잘 맞는다는 것을 알 수 있습니다. Rasch 모델은 각 문항에 대해 고유한 난이도 모수와 잠재 특성에 대한 분산 추정치를 제공하기 때문에 이 결과는 놀라운 일이 아닙니다. 모델 적합도가 더 떨어지는 것으로 나타났지만, LLTM은 3개의 모수(2개의 문항 모수와 잠재 특성에 대한 분산)만 가지고 있기 때문에 더 간결한 모델입니다.</p>
+<p>두 번째 비교는 Rasch 모델과 오차가 있는 LLTM을 비교하는 것입니다. 오차가 있는 LLTM에는 각 문항에 대한 고유한 문항 난이도 모수와 itemtype(예: 시각적 및 비시각적)에 대한 두 개의 추가 모수가 포함됩니다. 따라서 오차가 있는 LLTM이 LLTM보다 더 나은 모델 적합도를 제공할 것으로 예상됩니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(rasch_mod, lltme_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Data: eirm
+Models:
+lltme_mod: response ~ -1 + itemtype + (1 | person) + (1 | item)
+rasch_mod: response ~ -1 + item + (1 | person)
+          npar   AIC   BIC  logLik deviance  Chisq Df Pr(&gt;Chisq)    
+lltme_mod    4 12178 12207 -6085.0    12170                         
+rasch_mod   11 12142 12221 -6059.8    12120 50.416  7  1.197e-08 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>두 번째 비교의 결과는 AIC 및 로그-우도 값에 기반한 오차에서 Rasch 모델이 LLTM보다 더 잘 맞는다는 것을 보여줍니다. 그러나 잔차 항을 LLTM에 추가한 결과 적합도가 더 좋아졌으며, 이는 세 모델 중 가장 낮은 BIC 값으로 반영됩니다. 오차가 있는 LLTM은 문항의 변산성을 고려하여 보다 정확한 모수 추정이 가능하기 때문에 문항 속성 변수의 효과를 검토하는 데 더 적합한 옵션으로 보입니다.</p>
+</section>
+<section id="잠재-회귀-rasch-모델" class="level3" data-number="8.2.4">
+<h3 data-number="8.2.4" class="anchored" data-anchor-id="잠재-회귀-rasch-모델"><span class="header-section-number">8.2.4</span> 잠재 회귀 Rasch 모델</h3>
+<p>잠재 회귀 Rasch 모델(Zwinderman, 1991)은 측정되는 잠재 특성과 관련하여 피험자 간의 차이를 설명하기 위해 피험자 관련 변수를 Rasch 모델에 통합합니다. GLMM에서 피험자 관련 예측 변수는 일반적으로 고정 효과로 사용되지만, 그 효과는 무선 효과로 추정할 수도 있습니다. 잠재 회귀 라쉬 모형의 수학적 공식은 다음과 같습니다.</p>
+<p><span class="math display">\[
+\eta_{ij}=(\sum_{p=1}^P \vartheta_pZ_{jp}+\theta_j)+\beta_i
+\]</span></p>
+<ul>
+<li><p>여기서 <span class="math inline">\(\eta_{ij}\)</span>는 피험자 <span class="math inline">\(j\)</span>가 문항 <span class="math inline">\(i\)</span>에 정답을 맞출 확률(로짓 척도 기준)이고,</p></li>
+<li><p><span class="math inline">\(Z_{jp}\)</span>는 피험자 속성 <span class="math inline">\(p(p = 1, 2, ..., P)\)</span>에 대한 피험자 <span class="math inline">\(j\)</span>의 값이며,</p></li>
+<li><p><span class="math inline">\(\vartheta_p\)</span>는 피험자 속성 <span class="math inline">\(p\)</span>의 회귀 가중치이고,</p></li>
+<li><p><span class="math inline">\(\theta_j\)</span>는 피험자 속성 효과를 고려한 후 피험자 <span class="math inline">\(j\)</span>의 잠재 특성 수준이고,</p></li>
+<li><p><span class="math inline">\(\beta_i\)</span>는 문항 <span class="math inline">\(i\)</span>의 난이도 모수(즉, GLMM의 문항의 쉬운 정도)입니다.</p></li>
+</ul>
+<p>여러 피험자 속성 변수(예: 성별, 인종, SES)와 이들의 상호 작용을 잠재 회귀 Rasch 모델에서 예측 변수로 함께 사용할 수 있습니다.</p>
+<p>잠재 회귀 Rasch 모델을 추정하는 방법을 설명하기 위해, eirm 데이터 세트의 성별 변수를 사용하여 문항에 올바르게 응답할 확률을 예측합니다. 이 모델에서 두 가지 고정 효과는 문항 난이도 모수를 추정하기 위한 문항과 피험자의 성별 효과를 추정하기 위한 성별입니다. 성별 변수는 두 가지 값을 갖는 문자 변수입니다: 여성 피험자는 F, 남성 피험자는 M입니다. 성별 변수의 경우 여성을 기준 집단으로 합니다.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>lrrm_mod <span class="ot">&lt;-</span> <span class="fu">glmer</span>(response <span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> item <span class="sc">+</span> gender <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> person),</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">family =</span> binomial, <span class="at">data =</span> eirm,</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">control =</span> control)</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lrrm_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Generalized linear mixed model fit by maximum likelihood (Laplace
+  Approximation) [glmerMod]
+ Family: binomial  ( logit )
+Formula: response ~ -1 + item + gender + (1 | person)
+   Data: eirm
+Control: control
+
+     AIC      BIC   logLik deviance df.resid 
+ 11990.3  12076.8  -5983.1  11966.3     9988 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.3928 -0.7211 -0.3459  0.7617  3.4728 
+
+Random effects:
+ Groups Name        Variance Std.Dev.
+ person (Intercept) 0.4626   0.6802  
+Number of obs: 10000, groups:  person, 1000
+
+Fixed effects:
+        Estimate Std. Error z value Pr(&gt;|z|)    
+item1    1.32578    0.09398  14.107  &lt; 2e-16 ***
+item2    0.41592    0.08043   5.171 2.32e-07 ***
+item3    0.03392    0.07814   0.434   0.6643    
+item4    0.01505    0.07807   0.193   0.8472    
+item5   -0.16203    0.07765  -2.087   0.0369 *  
+item6   -0.64844    0.07830  -8.281  &lt; 2e-16 ***
+item7   -1.12592    0.08149 -13.817  &lt; 2e-16 ***
+item8   -1.37408    0.08418 -16.323  &lt; 2e-16 ***
+item9   -1.37408    0.08417 -16.324  &lt; 2e-16 ***
+item10  -1.74095    0.08955 -19.442  &lt; 2e-16 ***
+genderM  0.80083    0.06325  12.661  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Correlation of Fixed Effects:
+        item1  item2  item3  item4  item5  item6  item7  item8  item9  item10
+item2    0.175                                                               
+item3    0.179  0.218                                                        
+item4    0.179  0.218  0.228                                                 
+item5    0.179  0.220  0.232  0.232                                          
+item6    0.176  0.221  0.235  0.236  0.241                                   
+item7    0.167  0.215  0.231  0.231  0.237  0.247                            
+item8    0.161  0.209  0.226  0.226  0.232  0.244  0.246                     
+item9    0.161  0.209  0.226  0.226  0.232  0.244  0.246  0.244              
+item10   0.151  0.198  0.215  0.216  0.222  0.235  0.238  0.237  0.237       
+genderM -0.282 -0.361 -0.387 -0.388 -0.398 -0.414 -0.417 -0.412 -0.412 -0.399</code></pre>
+</div>
+</div>
+<p>성별의 추정 효과는 0.801로 <span class="math inline">\(\alpha = .001\)</span>에서 통계적으로 유의미했습니다. 성별에 대한 정적(+) 효과는 eirm 데이터 세트에서 남성 피험자가 여성 피험자에에 비해 문항에 정답을 맞힐 가능성이 더 높다는 것을 의미합니다.</p>
+<p>성별에 대한 고정 효과 추정치 외에도, 무선 효과는 잠재 특성 추정치의 추정 분산(0.463)이 Rasch 모델의 잠재 특성 분산(0.622)보다 작다는 것을 보여줍니다. 이 결과는 성별이 피험자 간 잠재 특성 변산의 일부를 설명한다는 것을 시사합니다. 잠재 회귀 Rasch 모델은 피험자 특성 변수의 효과가 고정되어 있으므로 오차를 포함하지 않는다고 가정합니다. 이 가정은 피험자 속성 변수에 무선 효과 구성 요소를 추가하여 부분적으로 완화할 수 있습니다. 다음 예에서는 (gender | person)을 사용하여 무선 효과 섹션에 성별을 포함합니다. 이렇게 변경하면 성별에 대한 고정 효과에 더해 피험자에 따라 성별의 효과가 달라질 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>lrrme_mod <span class="ot">&lt;-</span> <span class="fu">glmer</span>(response <span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> item <span class="sc">+</span> gender <span class="sc">+</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>                     (gender <span class="sc">|</span> person), <span class="at">family =</span> binomial,</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> eirm, <span class="at">control =</span> control)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv, :
+unable to evaluate scaled gradient</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv, :
+Model failed to converge: degenerate Hessian with 1 negative eigenvalues</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lrrme_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Generalized linear mixed model fit by maximum likelihood (Laplace
+  Approximation) [glmerMod]
+ Family: binomial  ( logit )
+Formula: response ~ -1 + item + gender + (gender | person)
+   Data: eirm
+Control: control
+
+     AIC      BIC   logLik deviance df.resid 
+ 11994.3  12095.2  -5983.1  11966.3     9986 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.3893 -0.7222 -0.3448  0.7598  3.4840 
+
+Random effects:
+ Groups Name        Variance Std.Dev. Corr 
+ person (Intercept) 0.4696   0.6853        
+        genderM     0.5313   0.7289   -0.55
+Number of obs: 10000, groups:  person, 1000
+
+Fixed effects:
+        Estimate Std. Error z value Pr(&gt;|z|)    
+item1    1.32582    0.09409  14.092  &lt; 2e-16 ***
+item2    0.41553    0.08058   5.157 2.51e-07 ***
+item3    0.03341    0.07833   0.427   0.6697    
+item4    0.01454    0.07826   0.186   0.8526    
+item5   -0.16258    0.07784  -2.088   0.0368 *  
+item6   -0.64900    0.07849  -8.269  &lt; 2e-16 ***
+item7   -1.12639    0.08163 -13.798  &lt; 2e-16 ***
+item8   -1.37447    0.08429 -16.306  &lt; 2e-16 ***
+item9   -1.37447    0.08429 -16.306  &lt; 2e-16 ***
+item10  -1.74119    0.08963 -19.427  &lt; 2e-16 ***
+genderM  0.80103    0.06327  12.660  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Correlation of Fixed Effects:
+        item1  item2  item3  item4  item5  item6  item7  item8  item9  item10
+item2    0.176                                                               
+item3    0.180  0.220                                                        
+item4    0.180  0.221  0.232                                                 
+item5    0.180  0.223  0.235  0.236                                          
+item6    0.177  0.224  0.239  0.239  0.244                                   
+item7    0.169  0.218  0.234  0.235  0.240  0.251                            
+item8    0.163  0.212  0.228  0.229  0.235  0.247  0.249                     
+item9    0.163  0.212  0.228  0.229  0.235  0.247  0.249  0.247              
+item10   0.152  0.200  0.217  0.218  0.224  0.237  0.241  0.239  0.239       
+genderM -0.284 -0.364 -0.390 -0.391 -0.401 -0.417 -0.419 -0.415 -0.415 -0.401
+optimizer (bobyqa) convergence code: 0 (OK)
+unable to evaluate scaled gradient
+Model failed to converge: degenerate  Hessian with 1 negative eigenvalues</code></pre>
+</div>
+</div>
+<p>위의 결과는 또한 성별에 대한 분산 추정치가 0.511이고 잠재 특성 추정치와 성별에 대한 무선 효과 간의 상관관계가 r = -.54임을 보여줍니다. 다음으로, anova 함수를 사용하여 성별의 고정 효과와 무선 효과가 Rasch 모델(즉, 기준 모델)에 유의미한 기여를 했는지 확인합니다. 첫 번째 비교에서는 성별이 고정 효과 변수로서 미치는 영향을 평가하고, 두 번째 비교에서는 성별의 변산 효과가 무선 효과 변수로서 미치는 영향을 평가합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(rasch_mod, lrrm_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Data: eirm
+Models:
+rasch_mod: response ~ -1 + item + (1 | person)
+lrrm_mod: response ~ -1 + item + gender + (1 | person)
+          npar   AIC   BIC  logLik deviance  Chisq Df Pr(&gt;Chisq)    
+rasch_mod   11 12142 12221 -6059.8    12120                         
+lrrm_mod    12 11990 12077 -5983.1    11966 153.37  1  &lt; 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(lrrm_mod, lrrme_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Data: eirm
+Models:
+lrrm_mod: response ~ -1 + item + gender + (1 | person)
+lrrme_mod: response ~ -1 + item + gender + (gender | person)
+          npar   AIC   BIC  logLik deviance  Chisq Df Pr(&gt;Chisq)
+lrrm_mod    12 11990 12077 -5983.1    11966                     
+lrrme_mod   14 11994 12095 -5983.1    11966 0.0212  2     0.9895</code></pre>
+</div>
+</div>
+<p>결과에 따르면 잠재 회귀 Rasch 모델에서 성별을 고정 효과 변수로 사용하면 Rasch 모델에 비해 적합도 통계가 개선되었습니다. 이는 잠재 회귀 Rasch 모델에서 성별이 통계적으로 유의미한 영향을 미치기 때문에 예상되는 결과입니다. 두 번째 비교에서는 lrrme_mod에서 성별을 가변 무선 효과 변수로 사용해도 모델 적합도가 개선되지 않았음을 보여줍니다. 두 개의 추가 모수(성별에 대한 분산 추정치 및 성별과 잠재 특성 추정치 간의 상관관계)가 있는 경우, lrrme_mod는 잠재 회귀 Rasch 모델에 비해 더 나은 적합도 통계를 얻지 못했습니다. 이 결과는 성별의 영향이 피험자에 따라 크게 다르지 않음을 시사합니다.</p>
+<p>앞서 언급한 바와 같이, 잠재 회귀 Rasch 모델에 피험자의 특성 변수를 포함시키는 방법에는 여러 가지가 있습니다. 예를 들어, 설명되지 않은 잠재 특성 분산의 이산성은 피험자 속성 변수에 대한 다양한 효과만 추가하여 (-1 + gender | person)을 사용하여 모델링할 수 있습니다. 또는 문항(수준 1) 및 피험자(수준 2) 외에 피험자 특성 변수를 세 번째 수준(1 | 성별)으로 사용하여 다층 Rasch 모형을 추정할 수도 있습니다. 다양한 잠재 회귀 Rasch 모형에 대한 자세한 설명은 De Boeck 외(2011)에서 확인할 수 있습니다.</p>
+</section>
+<section id="상호작용-모델" class="level3" data-number="8.2.5">
+<h3 data-number="8.2.5" class="anchored" data-anchor-id="상호작용-모델"><span class="header-section-number">8.2.5</span> 상호작용 모델</h3>
+<p>이 장의 서두에서 설명했듯이, 동일한 설명적 IRT 모델 내에 문항 속성 변수와 피험자 속성 변수를 모두 포함할 수 있습니다. 예를 들어, 방정식 8.4의 LLTM과 방정식 8.6의 잠재 회귀 Rasch 모델을 결합할 수 있습니다. 이렇게 하면 문항 및 피험자 관련 설명 변수를 모두 포함하는 잠재 회귀 LLTM이 산출됩니다. 잠재 회귀 LLTM은 다음과 같이 공식화할 수 있습니다.</p>
+<p><span class="math display">\[
+\eta_{ij}=(\sum_{p=1}^P \vartheta_pZ_{jp}+\theta_j)+\sum_{m=1}^M\beta_mX_{im\cdot}
+\]</span></p>
+<p>잔차 항 (<span class="math inline">\(\epsilon_i\)</span>)를 방정식 8.7에 포함시켜 문항의 다양한 효과(즉, 고유한 문항 난이도 모수)를 추정할 수 있습니다. 또한, 문항 속성 변수(또는 문항)와 피험자 속성 변수의 곱을 모델의 상호작용항으로 포함할 수 있습니다. 이 상호작용항은 고정 효과 또는 무선효과 변수일 수 있습니다. 방정식 8.8은 문항 속성 변수와 피험자 속성 변수의 곱을 고정 효과 변수로 사용한 상호작용 모델을 보여줍니다.</p>
+<p><span class="math display">\[
+\eta_{ij}=(\sum_{p=1}^P \vartheta_pZ_{jp}+\theta_j)+\sum_{m=1}^M\beta_mX_{im}+\sum_{h=1}^H \omega_hW_{(ij)h}
+\]</span></p>
+<ul>
+<li><p>여기서 <span class="math inline">\(\omega_h\)</span>는 상호작용항에 대한 회귀 가중치이고,</p></li>
+<li><p><span class="math inline">\(W_{(ij)h}\)</span>는 상호작용 변수이며, 나머지 요소는 방정식 8.7의 요소와 동일합니다.</p></li>
+</ul>
+<p>예를 들어, 두 수준(1 = 비시각적, 0 = 시각적)의 문항 유형과 두 수준(0 = 여성, 1 = 남성)의 성별의 곱은 문항 유형과 성별이 모두 1이면 <span class="math inline">\(W_{(ij)h} = 1\)</span>이 되고, 그렇지 않으면 <span class="math inline">\(W_{(ij)h} = 0\)</span>이 됩니다.</p>
+<p>다음 섹션에서는 eirm 데이터 세트를 사용한 상호작용 모델에 대한 두 가지 예를 제시합니다. 먼저, 문항 유형, 성별, 그리고 이들의 상호작용으로 상호작용 모델을 추정합니다. 이 모델은 성별에 따른 문항 유형의 차별적 효과를 보여줍니다. 두 번째 예에서는 성별과 문항과의 상호작용을 사용하여 잠재 회귀 Rasch 모델을 추정합니다. 이 모델은 유사한 잠재 특성 수준을 가진 피험자가 속한 성별 그룹에 따라 응답 확률이 달라지는지 여부를 조사합니다. 그런 다음 성별과 유의미한 상호작용을 보이는 개별 문항은 차별기능문항(DIF)에 대해 플래그를 지정합니다. 제11장에서 DIF 및 측정 불변성에 대한 자세한 내용을 설명합니다.</p>
+<p>아래에 제시된 첫 번째 상호작용 모델은 오차가 있는 LLTM과 잠재 회귀 Rasch 모델을 결합한 것입니다. 이 모델에서는 문항 유형 * 성별을 사용하여 문항 유형과 성별의 주 효과뿐만 아니라 이들의 상호작용에 대한 추가 고정 효과를 추정합니다. 이 상호작용 모델의 결과를 int_mod로 저장합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>int_mod <span class="ot">&lt;-</span> <span class="fu">glmer</span>(response <span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> itemtype <span class="sc">*</span> gender <span class="sc">+</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>                   (<span class="dv">1</span> <span class="sc">|</span> person) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> item), <span class="at">family =</span> binomial,</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> eirm, <span class="at">control =</span> control)</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(int_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Generalized linear mixed model fit by maximum likelihood (Laplace
+  Approximation) [glmerMod]
+ Family: binomial  ( logit )
+Formula: response ~ -1 + itemtype * gender + (1 | person) + (1 | item)
+   Data: eirm
+Control: control
+
+     AIC      BIC   logLik deviance df.resid 
+ 12022.1  12065.4  -6005.1  12010.1     9994 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.3095 -0.7407 -0.3648  0.7663  3.2095 
+
+Random effects:
+ Groups Name        Variance Std.Dev.
+ person (Intercept) 0.4554   0.6748  
+ item   (Intercept) 0.2000   0.4472  
+Number of obs: 10000, groups:  person, 1000; item, 10
+
+Fixed effects:
+                       Estimate Std. Error z value Pr(&gt;|z|)    
+itemtypeNonvisual       0.27439    0.20676   1.327   0.1845    
+itemtypeVisual         -1.18847    0.20803  -5.713 1.11e-08 ***
+genderM                 0.90748    0.07779  11.666  &lt; 2e-16 ***
+itemtypeVisual:genderM -0.21751    0.09165  -2.373   0.0176 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Correlation of Fixed Effects:
+            itmtyN itmtyV gendrM
+itemtypeVsl  0.021              
+genderM     -0.171 -0.060       
+itmtypVsl:M  0.098 -0.120 -0.590</code></pre>
+</div>
+</div>
+<p>상호작용 모형의 결과는 문항 유형 및 성별 변수의 주 효과에 관한 이전 모형의 결과와 유사합니다. 시각적 문항이 비시각적 문항보다 더 어렵습니다. 또한 남자 피험자가 여자 피험자보다 문항에 정답을 맞힐 가능성이 더 높습니다. itemtypeVisaul:genderM으로 레이블이 지정된 마지막 행은 모델에서 상호작용항을 나타냅니다. 상호작용항에 대한 추정 회귀 가중치는 -0.218이며, 유의 수준 <span class="math inline">\(\alpha = .05\)</span>에서 통계적으로 유의합니다. 이 회귀 가중치의 부호를 통해 남자 피험자는 잠재 특성 수준에 관계없이 여자 피험자에 비해 시각적 문항에 대해 정답을 맞힐 가능성이 낮다는 결론을 내릴 수 있습니다.</p>
+<p>두 번째 예는 개별 문항과 성별 간의 상호작용에 초점을 맞춥니다. 앞서 언급했듯이, 특정 문항과 성별 간에 유의미한 상호작용항은 균일 DIF를 나타냅니다. 균일 DIF는 특정 그룹(성별과 같은 특정 피험자 특성 변수로 정의됨)의 피험자가 다른 그룹의 피험자보다 일관되게 더 나은 성적을 거둔다는 것을 의미합니다. eirm 데이터 세트를 사용하여 문항이 균일한 DIF를 나타내는지 여부를 검사하고, 문항 * 성별을 사용하여 문항과 성별에 대한 주 효과와 그 상호작용을 추정합니다. 모델 결과를 dif_mod로 저장합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>dif_mod <span class="ot">&lt;-</span> <span class="fu">glmer</span>(response <span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> item <span class="sc">*</span> gender <span class="sc">+</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>                   (<span class="dv">1</span> <span class="sc">|</span> person), <span class="at">family =</span> binomial,</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> eirm, <span class="at">control =</span> control)</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(dif_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Generalized linear mixed model fit by maximum likelihood (Laplace
+  Approximation) [glmerMod]
+ Family: binomial  ( logit )
+Formula: response ~ -1 + item * gender + (1 | person)
+   Data: eirm
+Control: control
+
+     AIC      BIC   logLik deviance df.resid 
+ 11978.5  12129.9  -5968.2  11936.5     9979 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.4375 -0.7096 -0.3626  0.7538  2.9507 
+
+Random effects:
+ Groups Name        Variance Std.Dev.
+ person (Intercept) 0.4696   0.6853  
+Number of obs: 10000, groups:  person, 1000
+
+Fixed effects:
+                Estimate Std. Error z value Pr(&gt;|z|)    
+item1           1.316774   0.115000  11.450  &lt; 2e-16 ***
+item2           0.276166   0.099786   2.768  0.00565 ** 
+item3           0.008133   0.099066   0.082  0.93457    
+item4           0.034809   0.099076   0.351  0.72534    
+item5          -0.241583   0.099505  -2.428  0.01519 *  
+item6          -0.686259   0.103046  -6.660 2.74e-11 ***
+item7          -1.280303   0.113626 -11.268  &lt; 2e-16 ***
+item8          -1.198439   0.111711 -10.728  &lt; 2e-16 ***
+item9          -1.316335   0.114490 -11.497  &lt; 2e-16 ***
+item10         -1.415472   0.117090 -12.089  &lt; 2e-16 ***
+genderM         0.829144   0.183183   4.526 6.00e-06 ***
+item2:genderM   0.300539   0.230594   1.303  0.19246    
+item3:genderM   0.029133   0.224984   0.129  0.89697    
+item4:genderM  -0.068132   0.224521  -0.303  0.76154    
+item5:genderM   0.139064   0.224358   0.620  0.53537    
+item6:genderM   0.045144   0.224245   0.201  0.84045    
+item7:genderM   0.246263   0.229391   1.074  0.28302    
+item8:genderM  -0.346863   0.230264  -1.506  0.13197    
+item9:genderM  -0.132322   0.231139  -0.572  0.56700    
+item10:genderM -0.614687   0.236864  -2.595  0.00946 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Correlation matrix not shown by default, as p = 20 &gt; 12.
+Use print(x, correlation=TRUE)  or
+    vcov(x)        if you need it</code></pre>
+</div>
+</div>
+<p>결과의 첫 번째 부분에는 문항 난이도 모수와 성별에 대한 고정 효과가 표시됩니다. 개별 문항과 성별 간의 상호작용을 보여주는 결과의 두 번째 부분에 중점을 둡니다. 유의 수준 <span class="math inline">\(\alpha = .01\)</span>에서 유일하게 유의미한 상호작용은 item10:genderM입니다. 이 상호작용의 부호를 통해 남자 피험자가 여자 피험자보다 문항 10을 정답으로 맞힐 가능성이 낮다는 결론을 내릴 수 있습니다. 즉, 여자 피험자에 비해 남자 피험자가 10번 문항을 더 어렵게 느낀다는 것입니다.</p>
+<p>모든 상호 작용을 함께 검정하는 옴니버스 검정 대신 특정 문항과 성별 간의 단일 상호 작용항을 포함하여 각 문항을 개별적으로 검정할 수도 있습니다. 예를 들어, 문항(즉, 항목 식별자)이 10이고 성별이 M이면 dif10이 1이 되고 그렇지 않으면 0이 되는 문항 10에 대한 더미 변수(dif10이라고 함)를 만들 수 있습니다. 문항 * 성별 대신 문항 + 성별 + diff10을 사용하여 문항 10에 대한 문항 난이도 모수, 성별 효과 및 상호 작용 효과를 추정해야 합니다. 그런 다음 이 모델의 확률과 Rasch 모형의 확률을 비교할 수 있습니다. Rasch 모델이 상호작용 모형 내에 내재되어 있기 때문에 anova 함수의 우도비검정이 이 비교에 적합합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>dif10 <span class="ot">&lt;-</span> <span class="fu">with</span>(eirm, <span class="fu">ifelse</span>(gender <span class="sc">==</span> <span class="st">"M"</span> <span class="sc">&amp;</span> item <span class="sc">==</span> <span class="st">"10"</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>dif10_mod <span class="ot">&lt;-</span> <span class="fu">glmer</span>(response <span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> item <span class="sc">+</span> gender <span class="sc">+</span></span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>                     dif10 <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> person), <span class="at">family =</span> binomial,</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">data =</span> eirm, <span class="at">control =</span> control)</span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(rasch_mod, dif10_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Data: eirm
+Models:
+rasch_mod: response ~ -1 + item + (1 | person)
+dif10_mod: response ~ -1 + item + gender + dif10 + (1 | person)
+          npar   AIC   BIC  logLik deviance  Chisq Df Pr(&gt;Chisq)    
+rasch_mod   11 12142 12221 -6059.8    12120                         
+dif10_mod   13 11977 12071 -5975.6    11951 168.57  2  &lt; 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>우도비검정에서 유의미한 <span class="math inline">\(\chi^2\)</span> 통계는 모수가 더 많은 큰 모델이 모수가 더 적은 작은 모델보다 데이터에 더 잘 맞는다는 것을 나타냅니다. 위의 결과에서, 더 복잡한 모델인 dif10_mod와 기준 모델인 rasch_mod의 차이가 <span class="math inline">\(\chi^2(2) = 168:57, p &lt; .001\)</span>로 통계적으로 유의미하여 dif10_mod의 모델이 더 잘 맞는다는 것을 알 수 있습니다. 이 결과는 또한 문항 10에 대한 추정된 DIF 모수가 두 모델 간의 유일한 차이이기 때문에 통계적으로 유의미하다는 것을 시사합니다. 이 프로세스를 각 문항에 대해 반복하여 균일한 DIF를 나타내는 문항을 찾을 수 있습니다.</p>
+</section>
+</section>
+<section id="요약" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="요약"><span class="header-section-number">8.3</span> 요약</h2>
+<p>이 장에서는 EIRM 프레임워크를 소개하고 lme4 패키지를 사용하여 몇 가지 설명적 IRT 모델을 추정하는 방법을 시연했습니다. GLMM 프레임워크는 문항 속성 변수, 피험자 속성 변수 및 이들의 상호작용의 효과를 EIRM의 맥락에서 조사하는 데 매우 유연하게 사용할 수 있습니다. 이 장에서 제시된 모델은 Rasch 모델과 설명적 IRT 모델 간의 주요 차이점을 보여줍니다.</p>
+<p>lme4 패키지의 glmer 함수를 사용하면 설명 변수의 효과를 고정 효과 또는 무선 효과로 추정할 수 있습니다. 고정 효과와 무선 효과의 다양한 조합을 통해 매우 다양한 설명적 IRT 모델을 만들 수 있습니다. EIRM 프레임워크와 glmer 함수에 대한 보다 포괄적인 논의는 De Boeck and Wilson(2004) 및 De Boeck 외.(2011)에서 확인할 수 있습니다.</p>
+<p>glmer 함수는 다양한 설명적 IRT 모델을 추정하는 데 유용한 도구이지만, Rasch 모델과 그 설명적 변형 모델만 추정할 수 있습니다. 제5장과 제6장에 제시된 다른 IRT 모델(예: 2PL 모델, 3PL 모델, GRM)을 추정하는 데는 glmer 함수를 사용할 수 없습니다. 또한 다른 R 패키지와 비교할 때, glmer 함수는 고정 효과와 무선 효과가 많은 복잡한 모델에 대해 더 긴 추정 시간이 필요한 경우가 많습니다. 따라서 Rasch 모형 이외의 IRT 모형에 대한 설명이 필요하고 반응 데이터 세트에 문항과 피험자의 수가 많은 경우에는 mirt(Chalmers, 2012) 및 flirt(Jeon et al., 2014) 패키지를 사용하는 것을 권장합니다.</p>
+
+
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>프로빗 연결 함수도 사용될 수 있습니다.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>기본적으로 R은 알파벳 순서로 첫 번째 값을 참조 범주로 선택합니다.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./chap07.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">다차원 문항반응이론</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./chap09.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">데이터 시각화 및 측정 모델</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
