@@ -242,6 +242,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#개요" id="toc-개요" class="nav-link active" data-scroll-target="#개요"><span class="toc-section-number">9.1</span>  개요</a></li>
   <li><a href="#소개" id="toc-소개" class="nav-link" data-scroll-target="#소개"><span class="toc-section-number">9.2</span>  소개</a></li>
   <li><a href="#진단-그래프" id="toc-진단-그래프" class="nav-link" data-scroll-target="#진단-그래프"><span class="toc-section-number">9.3</span>  진단 그래프</a></li>
+  <li><a href="#경로도" id="toc-경로도" class="nav-link" data-scroll-target="#경로도"><span class="toc-section-number">9.4</span>  경로도</a></li>
+  <li><a href="#shiny로-대화형-플롯" id="toc-shiny로-대화형-플롯" class="nav-link" data-scroll-target="#shiny로-대화형-플롯"><span class="toc-section-number">9.5</span>  shiny로 대화형 플롯</a>
+  <ul class="collapse">
+  <li><a href="#예제-1-요인-분석을-위한-진단-플롯" id="toc-예제-1-요인-분석을-위한-진단-플롯" class="nav-link" data-scroll-target="#예제-1-요인-분석을-위한-진단-플롯"><span class="toc-section-number">9.5.1</span>  예제 1: 요인 분석을 위한 진단 플롯</a></li>
+  <li><a href="#예제-2-3pl-irt-모델" id="toc-예제-2-3pl-irt-모델" class="nav-link" data-scroll-target="#예제-2-3pl-irt-모델"><span class="toc-section-number">9.5.2</span>  예제 2: 3PL IRT 모델</a></li>
+  </ul></li>
+  <li><a href="#요약" id="toc-요약" class="nav-link" data-scroll-target="#요약"><span class="toc-section-number">9.6</span>  요약</a></li>
   </ul>
 </nav>
     </div>
@@ -373,9 +380,9 @@ Attaching package: 'boot'</code></pre>
 </div>
 </div>
 <p>제4장에서는 레버리지가 높은 다변량 사례를 탐지하기 위해 Bollen(1989)에서 설명한 그래프를 소개했습니다. 다른 접근 방식은 마하라노비스 거리를 그리는 것입니다.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> 레버리지는 일부 변수(예: 독립 변수, 종속 변수 또는 명시 변수)에 대한 값 세트의 고유성을 측정하는 척도입니다. 특정 관측값에 대한 데이터에서 이러한 변수 값의 조합이 고유할수록 해당 관측값에 대한 레버리지가 높아집니다. 마하라노비스 거리는 다음과 같이 정의할 수 있습니다.</p>
-<p><span class="math display">\[
+<p><span id="eq-9.1"><span class="math display">\[
 D_i^2=(X_i-\bar{X})T\sum^{-1}(X_i-\bar{X})
-\]</span></p>
+\tag{9.1}\]</span></span></p>
 <ul>
 <li><p>여기서 <span class="math inline">\(X_i\)</span>는 관측값 <span class="math inline">\(i\)</span>에 대한 변수 벡터이고,</p></li>
 <li><p><span class="math inline">\(\bar{X}\)</span>는 이러한 변수의 평균 벡터이며,</p></li>
@@ -396,8 +403,8 @@ D_i^2=(X_i-\bar{X})T\sum^{-1}(X_i-\bar{X})
 <div class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>D2<span class="sc">$</span>mah[<span class="fu">which.max</span>(D2<span class="sc">$</span>mah)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>     202 
-33.15461 </code></pre>
+<pre><code>    202 
+32.3215 </code></pre>
 </div>
 </div>
 <p>결과는 마할로노비스 거리가 가장 높은 관측값이 202(즉, 개인 ID가 202)임을 보여줍니다. 그림 9.1은 이 관측값의 <span class="math inline">\(D^2\)</span>가 가장 가까운 관측의 거리보다 거의 두 배나 크다는 것을 보여줍니다. apply 함수를 사용하여 이 관찰값과 관련된 값과 각 변수의 최대값을 출력하여 이 관찰값을 자세히 살펴봅니다.</p>
@@ -416,6 +423,433 @@ D_i^2=(X_i-\bar{X})T\sum^{-1}(X_i-\bar{X})
 </div>
 </div>
 <p>이 관찰값에서는 vocab, geometry, analyrea이 최대값이고, reading, sentcomp, mathmtcs의 값이 크다는 것을 알 수 있습니다(최대값은 아니지만). 이것이 높은 <span class="math inline">\(D^2\)</span>의 원인일 가능성이 높습니다. 마하라노비스 거리를 통해 레버리지를 평가할 때 가장 큰 문제는 레버리지가 반드시 영향력의 척도가 아니며, 적합 모델을 기반으로 하는 것이 아니라 명시 변수의 관계에만 기반한다는 것입니다. 더 유용한 통계는 적합도 모델과 모수가 추정 적합도 및 모수에 미치는 영향을 고려하는 것입니다. 이를 영향력이라고 합니다. 영향력을 평가하는 가장 일반적인 통계는 Cook의 거리(Cook, 1977)와 일반화된 Cook의 거리(Pek &amp; MacCallum, 2011)입니다. 이러한 통계는 이 책 전체에서 논의되는 많은 모델인 sem(Fox et al., 2017), lavaan(Rosseel, 2012), mirt(Chalmers, 2012)로 추정된 측정 모델과 함께 계산하여 사용할 수 있습니다. 일반화된 Cook의 거리는 다음과 같이 정의됩니다.</p>
+<p><span id="eq-9.2"><span class="math display">\[
+gD_i=(\hat\theta-\hat\theta_{(i)})^T[\hat{VAR}(\hat\theta_{(i)}]^{-1}(\hat\theta-\hat\theta_{(i)})
+\tag{9.2}\]</span></span></p>
+<p>여기서 <span class="math inline">\(\hat\theta\)</span> 및 <span class="math inline">\(\hat\theta_{(i)}\)</span>는 전체 데이터 세트와 관측치 <span class="math inline">\(i\)</span>를 제거한 데이터 세트에서 얻은 모수 추정치의 벡터이고, <span class="math inline">\(\hat{VAR}(\hat\theta_{(i)})\)</span>는 관측치 <span class="math inline">\(i\)</span>를 제거하여 구한 모수 추정치의 추정 점근 분산과 공분산을 포함하는 행렬입니다. 일반화된 쿡의 거리가 큰 관측치는 전체 데이터 세트의 모수 추정치에 강한 영향을 미쳤음을 나타냅니다.</p>
+<p>일반화된 쿡의 거리는 faoutlier 패키지의 gCD 함수를 사용하여 계산할 수 있습니다. gCD 함수는 데이터 세트와 탐색적 또는 확인적 요인 모델(sem, lavaan 또는 mirt 패키지로 생성)을 사용하여 일반화된 쿡의 거리를 반환합니다.</p>
+<p>다음 예에서는 interest 데이터 세트에 2요인 모델을 맞추고 interest 데이터 세트의 관측값에 대한 일반화된 쿡의 거리를 계산하여 일반화된 쿡의 거리를 보여줍니다. 아래에서 이 예제의 2요인 모델에 대해 자세히 설명합니다.</p>
+<p>Vocab=<span class="math inline">\(\lambda_{1,1}f_1+\epsilon_1\)</span> Mathmtcs= <span class="math inline">\(\lambda_{4,2}f_2+\epsilon_4\)</span></p>
+<p>Reading=<span class="math inline">\(\lambda_{2,1}f_1+\epsilon_2\)</span> Geometry= <span class="math inline">\(\lambda_{5,2}f_2+\epsilon_5\)</span></p>
+<p>Sent Comp=<span class="math inline">\(\lambda_{3,1}f_1+\epsilon_3\)</span> Analyrea= <span class="math inline">\(\lambda_{6,2}f_2+\epsilon_6\)</span></p>
+<p>위에 제시된 모델에서 <span class="math inline">\(\lambda\)</span>는 표준화된 요인 적재량, <span class="math inline">\(f\)</span>는 요인, <span class="math inline">\(\epsilon\)</span>는 잔차(고유요인)입니다. 첫 번째 요인인 <span class="math inline">\(f_1\)</span>은 언어적 지능이라고 할 수 있고 두 번째 요인인 <span class="math inline">\(f_2\)</span>는 수학적 추론이라고 할 수 있습니다. <span class="math inline">\(f_1\)</span>과 <span class="math inline">\(f_2\)</span>의 기대값은 모두 0이며 공분산 행렬과 오차의 분산인 <span class="math inline">\(Var_{(\epsilon_j)}\)</span>는 다음과 같이 주어집니다:</p>
+<p><span id="eq-9.3"><span class="math display">\[
+Var\begin{pmatrix}f_1 \\f_2\end{pmatrix}=\begin{pmatrix}1 &amp; \phi_{f_1,f_2} \\\phi_{f_1,f_2} &amp; 1 \end{pmatrix}\text{ and } Var(\epsilon_j) = \psi_j I
+\tag{9.3}\]</span></span></p>
+<p>여기서 <span class="math inline">\(I\)</span>는 아이덴티티 행렬이며, 분산을 1로 고정하여 모델을 식별하고 표준화된 추정치를 얻습니다. 이 모델은 다음 명령을 사용하여 lavaan에서 정의합니다:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>cog_mod <span class="ot">&lt;-</span> <span class="st">"</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="st">verb =~ vocab + reading + sentcomp</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="st">math =~ mathmtcs + geometry + analyrea</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>아래에서는 gCD 함수를 사용하여 일반화된 쿡의 거리를 계산하고, 그 결과를 gd로 저장한 다음 마지막으로 플롯합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>gd <span class="ot">&lt;-</span> <span class="fu">gCD</span>(interest, cog_mod)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(gd, <span class="at">ylab =</span> <span class="st">"Generalized Cook's D"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap09_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>그림 9.2의 결과는 관측값 중 하나가 일반화된 쿡 거리의 값이 크다는 것을 보여줍니다. 마하라노비스 거리에서와 마찬가지로 다음 명령을 사용하면 일반화된 쿡 거리가 가장 큰 관측치를 확인할 수 있습니다:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>gd<span class="sc">$</span>gCD[<span class="fu">which.max</span>(gd<span class="sc">$</span>gCD)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     202 
+1.832179 </code></pre>
+</div>
+</div>
+<p>결과는 관측값 111이 가장 큰 일반화된 쿡의 거리를 가지며 가장 가까운 관측값(227)보다 1.5배 더 크다는 것을 보여줍니다. 일반화된 쿡의 거리와 마하라노비스 거리는 동일한 관측치를 식별하지 못했습니다. 일반화된 쿡의 거리는 모델에 따라 달라지지만 마할라노비스 거리는 그렇지 않기 때문에 이는 놀라운 일이 아닙니다.</p>
+<p>표 9.1은 관측치 111(세 번째 열)이 있는 경우와 관측치 111이 없는 경우(마지막 열)에 대한 이 모형의 모수 추정치(즉, 요인 적재치, 요인 공분산, 적합도 지수)와 적합 통계를 보여줍니다. 관측치 111을 포함하면 모형의 적합도가 양호하며(즉, TLI 및 CFI가 높고 RMSEA가 낮음), 측정 변수가 각 요인에 대해 높은 부하를 가짐을 알 수 있습니다. 모델 적합도 통계 및 모수 추정치는 관측치 111(백분위수와 동일)이 없어도 거의 변하지 않으며 통계적 유의성에도 영향을 미치지 않습니다. 따라서 이 관측값은 상대적으로 영향력이 크지만 모델에서 제거해도 큰 영향을 미치지 않습니다.</p>
+<p>영향력이나 레버리지가 높은 관측치를 데이터 세트에서 그냥 삭제해서는 안 됩니다. 영향력 또는 레버리지가 높은 원인을 이해하는 것이 중요합니다. 데이터 입력 문제, 표본 추출이 제대로 되지 않은 모집단의 일부 또는 다른 샘플링/설계 문제로 인해 발생한 것일 수 있습니다. 어느 쪽이든, 관찰과 피험자를 제거하기 전에 정당성을 확보하는 것이 필수적이며, 영향력과 레버리지는 통계적 타당성을 평가하기 위한 추가 도구로 사용해야 합니다.</p>
+<table class="table">
+<caption>표 9.1 interest 전체 표본과 관찰치 111을 사용하지 않은 인지 모델의 표준화된 모수 추정치</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th>Parameter</th>
+<th>Full Sample</th>
+<th>No 111</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Vocab</td>
+<td><span class="math inline">\(\lambda_{1,1}\)</span></td>
+<td>0.947</td>
+<td>0.949</td>
+</tr>
+<tr class="even">
+<td>Reading</td>
+<td><span class="math inline">\(\lambda_{2,1}\)</span></td>
+<td>0.850</td>
+<td>0.845</td>
+</tr>
+<tr class="odd">
+<td>Sentcomp</td>
+<td><span class="math inline">\(\lambda_{3,1}\)</span></td>
+<td>0.856</td>
+<td>0.851</td>
+</tr>
+<tr class="even">
+<td>Mathmtcs</td>
+<td><span class="math inline">\(\lambda_{4,2}\)</span></td>
+<td>0.933</td>
+<td>0.931</td>
+</tr>
+<tr class="odd">
+<td>Geometry</td>
+<td><span class="math inline">\(\lambda_{5,2}\)</span></td>
+<td>0.824</td>
+<td>0.819</td>
+</tr>
+<tr class="even">
+<td>Analyrea</td>
+<td><span class="math inline">\(\lambda_{6,2}\)</span></td>
+<td>0.876</td>
+<td>0.872</td>
+</tr>
+<tr class="odd">
+<td>Cov(<span class="math inline">\(f_1,f_2\)</span>)</td>
+<td><span class="math inline">\(\phi_{f_1,f_2}\)</span></td>
+<td>0.807</td>
+<td>0.800</td>
+</tr>
+<tr class="even">
+<td>RMSEA</td>
+<td></td>
+<td>0.051</td>
+<td>0.052</td>
+</tr>
+<tr class="odd">
+<td>CFI</td>
+<td></td>
+<td>0.996</td>
+<td>0.996</td>
+</tr>
+<tr class="even">
+<td>TLI</td>
+<td></td>
+<td>0.992</td>
+<td>0.992</td>
+</tr>
+</tbody>
+</table>
+<p>요인 분석의 기초가 되는 정규성 가정의 타당성을 확인하려면 각 측정 변수에 대해 정규 Q-Q 플롯을 구성할 수 있습니다. 선형 회귀에서와 마찬가지로, 이를 통해 정규성을 얻기 위해 변환이 필요한지 여부를 알 수 있습니다. faoutlier 패키지의 obs.resid 함수를 사용하는 다음 코드는 관측 잔차를 계산하고(Bollen &amp; Arminger, 1991; Jöreskog, Sörbom, &amp;Wallentin, 2006) cog_mod 객체에서 각 측정 변수에 대한 정규 Q-Q 플롯을 인쇄합니다. obs.resid 함수에서 반환된 관측 잔차의 표준화된 형태는 Bollen과 Arminger(1991)에 설명된 절차를 사용하여 계산됩니다. 아래에서는 표준화된 관측 잔차를 추출하고, 데이터를 긴 형식으로 재구성한 다음, lattice 패키지의 qqmath 함수를 사용하여 정규 Q-Q 플롯을 만듭니다. 결과 정규 Q-Q 플롯은 그림 9.3에 나와 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>cog_resid <span class="ot">&lt;-</span> <span class="fu">obs.resid</span>(interest, cog_mod)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>cogn_std <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(cog_resid<span class="sc">$</span>std_res)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>cogn_std_l <span class="ot">&lt;-</span> <span class="fu">reshape</span>(cogn_std,</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">direction =</span> <span class="st">"long"</span>,</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>                      <span class="at">varying =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>,</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>                      <span class="at">v.names =</span> <span class="st">"std_res"</span>,</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">timevar =</span> <span class="st">"var"</span>,</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">times =</span> <span class="fu">names</span>(cogn_std))</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="fu">qqmath</span>(<span class="sc">~</span> std_res <span class="sc">|</span> var, cogn_std_l,</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">"Normal theoretical quantiles"</span>,</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">ylab =</span> <span class="st">"Standardized Residuals"</span>,</span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">panel =</span> <span class="cf">function</span>(x, ...){</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">panel.qqmathline</span>(x, ...)</span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">panel.qqmath</span>(x, ...)</span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>        }, <span class="at">auto.key =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap09_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>그림 9.3에서 verbal 측정 변수는 맨 위 행에 있고 mathematics 측정 변수는 맨 아래 행에 있습니다. 이 그림은 표준화된 잔차가 정규 Q-Q 플롯에서 대부분 대각선에 정렬되어 있기 때문에 각 측정 변수에 대해 정규성 가정이 합리적임을 보여줍니다.</p>
+<p>표준화된 관측 잔차와 함께 정규 Q-Q 플롯을 사용하는 데는 몇 가지 문제가 있습니다. 첫째, 정규 Q-Q 플롯은 요인과 대표 변수 간의 비선형 관계를 반드시 포착하지는 못합니다. 둘째, 측정 변수가 요인과 관련이 없고 측정 변수가 약간 정규 분포인 경우 측정 변수에 대한 표준화된 관측 잔차는 정규 분포가 됩니다.</p>
+<p>측정 변수와 요인 간의 관계가 실제로 선형적이라는 타당성을 더 잘 확인하기 위해 각 측정 변수를 추정 요인 점수에 대해 플롯하거나(Jöreskog 외, 2006), 표준화된 관측 잔차를 추정 요인 점수에 대해 플롯할 수 있습니다. 기존의 잔차 플롯은 모델이 올바르게 지정되었을 때 잔차와 예측값 사이에 아무런 관계를 보여주지 않기 때문에 일반적으로 전자의 방법을 선호합니다. 관측 잔차를 추정 요인 점수와 비교하여 플롯하는 경우(이 연습은 가치가 있습니다), 플롯에 표시되는 결과 관계는 요인과 측정 변수 간의 관계를 나타내며, 모델이 올바르게 지정된 경우가 아니라 관계가 없는 경우에는 평평하고 무작위로 표시됩니다.</p>
+<p>이 플롯을 만들려면 먼저 predict 함수를 사용하여 lavaan 객체에서 추정된 요인 점수를 추출하고 이를 cog_pred라는 데이터 프레임으로 변환합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>cog_fit <span class="ot">&lt;-</span> <span class="fu">cfa</span>(cog_mod, interest)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>cog_pred <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">predict</span>(cog_fit))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>다음으로, cognitive 데이터 세트를 긴 형식으로 재구성하고, 이를 추정된 요인 점수와 결합한 다음, 마지막으로 xyplot 함수를 사용하여 플롯을 생성합니다. 그림 9.4는 이 절차의 결과를 보여줍니다. 위쪽 행에는 verbal 측정 변수가 추정된 verbal 요인 점수에 대해 플롯되어 있고, 아래쪽 행에는 mathematics 측정 변수가 추정된 mathematics 요인 점수에 대해 플롯되어 있습니다. 그림 9.4의 측정 변수와 요인 점수 사이의 관계는 강한 양의 선형 관계입니다(큰 요인 부하로 확증됩니다). 만약 요인과 측정 변수 사이의 관계가 선형적이지 않다면, 이는 플롯에서 비선형 패턴으로 나타날 것입니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>cognitive_l <span class="ot">&lt;-</span> <span class="fu">reshape</span>(cognitive,</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>                        <span class="at">direction =</span> <span class="st">"long"</span>,</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">varying =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>,</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">v.names =</span> <span class="st">"obs_score"</span>,</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>                        <span class="at">timevar =</span> <span class="st">"var"</span>,</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>                        <span class="at">times =</span> <span class="fu">names</span>(cognitive))</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>cognitive_l<span class="sc">$</span>pred_fact <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(cog_pred<span class="sc">$</span>v, <span class="dv">3</span>),</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">rep</span>(cog_pred<span class="sc">$</span>m, <span class="dv">3</span>))</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a><span class="fu">xyplot</span>(obs_score <span class="sc">~</span> pred_fact <span class="sc">|</span> var, cognitive_l,</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">"Factor Score"</span>,</span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">ylab =</span> <span class="st">"Manifest Variable"</span>,</span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">auto.key =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap09_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>표준화된 잔차에 접근할 수 있기 때문에 제안한 모델에 맞지 않는 큰 관측값이 있는지 확인할 수도 있습니다. 아래에서는 표준화된 관측 잔차를 식별자에 대해 플롯하여 이를 입증합니다(결과는 그림 9.5에 표시됨).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cog_resid, <span class="at">restype =</span> <span class="st">"std_res"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap09_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>일반적으로 잔차가 모두 합리적인 범위(즉, -3에서 3 사이) 내에 있음을 알 수 있습니다. 어떤 관측값이 이 범위를 벗어나는지 which 함수를 사용하여 빠르게 식별할 수 있습니다. 아래 코드는 표준화된 잔차의 절대값이 3보다 큰 관측값을 식별하여 인쇄합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>outliers <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">abs</span>(cogn_std_l<span class="sc">$</span>std_res) <span class="sc">&gt;</span> <span class="dv">3</span>)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>cogn_std_l[outliers, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  var   std_res  id
+202.mathmtcs mathmtcs -3.810076 202
+114.geometry geometry  3.032828 114
+202.geometry geometry  3.120521 202</code></pre>
+</div>
+</div>
+<p>관측값 202는 수학 및 기하학에 대해 표준화된 잔차가 3보다 크고, 관측값 114는 기하학에 대해 표준화된 잔차가 3보다 크다는 것을 알 수 있습니다. 관측값 212는 마하라노비스 거리로 식별된 동일한 관측값이지만, 관측값 114는 그렇지 않습니다. 이 두 관측값은 영향력이 큰 것으로 확인되지 않았기 때문에 전체 모델의 적합도 및 추론에 중요하지 않을 수 있습니다. 그러나 모델 피팅 중에 음의 분산(헤이우드 사례로 알려진), 기타 추정 문제 또는 직관적이지 않은 결과와 같은 문제가 발생한 경우, 마하라노비스 거리, 일반화된 쿡의 거리를 활용하고 잔차를 조사하는 것이 탐색을 시작하는 데 좋은 출발점이 될 수 있습니다. 또한, 이상값 및/또는 영향력 있는 지점의 누락에 대한 결과의 강건성을 조사하는 것도 항상 좋은 생각입니다.</p>
+</section>
+<section id="경로도" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="경로도"><span class="header-section-number">9.4</span> 경로도</h2>
+<p>R에서 측정 모델을 실행한 후에는 일반적으로 출판 또는 프레젠테이션을 위해 모델 결과를 보여줄 그림을 만들어야 할 필요가 있습니다. 요인 분석 및 구조 방정식 모델의 경우, 경로도를 통해 모델 결과를 표시하는 것이 일반적입니다. 경로도를 만드는 방법은 무수히 많습니다(Microsoft PowerPoint, <span class="math inline">\(\Omega\)</span>nyx (von Oertzen, Brandmaier, &amp; Tsang, 2015), 또는 Adobe Photoshop 등). 고품질의 경로도를 생성할 수 있는 R 패키지는 여러 가지가 있지만, 가장 사용자 친화적인 패키지는 semPlot 패키지(Epskamp &amp; Stuber, 2017)입니다. semPlot 패키지의 semPaths 함수는 lavaan 객체를 직접 가져와 자동으로 경로도를 생성할 수 있습니다.</p>
+<p>아래에서는 semPaths 함수를 사용하여 경로도를 만드는 방법을 보여드리겠습니다. 먼저 semPlot 패키지를 설치하고 로드하는 것으로 시작합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("semPlot")</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"semPlot"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>아래 R 코드는 그림 9.6에 표시된 경로도를 생성합니다. 이 코드는 추정된 표준화 모수를 플롯하고, 측정 변수의 잔차와 외생 잠재 변수 분산의 플롯을 나타내지 않고, 플롯을 기본 방향(하향식)에서 90도 회전하고, 색 구성표를 검정색(color = “검정”, edge.color = “검정”)으로 변경하고, 경로의 숫자에 대한 글꼴 크기(edge.label.cex = 1)를 변경하도록 semPaths에게 지시합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">semPaths</span>(cog_fit, <span class="at">what =</span> <span class="st">"std"</span>, <span class="at">residuals =</span> F,</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">rotation =</span> <span class="dv">4</span>, <span class="at">color =</span> <span class="st">"black"</span>,</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">edge.color =</span> <span class="st">"black"</span>,</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">edge.label.cex =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap09_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>제11장에서는 측정 불변성과 lavaan으로 다집단 모델을 실행하는 방법을 설명합니다. semPaths 함수를 사용하면 lavaan으로 추정된 요인 모델에 대한 다집단 경로도를 쉽게 만들 수 있습니다. 아래에서는 인지 2요인 모델(이 형태 동일성 모델은 제11장에서 자세히 설명합니다)에 성별에 대한 다집단 형태 동일성 모델을 적용한 다음 semPaths 함수를 사용하여 경로도를 빠르게 생성합니다. 그림 9.7에서 두 집단(왼쪽: 여성, 오른쪽: 남성) 간의 요인 적재량, 절편 및 오차를 빠르고 쉽게 비교할 수 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>configural <span class="ot">&lt;-</span> <span class="fu">cfa</span>(cog_mod, interest, <span class="at">group =</span> <span class="st">"gender"</span>)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">semPaths</span>(configural, <span class="at">what =</span> <span class="st">"est"</span>,</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">edge.label.cex =</span> <span class="dv">1</span>, <span class="at">panelGroups =</span> T,</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">ask =</span> <span class="cn">FALSE</span>, <span class="at">fade =</span> <span class="cn">FALSE</span>, <span class="at">title =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">edge.color =</span> <span class="st">"black"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chap09_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>semPaths 함수는 구조방정식 모델, 경로 분석, 회귀 분석 등 다른 모델을 쉽게 플로팅하는 데에도 사용할 수 있으며, 게시할 수 있는 수치를 만드는 데 필요한 높은 수준의 사용자 지정 기능도 제공합니다.</p>
+</section>
+<section id="shiny로-대화형-플롯" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="shiny로-대화형-플롯"><span class="header-section-number">9.5</span> shiny로 대화형 플롯</h2>
+<p>shiny 패키지(Chang et al., 2017)는 R용 대화형 웹 애플리케이션 프레임워크로, HTML, CSS 또는 JavaScript를 거의 또는 전혀 사용하지 않고도 R에서 매우 인상적인 대화형 그래픽 및 대시보드를 만드는 데 사용할 수 있습니다.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>shiny 대한 정확한 세부 사항은 이 장과 이 책의 범위를 벗어납니다. 이 장에서는 shiny에 대한 자세한 설명 대신 두 가지 기본 shiny 응용 프로그램을 빠르게 만드는 방법과 shiny를 사용하여 측정 모델을 더 깊이 이해하는 방법을 보여드리는 데 중점을 둡니다. shiny에 관한 여러 권의 책과 shiny 웹사이트<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>의 훌륭한 튜토리얼이 있으므로, 이 애플리케이션이 독자의 흥미를 유발하고 고급 요구 사항이 있는 경우 이러한 리소스를 참조하시기 바랍니다.</p>
+<p>주목해야 할 중요한 점은 shiny 애플리케이션을 만드는 방법에는 몇 가지가 있다는 것입니다. 다음 예제에서는 단일 R 스크립트 내에서 shiny 애플리케이션을 만드는 방법을 보여 드리겠습니다. 단일 스크립트 사용에는 장단점이 있지만 일반적으로 소규모 애플리케이션에는 단일 스크립트를 사용하는 것이 좋습니다. shiny 애플리케이션을 만들려면 두 가지 함수를 정의해야 합니다:</p>
+<ol type="1">
+<li><p>ui 함수: 이 함수는 사용자 인터페이스(예: 애플리케이션의 슬라이더, 체크 박스 및 기타 디자인 기능)를 생성합니다.</p></li>
+<li><p>server 함수: 이 함수는 ui 함수의 입력을 받아 입력에 따라 플롯, 텍스트, 요약 등을 생성합니다.</p></li>
+</ol>
+<p>그런 다음 이 두 함수는 shiny 패키지의 shinyApp 함수에 전달됩니다.</p>
+<section id="예제-1-요인-분석을-위한-진단-플롯" class="level3" data-number="9.5.1">
+<h3 data-number="9.5.1" class="anchored" data-anchor-id="예제-1-요인-분석을-위한-진단-플롯"><span class="header-section-number">9.5.1</span> 예제 1: 요인 분석을 위한 진단 플롯</h3>
+<p>첫 번째 shiny 애플리케이션의 경우, 추정된 요인 점수에 대한 측정 변수의 대화형 진단 플롯을 만들어 보겠습니다. 이것이 이 장의 앞부분에서 설명한 플롯입니다. 이 애플리케이션을 사용하면 요인 분석의 주요 가정(예: 측정 변수와 요인 간의 선형 관계, 측정 변수와 요인 간의 관계가 존재한다는 조건)을 위반하는 것이 이 플롯에서 어떻게 나타나는지 이해할 수 있습니다. 이 shiny 애플리케이션을 만들면 이 플롯이 알려주는 내용을 더 잘 이해할 수 있습니다.</p>
+<p>이 애플리케이션에서 사용자는 lam 값을 0으로 설정하여 관계가 없음을 지정하거나, 측정 변수와 요인 간의 관계가 선형 관계임을 지정하거나, 체크박스를 선택하여 관계가 비선형 관계임을 지정할 수 있습니다. 이 애플리케이션의 스크립트는 아래와 같습니다.</p>
+<p>스크립트 내에서 코드의 각 부분이 수행하는 작업에 대해 주석을 달았습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the required R packages</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"shiny"</span>)</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"lavaan"</span>)</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Shiny ui's can be drawn using a grid system</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a><span class="co"># consisting of 12 columns wide. We make use of this below</span></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a><span class="co"># by using the first 4 columns to contain the inputs (widgets)</span></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a><span class="co"># and the remaining 8 columns to hold the plot.</span></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="fu">fluidPage</span>(</span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column</span>(<span class="dv">4</span>,</span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># This creates the input for setting our factor loading</span></span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># for manifest variable one. The default value is set to</span></span>
+<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 0.5 and if we click the arrows, it will increase/decrease</span></span>
+<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># by 0.5</span></span>
+<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">numericInput</span>(<span class="st">"lam"</span>,</span>
+<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Value for the factor loading for manifest variable 1."</span>,</span>
+<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">value =</span> .<span class="dv">5</span>,</span>
+<span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">step =</span> .<span class="dv">5</span>),</span>
+<span id="cb47-20"><a href="#cb47-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb47-21"><a href="#cb47-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># This creates the checkbox for a non-linear</span></span>
+<span id="cb47-22"><a href="#cb47-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># quadratic relationship. When the box is unchecked,</span></span>
+<span id="cb47-23"><a href="#cb47-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># the relationship is linear.</span></span>
+<span id="cb47-24"><a href="#cb47-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">checkboxInput</span>(<span class="st">"nonlinear"</span>,</span>
+<span id="cb47-25"><a href="#cb47-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Should manifest variable 1 have a non-linear</span></span>
+<span id="cb47-26"><a href="#cb47-26" aria-hidden="true" tabindex="-1"></a><span class="st">      relationship with the factor?"</span>,</span>
+<span id="cb47-27"><a href="#cb47-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">value =</span> F)</span>
+<span id="cb47-28"><a href="#cb47-28" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb47-29"><a href="#cb47-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column</span>(<span class="dv">8</span>,</span>
+<span id="cb47-30"><a href="#cb47-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># This will draw our diagnostic plot</span></span>
+<span id="cb47-31"><a href="#cb47-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plotOutput</span>(<span class="st">"diagPlot"</span>)</span>
+<span id="cb47-32"><a href="#cb47-32" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb47-33"><a href="#cb47-33" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb47-34"><a href="#cb47-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-35"><a href="#cb47-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Below we define a server function</span></span>
+<span id="cb47-36"><a href="#cb47-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Every time we refresh the input random</span></span>
+<span id="cb47-37"><a href="#cb47-37" aria-hidden="true" tabindex="-1"></a><span class="co"># data will be created. So, no two plots will</span></span>
+<span id="cb47-38"><a href="#cb47-38" aria-hidden="true" tabindex="-1"></a><span class="co"># be identical!</span></span>
+<span id="cb47-39"><a href="#cb47-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-40"><a href="#cb47-40" aria-hidden="true" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output) {</span>
+<span id="cb47-41"><a href="#cb47-41" aria-hidden="true" tabindex="-1"></a>  output<span class="sc">$</span>diagPlot <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>({</span>
+<span id="cb47-42"><a href="#cb47-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-43"><a href="#cb47-43" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create our factor as a standard random normal variable.</span></span>
+<span id="cb47-44"><a href="#cb47-44" aria-hidden="true" tabindex="-1"></a>  <span class="co"># rnorm() ensures every time the plots are different.</span></span>
+<span id="cb47-45"><a href="#cb47-45" aria-hidden="true" tabindex="-1"></a>  f1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">500</span>)</span>
+<span id="cb47-46"><a href="#cb47-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-47"><a href="#cb47-47" aria-hidden="true" tabindex="-1"></a>  <span class="co"># If we specify the non-linear relationship</span></span>
+<span id="cb47-48"><a href="#cb47-48" aria-hidden="true" tabindex="-1"></a>  <span class="co"># then f1 will be squared else it won't be.</span></span>
+<span id="cb47-49"><a href="#cb47-49" aria-hidden="true" tabindex="-1"></a>  <span class="co"># We also add some specific variance/uniqueness</span></span>
+<span id="cb47-50"><a href="#cb47-50" aria-hidden="true" tabindex="-1"></a>  <span class="co"># (the rnorm part at the end).</span></span>
+<span id="cb47-51"><a href="#cb47-51" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(input<span class="sc">$</span>nonlinear) {</span>
+<span id="cb47-52"><a href="#cb47-52" aria-hidden="true" tabindex="-1"></a>    m1 <span class="ot">&lt;-</span> input<span class="sc">$</span>lam <span class="sc">*</span> f1 <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> f1<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">500</span>)</span>
+<span id="cb47-53"><a href="#cb47-53" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb47-54"><a href="#cb47-54" aria-hidden="true" tabindex="-1"></a>    m1 <span class="ot">&lt;-</span> input<span class="sc">$</span>lam <span class="sc">*</span> f1 <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">500</span>)</span>
+<span id="cb47-55"><a href="#cb47-55" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb47-56"><a href="#cb47-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-57"><a href="#cb47-57" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Now do the same thing for manifest variables 2 - 4,</span></span>
+<span id="cb47-58"><a href="#cb47-58" aria-hidden="true" tabindex="-1"></a>  <span class="co"># except their relationship with the factor is always</span></span>
+<span id="cb47-59"><a href="#cb47-59" aria-hidden="true" tabindex="-1"></a>  <span class="co"># fixed.</span></span>
+<span id="cb47-60"><a href="#cb47-60" aria-hidden="true" tabindex="-1"></a>  <span class="co"># The .60, .75, and .9 are the factor loadings</span></span>
+<span id="cb47-61"><a href="#cb47-61" aria-hidden="true" tabindex="-1"></a>  <span class="co"># The rnorm() adds specific/unique variance</span></span>
+<span id="cb47-62"><a href="#cb47-62" aria-hidden="true" tabindex="-1"></a>  m2 <span class="ot">&lt;-</span> .<span class="dv">60</span> <span class="sc">*</span> f1 <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">500</span>)</span>
+<span id="cb47-63"><a href="#cb47-63" aria-hidden="true" tabindex="-1"></a>  m3 <span class="ot">&lt;-</span> .<span class="dv">75</span> <span class="sc">*</span> f1 <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">500</span>)</span>
+<span id="cb47-64"><a href="#cb47-64" aria-hidden="true" tabindex="-1"></a>  m4 <span class="ot">&lt;-</span> .<span class="dv">9</span> <span class="sc">*</span> f1 <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">500</span>)</span>
+<span id="cb47-65"><a href="#cb47-65" aria-hidden="true" tabindex="-1"></a>  dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(m1, m2, m3, m4)</span>
+<span id="cb47-66"><a href="#cb47-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-67"><a href="#cb47-67" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Define the CFA model, run it, and extract the factor scores</span></span>
+<span id="cb47-68"><a href="#cb47-68" aria-hidden="true" tabindex="-1"></a>  mod <span class="ot">&lt;-</span> <span class="st">'</span></span>
+<span id="cb47-69"><a href="#cb47-69" aria-hidden="true" tabindex="-1"></a><span class="st">    fact =~ m1 + m2 + m3 + m4</span></span>
+<span id="cb47-70"><a href="#cb47-70" aria-hidden="true" tabindex="-1"></a><span class="st">    '</span></span>
+<span id="cb47-71"><a href="#cb47-71" aria-hidden="true" tabindex="-1"></a>  fit <span class="ot">&lt;-</span> <span class="fu">cfa</span>(mod, dat, <span class="at">std.lv =</span> T)</span>
+<span id="cb47-72"><a href="#cb47-72" aria-hidden="true" tabindex="-1"></a>  dat<span class="sc">$</span>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit)[,<span class="dv">1</span>]</span>
+<span id="cb47-73"><a href="#cb47-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-74"><a href="#cb47-74" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create a 2 by 2 plot (the par stuff) and</span></span>
+<span id="cb47-75"><a href="#cb47-75" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add a blue LOWESS curve to each of the manifest</span></span>
+<span id="cb47-76"><a href="#cb47-76" aria-hidden="true" tabindex="-1"></a>  <span class="co"># variables against the est. factor scores sub plots.</span></span>
+<span id="cb47-77"><a href="#cb47-77" aria-hidden="true" tabindex="-1"></a>  <span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb47-78"><a href="#cb47-78" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>){</span>
+<span id="cb47-79"><a href="#cb47-79" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(dat[,i] <span class="sc">~</span> pred, dat, <span class="at">xlab =</span> <span class="st">"Est. Factor Score"</span>,</span>
+<span id="cb47-80"><a href="#cb47-80" aria-hidden="true" tabindex="-1"></a>    <span class="at">ylab =</span> <span class="fu">paste</span>(<span class="st">"Manifest Var"</span>, i))</span>
+<span id="cb47-81"><a href="#cb47-81" aria-hidden="true" tabindex="-1"></a>    <span class="fu">lines</span>(<span class="fu">lowess</span>(dat<span class="sc">$</span>pred, dat[,i]), <span class="at">col =</span> <span class="st">"blue"</span>)</span>
+<span id="cb47-82"><a href="#cb47-82" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb47-83"><a href="#cb47-83" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb47-84"><a href="#cb47-84" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>UI 및 서버 함수가 R에서 정의되면 다음과 같이 이 함수를 전달하여 shinyApp 함수를 호출할 수 있습니다:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shinyApp</span>(<span class="at">ui =</span> ui, <span class="at">server =</span> server)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>PhantomJS not found. You can install it with webshot::install_phantomjs(). If it is installed, please make sure the phantomjs executable can be found via the PATH variable.</code></pre>
+</div>
+<div class="cell-output-display">
+<p></p><div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div><p></p>
+</div>
+</div>
+<p>또는 이 shiny 애플리케이션은 hemp 패키지에서 입력하여 호출할 수 있습니다:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fadiag_demo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p></p><div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div><p></p>
+</div>
+</div>
+<p>이 애플리케이션의 스크린샷은 그림 9.8에 나와 있습니다. 그림 9.8에서 볼 수 있듯이, shiny 애플리케이션에는 두 가지 대화형 입력이 있습니다. 첫 번째 측정 변수에 대한 요인 로딩의 크기에 해당하는 숫자 입력과 선택 시 측정 변수와 요인 간의 비선형 관계를 지정하는 체크박스가 있습니다. 측정 변수 2~4는 다양하게 요인과 선형 관계를 항상 갖습니다(이러한 로딩의 크기는 위의 스크립트 참조). 측정 변수 1과 요인 간의 관계(왼쪽 상단 플롯)만 변경됩니다. 그러나 매번 새로운 데이터를 무작위로 생성하기 때문에 각 플롯은 조금씩 다르게 보일 것입니다.</p>
+<p>숫자 입력 값을 변경하면 관계가 선형일 때 요인 로딩의 방향과 크기가 이 진단 플롯에서 어떻게 나타나는지, 관계가 없으면 어떻게 보이는지(힌트: 잘 작동하는 다중 회귀 잔차 플롯처럼 보일 것입니다), 체크박스를 선택하면 비선형 관계가 어떻게 보이는지 이해할 수 있습니다. 이 애플리케이션은 약간의 수정을 통해 이 장의 앞부분에서 설명한 일반 Q-Q 플롯과 함께 작동하도록 만들 수 있습니다. 이것은 예리하고 호기심 많은 독자들을 위한 연습 과제로 남겨 두었습니다.</p>
+</section>
+<section id="예제-2-3pl-irt-모델" class="level3" data-number="9.5.2">
+<h3 data-number="9.5.2" class="anchored" data-anchor-id="예제-2-3pl-irt-모델"><span class="header-section-number">9.5.2</span> 예제 2: 3PL IRT 모델</h3>
+<p>두 번째 shiny 애플리케이션을 통해 문항 난이도, 문항 변별력, 추측도를 조작할 때 3PL IRT 모델의 문항 반응 함수의 모양이 어떻게 변하는지를 살펴볼 수 있습니다. 첫 번째 애플리케이션과 마찬가지로 코드의 기능에 대한 설명은 아래 R 스크립트에 포함되어 있습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the shiny package</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"shiny"</span>)</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the 3PL function</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>threepl <span class="ot">&lt;-</span> <span class="cf">function</span>(person, b, a, c) {</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> c <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">-</span> c)<span class="sc">*</span>(<span class="fu">exp</span>(a <span class="sc">*</span> (person <span class="sc">-</span> b)) <span class="sc">/</span></span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>                    (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(a <span class="sc">*</span> (person <span class="sc">-</span> b))))</span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(x)</span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the range of abilities, difficulties,</span></span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a><span class="co"># discriminations, and guessing parameters allowed</span></span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>ability <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="at">by =</span> .<span class="dv">1</span>)</span>
+<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>diff <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">3</span><span class="sc">:</span><span class="dv">3</span></span>
+<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>discr <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">2</span><span class="sc">:</span><span class="dv">2</span></span>
+<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a>guess <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">10</span><span class="sc">/</span><span class="dv">10</span></span>
+<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a data.frame with all the combinations</span></span>
+<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a><span class="co"># of the values permitted above</span></span>
+<span id="cb51-20"><a href="#cb51-20" aria-hidden="true" tabindex="-1"></a>parameter_setup <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">person =</span> ability,</span>
+<span id="cb51-21"><a href="#cb51-21" aria-hidden="true" tabindex="-1"></a>                               <span class="at">b =</span> diff, <span class="at">a =</span> discr, <span class="at">c =</span> guess)</span>
+<span id="cb51-22"><a href="#cb51-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the threepl() function and save the probabilities</span></span>
+<span id="cb51-23"><a href="#cb51-23" aria-hidden="true" tabindex="-1"></a><span class="co"># of getting an item correct as function of these parameters</span></span>
+<span id="cb51-24"><a href="#cb51-24" aria-hidden="true" tabindex="-1"></a>parameter_setup<span class="sc">$</span>prob <span class="ot">&lt;-</span> <span class="fu">threepl</span>(<span class="at">person =</span> parameter_setup<span class="sc">$</span>person,</span>
+<span id="cb51-25"><a href="#cb51-25" aria-hidden="true" tabindex="-1"></a>                        <span class="at">b =</span> parameter_setup<span class="sc">$</span>b,</span>
+<span id="cb51-26"><a href="#cb51-26" aria-hidden="true" tabindex="-1"></a>                        <span class="at">a =</span> parameter_setup<span class="sc">$</span>a,</span>
+<span id="cb51-27"><a href="#cb51-27" aria-hidden="true" tabindex="-1"></a>                        <span class="at">c =</span> parameter_setup<span class="sc">$</span>c)</span>
+<span id="cb51-28"><a href="#cb51-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-29"><a href="#cb51-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the user-interface (ui) function</span></span>
+<span id="cb51-30"><a href="#cb51-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Will consists of three inputs</span></span>
+<span id="cb51-31"><a href="#cb51-31" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb51-32"><a href="#cb51-32" aria-hidden="true" tabindex="-1"></a><span class="co"># - A slider to set item difficulty (b)</span></span>
+<span id="cb51-33"><a href="#cb51-33" aria-hidden="true" tabindex="-1"></a><span class="co"># - A slider to set item discrimination (c)</span></span>
+<span id="cb51-34"><a href="#cb51-34" aria-hidden="true" tabindex="-1"></a><span class="co"># - A slider to set guessing (a)</span></span>
+<span id="cb51-35"><a href="#cb51-35" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb51-36"><a href="#cb51-36" aria-hidden="true" tabindex="-1"></a><span class="co"># and the plot (called threepl).</span></span>
+<span id="cb51-37"><a href="#cb51-37" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb51-38"><a href="#cb51-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: when a = 1 and c = 0, this the Rasch</span></span>
+<span id="cb51-39"><a href="#cb51-39" aria-hidden="true" tabindex="-1"></a><span class="co"># and when c = 0, this is the 2PL</span></span>
+<span id="cb51-40"><a href="#cb51-40" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb51-41"><a href="#cb51-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Shiny ui's can be drawn using a grid system</span></span>
+<span id="cb51-42"><a href="#cb51-42" aria-hidden="true" tabindex="-1"></a><span class="co"># consisting of 12 columns wide.We make use of this below</span></span>
+<span id="cb51-43"><a href="#cb51-43" aria-hidden="true" tabindex="-1"></a><span class="co"># by using the first 4 columns to contain the widgets</span></span>
+<span id="cb51-44"><a href="#cb51-44" aria-hidden="true" tabindex="-1"></a><span class="co"># and the remaining 8 columns to hold the plot.</span></span>
+<span id="cb51-45"><a href="#cb51-45" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb51-46"><a href="#cb51-46" aria-hidden="true" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="fu">fluidPage</span>(</span>
+<span id="cb51-47"><a href="#cb51-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column</span>(<span class="dv">4</span>,</span>
+<span id="cb51-48"><a href="#cb51-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sliderInput</span>(<span class="st">"b"</span>, <span class="at">label =</span> <span class="st">"Item Difficulty"</span>,</span>
+<span id="cb51-49"><a href="#cb51-49" aria-hidden="true" tabindex="-1"></a>              <span class="at">min =</span> <span class="sc">-</span><span class="dv">3</span>, <span class="at">max =</span> <span class="dv">3</span>, <span class="at">value =</span> <span class="dv">0</span>, <span class="at">step =</span> <span class="dv">1</span>),</span>
+<span id="cb51-50"><a href="#cb51-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sliderInput</span>(<span class="st">"a"</span>, <span class="at">label =</span> <span class="st">"Item Discrimination"</span>,</span>
+<span id="cb51-51"><a href="#cb51-51" aria-hidden="true" tabindex="-1"></a>              <span class="at">min =</span> <span class="sc">-</span><span class="dv">2</span>, <span class="at">max =</span> <span class="dv">2</span>, <span class="at">value =</span> <span class="dv">1</span>, <span class="at">step =</span> <span class="dv">1</span>),</span>
+<span id="cb51-52"><a href="#cb51-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sliderInput</span>(<span class="st">"c"</span>, <span class="at">label =</span> <span class="st">"Guessing"</span>,</span>
+<span id="cb51-53"><a href="#cb51-53" aria-hidden="true" tabindex="-1"></a>              <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">1</span>, <span class="at">value =</span> <span class="dv">0</span>, <span class="at">step =</span> .<span class="dv">1</span>)),</span>
+<span id="cb51-54"><a href="#cb51-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column</span>(<span class="dv">8</span>,</span>
+<span id="cb51-55"><a href="#cb51-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plotOutput</span>(<span class="st">"threepl"</span>))</span>
+<span id="cb51-56"><a href="#cb51-56" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb51-57"><a href="#cb51-57" aria-hidden="true" tabindex="-1"></a><span class="co"># Below we define a server function that</span></span>
+<span id="cb51-58"><a href="#cb51-58" aria-hidden="true" tabindex="-1"></a><span class="co"># subset our data based on the values of the sliders</span></span>
+<span id="cb51-59"><a href="#cb51-59" aria-hidden="true" tabindex="-1"></a><span class="co"># and then plot the IRF.</span></span>
+<span id="cb51-60"><a href="#cb51-60" aria-hidden="true" tabindex="-1"></a>server <span class="ot">&lt;-</span> <span class="cf">function</span>(input, output){</span>
+<span id="cb51-61"><a href="#cb51-61" aria-hidden="true" tabindex="-1"></a>    output<span class="sc">$</span>threepl <span class="ot">&lt;-</span> <span class="fu">renderPlot</span>({</span>
+<span id="cb51-62"><a href="#cb51-62" aria-hidden="true" tabindex="-1"></a>      plot.data <span class="ot">&lt;-</span> <span class="fu">subset</span>(parameter_setup, b <span class="sc">==</span> input<span class="sc">$</span>b <span class="sc">&amp;</span></span>
+<span id="cb51-63"><a href="#cb51-63" aria-hidden="true" tabindex="-1"></a>                            a <span class="sc">==</span> input<span class="sc">$</span>a <span class="sc">&amp;</span></span>
+<span id="cb51-64"><a href="#cb51-64" aria-hidden="true" tabindex="-1"></a>                            c <span class="sc">==</span> input<span class="sc">$</span>c)</span>
+<span id="cb51-65"><a href="#cb51-65" aria-hidden="true" tabindex="-1"></a>      <span class="fu">plot</span>(prob <span class="sc">~</span> person, plot.data, <span class="at">type =</span> <span class="st">"l"</span>,</span>
+<span id="cb51-66"><a href="#cb51-66" aria-hidden="true" tabindex="-1"></a>          <span class="at">xlab =</span> <span class="fu">expression</span>(theta),</span>
+<span id="cb51-67"><a href="#cb51-67" aria-hidden="true" tabindex="-1"></a>          <span class="at">ylab =</span> <span class="st">"Pr(Y = 1)"</span>,</span>
+<span id="cb51-68"><a href="#cb51-68" aria-hidden="true" tabindex="-1"></a>          <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb51-69"><a href="#cb51-69" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb51-70"><a href="#cb51-70" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>다시 한 번, 다음과 같이 shinyApp 함수를 사용하여 ui 및 서버 함수를 호출합니다:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shinyApp</span>(<span class="at">ui =</span> ui, <span class="at">server =</span> server)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p></p><div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div><p></p>
+</div>
+</div>
+<p>또는 이 shiny 애플리케이션은 hemp 패키지에서 입력하여 호출할 수 있습니다:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">threepl_demo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p></p><div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div><p></p>
+</div>
+</div>
+<p>이 애플리케이션의 기본 보기는 그림 9.9에 나와 있습니다. shiny 애플리케이션에는 상호 작용할 수 있는 세 가지 슬라이더 입력, 즉 문항 난이도, 문항 변별도 및 추측도가 있습니다. 눈치 빠른 독자라면 기본 보기가 실제로는 1PL(1파라미터 로지스틱) IRT 모델, 더 구체적으로는 라쉬 모델이라는 것을 알 수 있을 것입니다.</p>
+<p>이 애플리케이션을 사용하면 라쉬, 1PL 및 3PL 모델 외에도 2모수 로지스틱(2PL) 모델에 대해서도 배울 수 있습니다. 추측도 모수를 0으로, 문항 변별도를 특정 값으로 고정하고 문항 난이도만 변경하면 1PL 모델이 됩니다(문항 변별도를 1로 고정하면 라쉬 모델이 됩니다). 추측도 모수를 0으로 고정하고 문항 변별도와 난이도를 변경하면 2PL 모델이 됩니다. 마지막으로 세 가지 모수를 모두 변경하면 3PL 모델이 됩니다. 이 모델을 적용하면 음의 변별도 또는 변별도가 없는 모습이 어떤지, 추측도를 늘리면 가능한 확률 범위가 어떻게 달라지는지 등을 이해할 수 있습니다.</p>
+</section>
+</section>
+<section id="요약" class="level2" data-number="9.6">
+<h2 data-number="9.6" class="anchored" data-anchor-id="요약"><span class="header-section-number">9.6</span> 요약</h2>
+<p>이 장에서는 측정에서 그래픽과 시각화를 사용하는 매우 다른 세 가지 용도를 소개했습니다. 즉, 진단과 데이터에 대한 모델의 적합성 이해, 프레젠테이션과 출판을 위한 경로도 작성, 진단 플롯과 모델에 대한 학습에 그래픽을 사용했습니다. 이러한 주제를 너무 자세히 다루지는 못했지만, 독자들이 측정에 시각화를 사용하는 것에 대한 이해가 높아지고, 데이터에 그래픽을 사용하는 방법에 대한 몇 가지 아이디어와 자신만의 멋진 애플리케이션과 출판용 그림을 만드는 데 도움이 되는 몇 가지 코드를 얻게 되기를 바랍니다. 특정 고급 비주얼리제이션이 필요하거나 데이터 시각화에 특별한 관심이 있는 독자는 그래픽 디스플레이용 CRAN 작업 보기<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>, graphviz<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> 및 mermaid<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> 엔진에 보다 사용자 친화적인 인터페이스를 제공하는 DiagrammeR 패키지(Sveidqvist 외, 2017), 그리고 물론 ggplot2 패키지(Wickham, 2009)를 확인해 보시기를 권장합니다.</p>
 
 
 </section>
@@ -423,6 +857,11 @@ D_i^2=(X_i-\bar{X})T\sum^{-1}(X_i-\bar{X})
 <hr>
 <ol>
 <li id="fn1"><p>Bollen의 그래프는 마하라노비스 거리의 재척도화된 버전을 기반으로 합니다.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>예제는 <a href="https://shiny.rstudio.com/gallery/" class="uri">https://shiny.rstudio.com/gallery/</a> 을 참조하세요.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p><a href="https://shiny.rstudio.com/tutorial" class="uri">https://shiny.rstudio.com/tutorial</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><a href="https://cran.r-project.org/web/views/Graphics.html" class="uri">https://cran.r-project.org/web/views/Graphics.html</a><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p><a href="http://www.graphviz.org/" class="uri">http://www.graphviz.org/</a><a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p><a href="https://knsv.github.io/mermaid" class="uri">https://knsv.github.io/mermaid</a><a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
